@@ -353,6 +353,32 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 .title-btn.no{background:#F8D7DA;border-color:#E74C3C;color:#721C24}
 .title-btn:active{transform:scale(.9)}
 
+/* FIXTURE CALENDARIO */
+.fix-tabs{display:flex;gap:8px;margin-bottom:14px}
+.fix-tab{flex:1;padding:10px 6px;border:2px solid var(--red);border-radius:10px;
+  background:#fff;font-family:var(--fh);font-size:.95rem;color:var(--red-dark);
+  cursor:pointer;transition:all .15s;letter-spacing:1px}
+.fix-tab.active{background:var(--red);color:#fff;border-color:var(--red)}
+.fix-date-hdr{background:linear-gradient(90deg,var(--red-dark),var(--blue));
+  color:#fff;padding:7px 14px;border-radius:10px;margin:14px 0 6px;
+  font-family:var(--fh);font-size:.9rem;letter-spacing:2px}
+.fix-match{background:#fff;border-radius:12px;padding:9px 10px;
+  margin-bottom:5px;box-shadow:0 2px 7px rgba(0,0,0,.07);
+  display:flex;align-items:center;gap:4px}
+.fix-match.arg{background:linear-gradient(135deg,#EEF6FF,#FFFCE6);
+  border:2px solid var(--gold);box-shadow:0 3px 14px rgba(255,215,0,.3)}
+.fix-team{flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:2px;font-size:.68rem;font-weight:900;color:#333;text-align:center;line-height:1.2;min-width:0}
+.fix-team .ft-flag{font-size:1.7rem;line-height:1}
+.fix-center{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;min-width:46px}
+.fix-center .fc-time{font-family:var(--fh);font-size:1.05rem;color:var(--red-dark);line-height:1}
+.fix-center .fc-hs{font-size:.55rem;color:#999;font-weight:900}
+.fix-center .fc-vs{font-size:.6rem;color:#aaa;font-weight:900}
+.fix-center .fc-gr{font-size:.58rem;background:var(--red);color:#fff;
+  border-radius:4px;padding:1px 5px;font-weight:900;letter-spacing:1px;margin-top:1px}
+.fix-arg-tag{text-align:center;font-size:.6rem;color:var(--gold-dark);
+  font-weight:900;letter-spacing:1px;margin-bottom:2px}
+
 /* MATCHING (año / jugadores) */
 .match-game{display:flex;gap:10px}
 .match-col{flex:1;display:flex;flex-direction:column;gap:7px}
@@ -603,8 +629,13 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
     <button class="back-btn" onclick="goHome()">← Volver</button>
     <span class="act-ttl">📋 El Fixture</span>
   </div>
-  <div class="info-box">⚽ 48 selecciones divididas en 12 grupos de 4. Cada grupo juega 3 partidos.</div>
-  <div class="groups-grid" id="groups-grid"></div>
+  <div class="info-box">⚽ 48 selecciones · 12 grupos · 104 partidos · 11 JUN – 19 JUL 2026 🏆</div>
+  <div class="fix-tabs">
+    <button class="fix-tab active" id="fix-tab-btn-0" onclick="switchFixTab(0)">👥 GRUPOS</button>
+    <button class="fix-tab" id="fix-tab-btn-1" onclick="switchFixTab(1)">📅 PARTIDOS</button>
+  </div>
+  <div id="fix-panel-0"><div class="groups-grid" id="groups-grid"></div></div>
+  <div id="fix-panel-1" style="display:none"></div>
   <div style="margin-top:16px"><button class="btn btn-gr btn-full" onclick="markDone('fixture')">¡Ya lo sé! ✅</button></div>
 </div>
 
@@ -1562,6 +1593,140 @@ function initEquipos(){
 // ============================================================
 // FIXTURE
 // ============================================================
+const FIXTURE_MATCHES = [
+  // 11 JUN
+  {d:'11 JUN',h:'16:00',t1:'México',t2:'Sudáfrica',gr:'A'},
+  {d:'11 JUN',h:'23:00',t1:'Corea del Sur',t2:'Rep. Checa',gr:'A'},
+  // 12 JUN
+  {d:'12 JUN',h:'16:00',t1:'Canadá',t2:'Bosnia y Herz.',gr:'B'},
+  {d:'12 JUN',h:'22:00',t1:'Estados Unidos',t2:'Paraguay',gr:'D'},
+  // 13 JUN
+  {d:'13 JUN',h:'16:00',t1:'Qatar',t2:'Suiza',gr:'B'},
+  {d:'13 JUN',h:'19:00',t1:'Brasil',t2:'Marruecos',gr:'C'},
+  {d:'13 JUN',h:'22:00',t1:'Haití',t2:'Escocia',gr:'C'},
+  // 14 JUN
+  {d:'14 JUN',h:'01:00',t1:'Australia',t2:'Turquía',gr:'D'},
+  {d:'14 JUN',h:'14:00',t1:'Alemania',t2:'Curazao',gr:'E'},
+  {d:'14 JUN',h:'17:00',t1:'Países Bajos',t2:'Japón',gr:'F'},
+  {d:'14 JUN',h:'20:00',t1:'Costa de Marfil',t2:'Ecuador',gr:'E'},
+  {d:'14 JUN',h:'23:00',t1:'Suecia',t2:'Túnez',gr:'F'},
+  // 15 JUN
+  {d:'15 JUN',h:'13:00',t1:'España',t2:'Cabo Verde',gr:'H'},
+  {d:'15 JUN',h:'16:00',t1:'Bélgica',t2:'Egipto',gr:'G'},
+  {d:'15 JUN',h:'19:00',t1:'Arabia Saudita',t2:'Uruguay',gr:'H'},
+  {d:'15 JUN',h:'22:00',t1:'Irán',t2:'Nueva Zelanda',gr:'G'},
+  // 16 JUN
+  {d:'16 JUN',h:'16:00',t1:'Francia',t2:'Senegal',gr:'I'},
+  {d:'16 JUN',h:'19:00',t1:'Irak',t2:'Noruega',gr:'I'},
+  {d:'16 JUN',h:'22:00',t1:'Argentina',t2:'Argelia',gr:'J'},
+  // 17 JUN
+  {d:'17 JUN',h:'01:00',t1:'Austria',t2:'Jordania',gr:'J'},
+  {d:'17 JUN',h:'14:00',t1:'Portugal',t2:'Congo',gr:'K'},
+  {d:'17 JUN',h:'17:00',t1:'Inglaterra',t2:'Croacia',gr:'L'},
+  {d:'17 JUN',h:'20:00',t1:'Ghana',t2:'Panamá',gr:'L'},
+  {d:'17 JUN',h:'23:00',t1:'Uzbekistán',t2:'Colombia',gr:'K'},
+  // 18 JUN
+  {d:'18 JUN',h:'13:00',t1:'Rep. Checa',t2:'Sudáfrica',gr:'A'},
+  {d:'18 JUN',h:'16:00',t1:'Suiza',t2:'Bosnia y Herz.',gr:'B'},
+  {d:'18 JUN',h:'19:00',t1:'Canadá',t2:'Qatar',gr:'B'},
+  {d:'18 JUN',h:'22:00',t1:'México',t2:'Corea del Sur',gr:'A'},
+  // 19 JUN
+  {d:'19 JUN',h:'16:00',t1:'Estados Unidos',t2:'Australia',gr:'D'},
+  {d:'19 JUN',h:'19:00',t1:'Escocia',t2:'Marruecos',gr:'C'},
+  {d:'19 JUN',h:'22:00',t1:'Brasil',t2:'Haití',gr:'C'},
+  // 20 JUN
+  {d:'20 JUN',h:'01:00',t1:'Turquía',t2:'Paraguay',gr:'D'},
+  {d:'20 JUN',h:'14:00',t1:'Países Bajos',t2:'Suecia',gr:'F'},
+  {d:'20 JUN',h:'17:00',t1:'Alemania',t2:'Costa de Marfil',gr:'E'},
+  {d:'20 JUN',h:'21:00',t1:'Ecuador',t2:'Curazao',gr:'E'},
+  // 21 JUN
+  {d:'21 JUN',h:'01:00',t1:'Túnez',t2:'Japón',gr:'F'},
+  {d:'21 JUN',h:'13:00',t1:'España',t2:'Arabia Saudita',gr:'H'},
+  {d:'21 JUN',h:'16:00',t1:'Bélgica',t2:'Irán',gr:'G'},
+  {d:'21 JUN',h:'19:00',t1:'Uruguay',t2:'Cabo Verde',gr:'H'},
+  {d:'21 JUN',h:'22:00',t1:'Nueva Zelanda',t2:'Egipto',gr:'G'},
+  // 22 JUN
+  {d:'22 JUN',h:'14:00',t1:'Argentina',t2:'Austria',gr:'J'},
+  {d:'22 JUN',h:'18:00',t1:'Francia',t2:'Irak',gr:'I'},
+  {d:'22 JUN',h:'21:00',t1:'Noruega',t2:'Senegal',gr:'I'},
+  // 23 JUN
+  {d:'23 JUN',h:'00:00',t1:'Jordania',t2:'Argelia',gr:'J'},
+  {d:'23 JUN',h:'14:00',t1:'Portugal',t2:'Uzbekistán',gr:'K'},
+  {d:'23 JUN',h:'17:00',t1:'Inglaterra',t2:'Ghana',gr:'L'},
+  {d:'23 JUN',h:'20:00',t1:'Panamá',t2:'Croacia',gr:'L'},
+  {d:'23 JUN',h:'23:00',t1:'Colombia',t2:'Congo',gr:'K'},
+  // 24 JUN
+  {d:'24 JUN',h:'16:00',t1:'Suiza',t2:'Canadá',gr:'B'},
+  {d:'24 JUN',h:'16:00',t1:'Bosnia y Herz.',t2:'Qatar',gr:'B'},
+  {d:'24 JUN',h:'19:00',t1:'Escocia',t2:'Brasil',gr:'C'},
+  {d:'24 JUN',h:'19:00',t1:'Marruecos',t2:'Haití',gr:'C'},
+  {d:'24 JUN',h:'22:00',t1:'Rep. Checa',t2:'México',gr:'A'},
+  {d:'24 JUN',h:'22:00',t1:'Sudáfrica',t2:'Corea del Sur',gr:'A'},
+  // 25 JUN
+  {d:'25 JUN',h:'17:00',t1:'Ecuador',t2:'Alemania',gr:'E'},
+  {d:'25 JUN',h:'17:00',t1:'Curazao',t2:'Costa de Marfil',gr:'E'},
+  {d:'25 JUN',h:'20:00',t1:'Túnez',t2:'Países Bajos',gr:'F'},
+  {d:'25 JUN',h:'20:00',t1:'Japón',t2:'Suecia',gr:'F'},
+  {d:'25 JUN',h:'23:00',t1:'Turquía',t2:'Estados Unidos',gr:'D'},
+  {d:'25 JUN',h:'23:00',t1:'Paraguay',t2:'Australia',gr:'D'},
+  // 26 JUN
+  {d:'26 JUN',h:'16:00',t1:'Noruega',t2:'Francia',gr:'I'},
+  {d:'26 JUN',h:'16:00',t1:'Senegal',t2:'Irak',gr:'I'},
+  {d:'26 JUN',h:'21:00',t1:'Uruguay',t2:'España',gr:'H'},
+  {d:'26 JUN',h:'21:00',t1:'Cabo Verde',t2:'Arabia Saudita',gr:'H'},
+  // 27 JUN
+  {d:'27 JUN',h:'00:00',t1:'Nueva Zelanda',t2:'Bélgica',gr:'G'},
+  {d:'27 JUN',h:'00:00',t1:'Egipto',t2:'Irán',gr:'G'},
+  {d:'27 JUN',h:'18:00',t1:'Panamá',t2:'Inglaterra',gr:'L'},
+  {d:'27 JUN',h:'18:00',t1:'Croacia',t2:'Ghana',gr:'L'},
+  {d:'27 JUN',h:'20:30',t1:'Colombia',t2:'Portugal',gr:'K'},
+  {d:'27 JUN',h:'20:30',t1:'Congo',t2:'Uzbekistán',gr:'K'},
+  {d:'27 JUN',h:'23:00',t1:'Jordania',t2:'Argentina',gr:'J'},
+  {d:'27 JUN',h:'23:00',t1:'Argelia',t2:'Austria',gr:'J'},
+];
+
+function switchFixTab(idx){
+  [0,1].forEach(i=>{
+    document.getElementById('fix-panel-'+i).style.display = i===idx?'':'none';
+    document.getElementById('fix-tab-btn-'+i).classList.toggle('active', i===idx);
+  });
+  if(idx===1) renderFixCalendar();
+}
+
+function renderFixCalendar(){
+  // Build flag map from TEAMS_48
+  const fm = {};
+  TEAMS_48.forEach(t=>{ fm[t.n]=t.flag; });
+  // Group matches by date
+  const byDate = {};
+  FIXTURE_MATCHES.forEach(m=>{
+    if(!byDate[m.d]) byDate[m.d]=[];
+    byDate[m.d].push(m);
+  });
+  const isArg = m => m.t1==='Argentina'||m.t2==='Argentina';
+  const matchCard = m => {
+    const arg = isArg(m);
+    const f1 = fm[m.t1]||'🏳️', f2 = fm[m.t2]||'🏳️';
+    const n1 = m.t1.length>12 ? m.t1.replace(' y ','/'): m.t1;
+    const n2 = m.t2.length>12 ? m.t2.replace(' y ','/'): m.t2;
+    return `<div class="fix-match${arg?' arg':''}">
+      <div class="fix-team"><span class="ft-flag">${f1}</span><span>${n1.toUpperCase()}</span></div>
+      <div class="fix-center">
+        <span class="fc-time">${m.h}</span>
+        <span class="fc-hs">hs ARG</span>
+        <span class="fc-vs">—VS—</span>
+        <span class="fc-gr">GR ${m.gr}</span>
+      </div>
+      <div class="fix-team"><span class="ft-flag">${f2}</span><span>${n2.toUpperCase()}</span></div>
+    </div>`;
+  };
+  document.getElementById('fix-panel-1').innerHTML =
+    '<div style="font-size:.7rem;color:#888;text-align:center;margin-bottom:10px;letter-spacing:1px">HORARIOS EN HORA ARGENTINA (UTC-3) · FASE DE GRUPOS</div>' +
+    Object.entries(byDate).map(([date, matches])=>
+      `<div class="fix-date-hdr">📅 ${date}</div>${matches.map(matchCard).join('')}`
+    ).join('');
+}
+
 function initFixture(){
   const groups = {};
   TEAMS_48.forEach(t=>{ if(!groups[t.g]) groups[t.g]=[]; groups[t.g].push(t); });
