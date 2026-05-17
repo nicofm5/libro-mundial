@@ -77,7 +77,21 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
   border-radius:10px;padding:8px 16px;margin-top:12px;font-size:1rem;
   font-weight:900;display:inline-block;text-transform:uppercase;letter-spacing:.5px}
 
-.act-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.act-grid{display:block}
+.act-grid-inner{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.act-section-lbl{font-family:var(--fh);font-size:1.05rem;color:var(--red-dark);
+  letter-spacing:1px;margin-bottom:10px;padding-left:2px;text-transform:uppercase}
+.game-banner{background:linear-gradient(135deg,var(--red-dark) 0%,var(--red) 60%,#3B72F2 100%);
+  color:#fff;border-radius:var(--r);padding:14px 16px 12px;text-align:center;
+  margin:22px 0 14px;font-family:var(--fh);font-size:clamp(1rem,4.5vw,1.25rem);
+  letter-spacing:1px;text-transform:uppercase;
+  box-shadow:0 6px 20px rgba(27,77,228,.3);position:relative;overflow:hidden}
+.game-banner::before{content:'⭐';position:absolute;left:12px;top:50%;
+  transform:translateY(-50%);font-size:1.6rem;opacity:.5}
+.game-banner::after{content:'⭐';position:absolute;right:12px;top:50%;
+  transform:translateY(-50%);font-size:1.6rem;opacity:.5}
+.game-banner .gb-sub{font-size:.75rem;opacity:.85;margin-top:4px;font-family:var(--fb);
+  font-weight:900;letter-spacing:2px}
 .act-card{background:#fff;border-radius:var(--r);padding:18px 12px;text-align:center;
   cursor:pointer;box-shadow:0 4px 16px rgba(27,77,228,.1);border:3px solid transparent;
   transition:transform .25s cubic-bezier(.175,.885,.32,1.275),box-shadow .25s,border-color .2s;
@@ -1304,16 +1318,32 @@ function renderHomeGrid(){
   document.getElementById('stars-count').textContent = S.stars;
 
   const grid = document.getElementById('act-grid');
-  grid.innerHTML = ACTIVITIES.map(a=>{
+
+  const cardHtml = a => {
     const done = S.completed[a.id];
-    const starsLabel = a.stars ? `⭐ Ganás ${a.stars} estrellas` : '';
+    const starsLabel = a.stars ? `⭐ Ganás ${a.stars} ${a.stars===1?'estrella':'estrellas'}` : '';
     return `<div class="act-card ${done?'done':''}" onclick="openActivity('${a.id}')">
       ${done?'<div class="done-badge">✓</div>':''}
       <div class="ci">${a.emoji}</div>
       <div class="ct">${a.title}</div>
       ${starsLabel?`<div class="cs">${starsLabel}</div>`:''}
     </div>`;
-  }).join('');
+  };
+
+  const infoActs = ACTIVITIES.filter(a => !a.game);
+  const gameActs = ACTIVITIES.filter(a =>  a.game);
+  const totalStarsAvail = gameActs.reduce((s,a)=>s+(a.stars||0),0);
+
+  grid.innerHTML = `
+    <div class="act-section-lbl">📚 CONOCÉ EL MUNDIAL</div>
+    <div class="act-grid-inner">${infoActs.map(cardHtml).join('')}</div>
+
+    <div class="game-banner">
+      ⚽ ¡JUGÁ Y GANÁ ESTRELLAS! ⭐
+      <div class="gb-sub">COMPLETÁ TODO Y SALÍ CAMPEÓN DEL MUNDO · ${totalStarsAvail} ESTRELLAS EN JUEGO</div>
+    </div>
+    <div class="act-grid-inner">${gameActs.map(cardHtml).join('')}</div>
+  `;
 }
 
 // ============================================================
