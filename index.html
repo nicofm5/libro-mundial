@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>⚽ Mi Libro del Mundial 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
   --red:#1B4DE4; --red-dark:#0D2B8E; --gold:#FFD700; --gold-dark:#D4A800;
@@ -204,7 +205,10 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 
 /* SELECCIONES */
-.jersey-show{width:110px;height:95px;margin:0 auto 12px;border-radius:10px;position:relative;overflow:hidden}
+.jersey-show{width:200px;height:220px;margin:0 auto 12px;border-radius:12px;position:relative;overflow:hidden;
+  background:#F5F5F5;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.jersey-show img{max-width:100%;max-height:100%;object-fit:contain}
 .jersey-desc{font-size:1rem;font-weight:700;color:#555;margin-bottom:18px;text-align:center}
 .ans-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
 .ans-opt{background:#fff;border:3px solid #E0E0E0;border-radius:12px;padding:13px 8px;
@@ -306,15 +310,20 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 .bracket-sec{margin-bottom:20px}
 .bracket-ttl{font-family:var(--fh);font-size:1.1rem;color:#fff;background:var(--red);
   border-radius:9px;padding:9px 14px;margin-bottom:10px}
-.bracket-match{background:#fff;border-radius:10px;padding:10px;margin-bottom:7px;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);display:grid;
-  grid-template-columns:1fr 32px 32px 10px 32px 32px 1fr;align-items:center;gap:4px}
-.b-inp{border:2px solid #E0E0E0;border-radius:7px;padding:7px 8px;font-size:.8rem;
-  font-weight:900;font-family:var(--fb);width:100%;outline:none;text-align:center}
-.b-score{width:32px;border:2px solid #E0E0E0;border-radius:7px;padding:7px 2px;
-  font-size:.9rem;font-weight:900;font-family:var(--fb);text-align:center;outline:none}
-.b-vs{font-size:.8rem;font-weight:900;color:#999;text-align:center}
-.match-label{font-size:.7rem;font-weight:900;color:#AAA;text-align:center;margin-bottom:4px}
+.bracket-match{background:#fff;border-radius:12px;padding:12px;margin-bottom:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:8px}
+.bracket-row{display:grid;grid-template-columns:1fr 60px;gap:10px;align-items:center}
+.bracket-vs{text-align:center;font-family:var(--fh);font-size:.9rem;
+  color:#999;letter-spacing:2px;line-height:1;padding:2px 0;
+  border-top:1px dashed #E0E0E0;border-bottom:1px dashed #E0E0E0}
+.b-inp{border:2px solid #E0E0E0;border-radius:8px;padding:9px 10px;font-size:.9rem;
+  font-weight:900;font-family:var(--fb);width:100%;outline:none;min-width:0;
+  text-transform:uppercase}
+.b-inp:focus{border-color:var(--red)}
+.b-score{width:100%;border:2px solid #E0E0E0;border-radius:8px;padding:9px 4px;
+  font-size:1.1rem;font-weight:900;font-family:var(--fh);text-align:center;outline:none}
+.b-score:focus{border-color:var(--red)}
+.match-label{font-size:.75rem;font-weight:900;color:#888;margin:8px 0 4px;padding-left:4px}
 
 /* GRAN FINAL */
 .final-field{background:linear-gradient(180deg,#27AE60,#229954);border-radius:var(--r);
@@ -395,6 +404,21 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
     <div id="player-name-display">👤 ¡Hola, campeón!</div>
   </div>
   <div class="act-grid" id="act-grid"></div>
+
+  <!-- EMAIL + PDF -->
+  <div class="card" style="margin-top:18px;background:linear-gradient(135deg,#FFF9E6,#FFFDF5);border:2px solid var(--gold)">
+    <div style="text-align:center;margin-bottom:10px">
+      <div style="font-size:2.4rem">📧📄</div>
+      <div style="font-family:var(--fh);font-size:1.3rem;color:var(--red-dark);letter-spacing:1px;margin-top:4px">¡ENVIAR MIS RESPUESTAS!</div>
+      <div style="font-size:.85rem;font-weight:700;color:#666;margin-top:4px">Recibí un PDF con todo lo que completaste</div>
+    </div>
+    <label class="big-lbl" style="margin-top:8px">📧 EMAIL:</label>
+    <input class="big-inp" id="inp-email" placeholder="ejemplo@gmail.com" type="email" style="text-transform:lowercase">
+    <div style="margin-top:12px">
+      <button class="btn btn-g btn-full" onclick="generarPDF()">📄 GENERAR Y ENVIAR PDF</button>
+    </div>
+    <div id="pdf-fb" class="fb-msg" style="margin-top:10px;display:none"></div>
+  </div>
 </div>
 
 <!-- ===== PORTADA ===== -->
@@ -750,19 +774,18 @@ const INTRUSO_ROUNDS = [
 ];
 
 const SELECCIONES_GAME = [
-  {bg:'linear-gradient(135deg,#75AADB 50%,#fff 50%)',desc:'Celeste y blanca con rayas verticales',
+  {img:'img/argentina.jpg',desc:'Celeste y blanca con rayas verticales',
    opts:['Argentina 🇦🇷','Uruguay 🇺🇾','Grecia 🇬🇷','Israel 🇮🇱'],correct:0},
-  {bg:'#FFDF00',desc:'Toda amarilla, letras verdes',
+  {img:'img/brasil.jpg',desc:'Toda amarilla con detalles verdes',
    opts:['Colombia 🇨🇴','Brasil 🇧🇷','Ecuador 🇪🇨','Suecia 🇸🇪'],correct:1},
-  {bg:'#003189',desc:'Azul oscura con letras doradas',
+  {img:'img/francia.jpg',desc:'Azul oscura con gallo dorado',
    opts:['Francia 🇫🇷','Italia 🇮🇹','Uruguay 🇺🇾','Bosnia 🇧🇦'],correct:0},
-  {bg:'#AA151B',desc:'Roja con letras doradas',
+  {img:'img/espana.png',desc:'Roja con detalles azules y dorados',
    opts:['Turquía 🇹🇷','Marruecos 🇲🇦','España 🇪🇸','Dinamarca 🇩🇰'],correct:2},
-  {bg:'#FFFFFF',desc:'Toda blanca con letras negras y escudo negro',
+  {img:'img/alemania.png',desc:'Blanca con franja negra, roja y amarilla',
    opts:['Polonia 🇵🇱','Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿','Alemania 🇩🇪','Argentina 🇦🇷'],correct:2},
-  {bg:'linear-gradient(180deg,#fff 33%,#fff 33%)',desc:'Blanca con cruz roja (escudo de San Jorge)',
-   opts:['Suiza 🇨🇭','Portugal 🇵🇹','Polonia 🇵🇱','Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿'],correct:3,
-   extra:'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none"><div style="width:20%;height:100%;background:#CC0000;opacity:.7"></div></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none"><div style="width:100%;height:20%;background:#CC0000;opacity:.7"></div></div>'},
+  {img:'img/inglaterra.png',desc:'Blanca con cruz roja (escudo de San Jorge)',
+   opts:['Suiza 🇨🇭','Portugal 🇵🇹','Polonia 🇵🇱','Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿'],correct:3},
 ];
 
 const PLAYERS = [
@@ -1327,8 +1350,8 @@ function renderSel(){
   const g = SELECCIONES_GAME[cur];
   cont.innerHTML = `
     <div class="card text-c">
-      <div class="jersey-show" style="background:${g.bg};position:relative;overflow:hidden">
-        ${g.extra||''}
+      <div class="jersey-show">
+        <img src="${g.img}" alt="Camiseta">
       </div>
       <div class="jersey-desc">👕 ${g.desc}</div>
       <div class="ans-opts">
@@ -1793,15 +1816,17 @@ function initElim(){
         const k=r.key+'_'+mi;
         const d=S.elim[k]||{};
         return `
-          <div style="font-size:.7rem;font-weight:900;color:#AAA;margin-bottom:2px;padding-left:4px">Partido ${mi+1}</div>
+          <div class="match-label">⚽ Partido ${mi+1}</div>
           <div class="bracket-match">
-            <input class="b-inp" placeholder="Equipo 1" value="${d.t1||''}" onchange="saveElimField('${k}','t1',this.value)">
-            <input class="b-score" placeholder="0" value="${d.s1||''}" onchange="saveElimField('${k}','s1',this.value)" type="number" min="0">
-            <div class="b-vs">–</div>
-            <input class="b-score" placeholder="0" value="${d.s2||''}" onchange="saveElimField('${k}','s2',this.value)" type="number" min="0">
-            <input class="b-inp" placeholder="Equipo 2" value="${d.t2||''}" onchange="saveElimField('${k}','t2',this.value)">
-            <div></div>
-            <div style="font-size:.7rem;font-weight:900;color:#888;text-align:right">→</div>
+            <div class="bracket-row">
+              <input class="b-inp" placeholder="Equipo 1" value="${d.t1||''}" onchange="saveElimField('${k}','t1',this.value)">
+              <input class="b-score" placeholder="-" value="${d.s1||''}" onchange="saveElimField('${k}','s1',this.value)" type="number" min="0">
+            </div>
+            <div class="bracket-vs">VS</div>
+            <div class="bracket-row">
+              <input class="b-inp" placeholder="Equipo 2" value="${d.t2||''}" onchange="saveElimField('${k}','t2',this.value)">
+              <input class="b-score" placeholder="-" value="${d.s2||''}" onchange="saveElimField('${k}','s2',this.value)" type="number" min="0">
+            </div>
           </div>`;
       }).join('')}
     </div>`).join('');
@@ -1846,6 +1871,151 @@ function saveFinal(){
   fb.className='fb-msg fb-ok';
   fb.textContent='🏆 ¡Campeón guardado! ¡'+S.final.winner+' Campeón del Mundo! 🎉';
   confetti(100); sndFanfare();
+}
+
+// ============================================================
+// PDF + EMAIL
+// ============================================================
+function generarPDF(){
+  const email = document.getElementById('inp-email').value.trim();
+  const fb = document.getElementById('pdf-fb');
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    fb.style.display='block'; fb.className='fb-msg fb-no';
+    fb.textContent='❌ Escribí un email válido (ej: ejemplo@gmail.com)';
+    return;
+  }
+  if(!window.jspdf){
+    fb.style.display='block'; fb.className='fb-msg fb-no';
+    fb.textContent='❌ No se pudo cargar el generador de PDF. Revisá tu conexión.';
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'mm',format:'a4'});
+  const W = 210, M = 15;
+  let y = 20;
+
+  // HEADER
+  doc.setFillColor(13,43,142); doc.rect(0,0,W,32,'F');
+  doc.setTextColor(255,215,0); doc.setFontSize(22); doc.setFont('helvetica','bold');
+  doc.text('MI LIBRO DEL MUNDIAL 2026', W/2, 14, {align:'center'});
+  doc.setFontSize(10); doc.setTextColor(255,255,255);
+  doc.text('Estados Unidos · México · Canadá', W/2, 22, {align:'center'});
+  doc.setFontSize(9);
+  doc.text('Generado: '+new Date().toLocaleDateString('es-AR'), W/2, 28, {align:'center'});
+  y = 42;
+
+  // SECTION HELPER
+  const sec = (title)=>{
+    doc.setFillColor(27,77,228); doc.rect(M,y,W-M*2,8,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text(title, M+3, y+5.5); y += 12;
+    doc.setTextColor(40,40,40); doc.setFontSize(10); doc.setFont('helvetica','normal');
+  };
+  const line = (label, val)=>{
+    if(y > 275){ doc.addPage(); y = 20; }
+    doc.setFont('helvetica','bold'); doc.text(label+':', M, y);
+    doc.setFont('helvetica','normal'); doc.text(String(val||'(sin completar)'), M+50, y);
+    y += 6;
+  };
+
+  // DATOS PERSONALES
+  sec('👤 DATOS DEL CAMPEÓN');
+  line('Nombre', S.playerName);
+  line('Edad', S.playerAge ? S.playerAge+' años' : '');
+  line('Selección favorita', S.favoriteTeam);
+  line('Estrellas ganadas', S.stars+' ⭐');
+  y += 4;
+
+  // ACTIVIDADES
+  sec('✅ ACTIVIDADES COMPLETADAS');
+  ACTIVITIES.forEach(a=>{
+    if(y > 275){ doc.addPage(); y = 20; }
+    const done = S.completed[a.id];
+    doc.setFont('helvetica','normal');
+    doc.text((done?'[X] ':'[ ] ')+a.title, M, y);
+    y += 5.5;
+  });
+  y += 4;
+
+  // EQUIPO IDEAL
+  if(S.equipo && Object.keys(S.equipo).length){
+    if(y > 240){ doc.addPage(); y = 20; }
+    sec('⚽ MI EQUIPO IDEAL');
+    const labels = {arq:'Arquero',def1:'Defensor 1',def2:'Defensor 2',def3:'Defensor 3',def4:'Defensor 4',
+      med1:'Mediocampista 1',med2:'Mediocampista 2',med3:'Mediocampista 3',
+      del1:'Delantero 1',del2:'Delantero 2',del3:'Delantero 3'};
+    ['arq','def1','def2','def3','def4','med1','med2','med3','del1','del2','del3'].forEach(k=>{
+      line(labels[k], S.equipo[k]);
+    });
+    y += 4;
+  }
+
+  // ELIMINATORIAS
+  if(S.elim && Object.keys(S.elim).length){
+    if(y > 240){ doc.addPage(); y = 20; }
+    sec('🗓️ ELIMINATORIAS');
+    ELIM_ROUNDS.forEach(r=>{
+      let hasData = false;
+      for(let mi=0; mi<r.matches; mi++){
+        const d = S.elim[r.key+'_'+mi];
+        if(d && (d.t1||d.t2||d.s1||d.s2)){ hasData = true; break; }
+      }
+      if(!hasData) return;
+      if(y > 270){ doc.addPage(); y = 20; }
+      doc.setFont('helvetica','bold'); doc.setFontSize(10);
+      doc.text(r.title, M, y); y += 5;
+      doc.setFont('helvetica','normal'); doc.setFontSize(9);
+      for(let mi=0; mi<r.matches; mi++){
+        const d = S.elim[r.key+'_'+mi] || {};
+        if(!d.t1 && !d.t2) continue;
+        if(y > 280){ doc.addPage(); y = 20; }
+        const line = `Partido ${mi+1}:  ${d.t1||'?'}  ${d.s1||'-'}  vs  ${d.s2||'-'}  ${d.t2||'?'}`;
+        doc.text(line, M+4, y); y += 4.5;
+      }
+      y += 3;
+    });
+  }
+
+  // GRAN FINAL
+  if(S.final && (S.final.team1 || S.final.winner)){
+    if(y > 250){ doc.addPage(); y = 20; }
+    sec('🏆 LA GRAN FINAL');
+    line('Equipo 1', S.final.team1);
+    line('Equipo 2', S.final.team2);
+    line('Resultado', (S.final.score1||'-')+' a '+(S.final.score2||'-'));
+    line('¡CAMPEÓN!', S.final.winner);
+  }
+
+  // FOOTER
+  const pages = doc.internal.getNumberOfPages();
+  for(let i=1; i<=pages; i++){
+    doc.setPage(i);
+    doc.setFontSize(8); doc.setTextColor(150,150,150);
+    doc.text('Mi Libro del Mundial 2026 - Página '+i+' de '+pages, W/2, 290, {align:'center'});
+  }
+
+  const fileName = `mundial2026-${(S.playerName||'campeon').replace(/[^a-z0-9]/gi,'_').toLowerCase()}.pdf`;
+  doc.save(fileName);
+
+  // OPEN MAILTO
+  const subject = encodeURIComponent('Mis respuestas del Mundial 2026');
+  const body = encodeURIComponent(
+    `¡Hola!\n\nAcabo de completar mi Libro del Mundial 2026.\n\n`+
+    `Nombre: ${S.playerName||'(sin nombre)'}\n`+
+    `Edad: ${S.playerAge||'?'} años\n`+
+    `Selección favorita: ${S.favoriteTeam||'(sin elegir)'}\n`+
+    `Estrellas ganadas: ${S.stars} ⭐\n\n`+
+    `Te adjunto el PDF con todas mis respuestas (se descargó en tu dispositivo, adjuntalo a este mail).\n\n`+
+    `¡Saludos!`
+  );
+  setTimeout(()=>{
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  }, 800);
+
+  fb.style.display='block'; fb.className='fb-msg fb-ok';
+  fb.innerHTML='✅ ¡PDF generado! Se descargó como <strong>'+fileName+'</strong>.<br>Se abrió tu mail — solo adjuntá el PDF y enviá.';
+  confetti(60); sndFanfare();
 }
 
 // ============================================================
