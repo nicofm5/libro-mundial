@@ -1127,6 +1127,8 @@ async function loadUsersList(){
   }
 }
 
+const TOTAL_STARS = ACTIVITIES.reduce((s,a)=>s+(a.stars||0),0);
+
 async function renderRanking(){
   const cont = document.getElementById('ranking-list');
   if(!cont) return;
@@ -1134,19 +1136,38 @@ async function renderRanking(){
   try{
     const snap = await db.ref('users').get();
     if(!snap.exists()){ cont.innerHTML = '<div style="text-align:center;font-size:.8rem;color:#999;padding:10px">Aún no hay jugadores. ¡Sumá tu nombre!</div>'; return; }
-    const list = Object.entries(snap.val())
+    const all = Object.entries(snap.val())
       .map(([k,v])=>({key:k, name:v.playerName||k, stars:v.stars||0}))
-      .sort((a,b)=>b.stars-a.stars).slice(0,10);
-    cont.innerHTML = list.map((u,i)=>{
-      const isMe = u.key===currentUserKey;
-      const isFirst = i===0;
-      const crown = isFirst ? '👑' : (i===1?'🥈':(i===2?'🥉':''));
-      return `<div class="rank-row ${isFirst?'first':''} ${isMe?'me':''}">
-        <div class="rank-pos">${i+1}°</div>
-        <div class="rank-name">${u.name}${isMe?' <span style="color:var(--red);font-size:.7rem">(VOS)</span>':''}${isFirst?' <span class="rank-crown">'+crown+'</span><br><span style="font-size:.65rem;font-weight:700;color:#8B6914">🏆 ¡CAMPEÓN DEL MUNDO!</span>':(crown?' '+crown:'')}</div>
-        <div class="rank-stars">${u.stars} ⭐</div>
-      </div>`;
-    }).join('');
+      .sort((a,b)=>b.stars-a.stars);
+    const champions = all.filter(u=>u.stars>=TOTAL_STARS);
+    const rest = all.filter(u=>u.stars<TOTAL_STARS).slice(0,10-champions.length);
+
+    let html = '';
+    if(champions.length){
+      html += `<div style="text-align:center;font-family:var(--fh);font-size:.95rem;color:#8B6914;letter-spacing:1px;margin-bottom:8px;padding:6px;background:linear-gradient(90deg,transparent,#FFF3CD,transparent)">🏆 ¡CAMPEONES DEL MUNDO! 🏆</div>`;
+      html += champions.map(u=>{
+        const isMe = u.key===currentUserKey;
+        return `<div class="rank-row first ${isMe?'me':''}">
+          <div class="rank-pos">👑</div>
+          <div class="rank-name">${u.name}${isMe?' <span style="color:var(--red);font-size:.7rem">(VOS)</span>':''}<br><span style="font-size:.65rem;font-weight:700;color:#8B6914">⚽ ¡COMPLETÓ TODAS LAS ESTRELLAS!</span></div>
+          <div class="rank-stars">${u.stars}/${TOTAL_STARS} ⭐</div>
+        </div>`;
+      }).join('');
+    }
+    if(rest.length){
+      if(champions.length) html += `<div style="text-align:center;font-size:.7rem;color:#888;margin:10px 0 6px;letter-spacing:1px">— RANKING GENERAL —</div>`;
+      html += rest.map((u,i)=>{
+        const isMe = u.key===currentUserKey;
+        const pos = champions.length+i+1;
+        const medal = (i===0&&!champions.length)?'🥇':(i===1&&!champions.length)?'🥈':(i===2&&!champions.length)?'🥉':'';
+        return `<div class="rank-row ${isMe?'me':''}">
+          <div class="rank-pos">${pos}°</div>
+          <div class="rank-name">${u.name}${isMe?' <span style="color:var(--red);font-size:.7rem">(VOS)</span>':''}${medal?' '+medal:''}</div>
+          <div class="rank-stars">${u.stars}/${TOTAL_STARS} ⭐</div>
+        </div>`;
+      }).join('');
+    }
+    cont.innerHTML = html;
   }catch(e){
     cont.innerHTML = '<div style="text-align:center;font-size:.8rem;color:#E74C3C;padding:10px">Error cargando ranking</div>';
   }
