@@ -6,6 +6,8 @@
 <title>⚽ Mi Libro del Mundial 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <style>
 :root {
   --red:#1B4DE4; --red-dark:#0D2B8E; --gold:#FFD700; --gold-dark:#D4A800;
@@ -15,6 +17,27 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidden;text-transform:uppercase}
+
+/* LOGIN USER CHIP */
+.user-chip{background:linear-gradient(135deg,#EEF3FF,#fff);border:2px solid var(--red);
+  border-radius:50px;padding:8px 14px;cursor:pointer;font-size:.85rem;font-weight:900;
+  color:var(--red-dark);transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.user-chip:hover{background:var(--red);color:#fff}
+.user-chip:active{transform:scale(.92)}
+
+/* RANKING */
+.rank-row{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:10px;
+  padding:10px 12px;background:#fff;border-radius:10px;margin-bottom:6px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.rank-row.me{background:linear-gradient(135deg,#FFF9E6,#fff);border:2px solid var(--gold)}
+.rank-row.first{background:linear-gradient(135deg,#FFD700,#FFEB99);border:2px solid #D4A800}
+.rank-pos{font-family:var(--fh);font-size:1.4rem;text-align:center;color:var(--red-dark)}
+.rank-row.first .rank-pos{color:#8B6914}
+.rank-name{font-weight:900;font-size:.95rem;color:#222;line-height:1.2}
+.rank-stars{font-family:var(--fh);font-size:1.1rem;color:var(--gold-dark);
+  display:flex;align-items:center;gap:3px}
+.rank-row.first .rank-stars{color:#8B6914}
+.rank-crown{font-size:1.2rem}
 
 /* HEADER */
 #hdr{background:linear-gradient(135deg,var(--red-dark) 0%,var(--red) 60%,#3B72F2 100%);color:#fff;
@@ -395,13 +418,46 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 
 <main id="main">
 
+<!-- ===== LOGIN ===== -->
+<div id="login-screen" class="screen active" style="padding:18px 14px">
+  <div class="home-banner" style="text-align:center;padding:32px 20px">
+    <img src="img/logo.png" alt="Mundial 2026" style="max-width:160px;height:auto;margin:0 auto 12px;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))">
+    <h2 style="font-family:var(--fh);font-size:1.8rem;letter-spacing:2px;text-transform:uppercase">¡Bienvenido!</h2>
+    <p style="margin-top:6px">Escribí tu nombre para empezar</p>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <label class="big-lbl">👤 ¿CÓMO TE LLAMÁS?</label>
+    <input class="big-inp" id="login-name" placeholder="Escribí tu nombre..." maxlength="30" style="text-transform:uppercase">
+    <div id="login-fb" class="fb-msg" style="margin-top:10px;display:none"></div>
+    <div style="margin-top:14px">
+      <button class="btn btn-r btn-full" onclick="loginUser()">⚽ ¡ENTRAR! ➡️</button>
+    </div>
+    <div style="margin-top:14px;padding-top:14px;border-top:2px dashed #DDD">
+      <div style="font-size:.8rem;font-weight:700;color:#666;text-align:center;margin-bottom:8px">¿Ya jugaste antes? Elegí tu usuario:</div>
+      <div id="login-users-list" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== HOME ===== -->
-<div id="home-screen" class="screen active">
+<div id="home-screen" class="screen">
   <div class="home-banner">
-    <div class="trophy">🏆</div>
-    <h2>MI LIBRO DEL MUNDIAL</h2>
+    <img src="img/logo.png" alt="Mundial 2026" style="max-width:180px;height:auto;margin:0 auto 8px;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))">
     <p>Estados Unidos · México · Canadá</p>
     <div id="player-name-display">👤 ¡Hola, campeón!</div>
+    <div style="margin-top:10px">
+      <button class="btn btn-g" style="padding:8px 14px;font-size:.85rem;min-height:auto" onclick="cambiarUsuario()">👥 Cambiar de usuario</button>
+    </div>
+  </div>
+
+  <!-- RANKING -->
+  <div class="card" id="ranking-card" style="margin-top:14px;background:linear-gradient(135deg,#FFF8DC,#FFFEF5);border:2px solid var(--gold)">
+    <div style="text-align:center;margin-bottom:10px">
+      <div style="font-size:2rem">🏆</div>
+      <div style="font-family:var(--fh);font-size:1.3rem;color:var(--red-dark);letter-spacing:1px;margin-top:2px">RANKING DEL MUNDIAL</div>
+      <div style="font-size:.75rem;font-weight:700;color:#888">¡El que más estrellas tiene es el CAMPEÓN!</div>
+    </div>
+    <div id="ranking-list" style="min-height:40px"></div>
   </div>
   <div class="act-grid" id="act-grid"></div>
 
@@ -942,10 +998,26 @@ function processFlags(str,h=18,w=20){
 }
 
 // ============================================================
-// STATE
+// FIREBASE
 // ============================================================
-const SK = 'mundial2026_v1';
-let S = loadState();
+const firebaseConfig = {
+  apiKey: "AIzaSyBWG2zA6nWEyD4Dp4TWQKmYPvCDwvWnsNU",
+  authDomain: "libro-mundial.firebaseapp.com",
+  databaseURL: "https://libro-mundial-default-rtdb.firebaseio.com",
+  projectId: "libro-mundial",
+  storageBucket: "libro-mundial.firebasestorage.app",
+  messagingSenderId: "255402815594",
+  appId: "1:255402815594:web:0f44e464bd9da9160e1a13"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// ============================================================
+// STATE + MULTI-USER
+// ============================================================
+const LSK_USER = 'mundial2026_currentUser';
+let currentUserKey = null;
+let S = defaultState();
 
 function defaultState(){
   return {
@@ -964,15 +1036,121 @@ function defaultState(){
   };
 }
 
-function loadState(){
+function nameToKey(name){
+  return name.trim().toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]/g,'_').slice(0,40);
+}
+
+let saveTimer = null;
+function save(){
+  // local cache for offline
+  try{ localStorage.setItem('mundial2026_cache_'+currentUserKey, JSON.stringify(S)); }catch(e){}
+  // debounced firebase write
+  if(!currentUserKey) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    db.ref('users/'+currentUserKey).set(S).catch(e=>console.warn('Firebase save error:',e));
+  }, 600);
+}
+
+async function loadUserData(userKey){
+  // Try Firebase first
   try{
-    const d = JSON.parse(localStorage.getItem(SK));
-    if(d) return {...defaultState(),...d};
+    const snap = await db.ref('users/'+userKey).get();
+    if(snap.exists()){
+      return {...defaultState(), ...snap.val()};
+    }
+  }catch(e){ console.warn('Firebase load error:', e); }
+  // Fallback to localStorage cache
+  try{
+    const cached = JSON.parse(localStorage.getItem('mundial2026_cache_'+userKey));
+    if(cached) return {...defaultState(), ...cached};
   }catch(e){}
   return defaultState();
 }
 
-function save(){ localStorage.setItem(SK, JSON.stringify(S)); }
+async function loginUser(){
+  const name = (document.getElementById('login-name').value||'').trim();
+  const fb = document.getElementById('login-fb');
+  if(!name || name.length<2){
+    fb.style.display='block'; fb.className='fb-msg fb-no';
+    fb.textContent='❌ Escribí tu nombre (al menos 2 letras)';
+    return;
+  }
+  await enterAsUser(name);
+}
+
+async function loginExistingUser(userKey, name){
+  await enterAsUser(name, userKey);
+}
+
+async function enterAsUser(name, forcedKey){
+  const key = forcedKey || nameToKey(name);
+  currentUserKey = key;
+  localStorage.setItem(LSK_USER, JSON.stringify({key, name}));
+  S = await loadUserData(key);
+  if(!S.playerName) S.playerName = name;
+  save();
+  showScreen('home');
+  renderHomeGrid();
+  renderRanking();
+  document.getElementById('stars-count').textContent = S.stars;
+}
+
+function cambiarUsuario(){
+  if(!confirm('¿Querés cambiar de usuario? Tu progreso queda guardado.')) return;
+  localStorage.removeItem(LSK_USER);
+  currentUserKey = null;
+  S = defaultState();
+  document.getElementById('stars-count').textContent = 0;
+  document.getElementById('login-name').value = '';
+  showScreen('login');
+  loadUsersList();
+}
+
+async function loadUsersList(){
+  const cont = document.getElementById('login-users-list');
+  cont.innerHTML = '<div style="font-size:.75rem;color:#999">Cargando...</div>';
+  try{
+    const snap = await db.ref('users').get();
+    if(!snap.exists()){ cont.innerHTML = '<div style="font-size:.75rem;color:#999">Todavía no hay usuarios. ¡Sé el primero!</div>'; return; }
+    const users = snap.val();
+    const list = Object.entries(users)
+      .map(([k,v])=>({key:k, name:v.playerName||k, stars:v.stars||0}))
+      .sort((a,b)=>b.stars-a.stars);
+    cont.innerHTML = list.map(u=>
+      `<button class="user-chip" onclick="loginExistingUser('${u.key}','${(u.name||'').replace(/'/g,"\\'")}')">${u.name} ⭐${u.stars}</button>`
+    ).join('');
+  }catch(e){
+    cont.innerHTML = '<div style="font-size:.75rem;color:#E74C3C">Error: revisá tu conexión</div>';
+  }
+}
+
+async function renderRanking(){
+  const cont = document.getElementById('ranking-list');
+  if(!cont) return;
+  cont.innerHTML = '<div style="text-align:center;font-size:.8rem;color:#999;padding:10px">Cargando ranking...</div>';
+  try{
+    const snap = await db.ref('users').get();
+    if(!snap.exists()){ cont.innerHTML = '<div style="text-align:center;font-size:.8rem;color:#999;padding:10px">Aún no hay jugadores. ¡Sumá tu nombre!</div>'; return; }
+    const list = Object.entries(snap.val())
+      .map(([k,v])=>({key:k, name:v.playerName||k, stars:v.stars||0}))
+      .sort((a,b)=>b.stars-a.stars).slice(0,10);
+    cont.innerHTML = list.map((u,i)=>{
+      const isMe = u.key===currentUserKey;
+      const isFirst = i===0;
+      const crown = isFirst ? '👑' : (i===1?'🥈':(i===2?'🥉':''));
+      return `<div class="rank-row ${isFirst?'first':''} ${isMe?'me':''}">
+        <div class="rank-pos">${i+1}°</div>
+        <div class="rank-name">${u.name}${isMe?' <span style="color:var(--red);font-size:.7rem">(VOS)</span>':''}${isFirst?' <span class="rank-crown">'+crown+'</span><br><span style="font-size:.65rem;font-weight:700;color:#8B6914">🏆 ¡CAMPEÓN DEL MUNDO!</span>':(crown?' '+crown:'')}</div>
+        <div class="rank-stars">${u.stars} ⭐</div>
+      </div>`;
+    }).join('');
+  }catch(e){
+    cont.innerHTML = '<div style="text-align:center;font-size:.8rem;color:#E74C3C;padding:10px">Error cargando ranking</div>';
+  }
+}
 
 // ============================================================
 // SOUND
@@ -1063,6 +1241,7 @@ function markDone(id, extraStars=0){
 function goHome(){
   showScreen('home');
   renderHomeGrid();
+  renderRanking();
 }
 
 function showScreen(id){
@@ -1074,6 +1253,7 @@ function showScreen(id){
 function openActivity(id){
   showScreen(id);
   const inits = {
+    portada: initPortadaGrid,
     anfitriones: initAnfitriones,
     equipos: initEquipos,
     fixture: initFixture,
@@ -1118,20 +1298,20 @@ function renderHomeGrid(){
 // ============================================================
 // PORTADA
 // ============================================================
-(function initPortadaGrid(){
+function initPortadaGrid(){
   renderTeamGrid('');
-  if(S.playerName){
-    const el = document.getElementById('inp-name');
-    if(el) el.value = S.playerName;
-  }
-  if(S.playerAge){
-    const el = document.getElementById('inp-age');
-    if(el) el.value = S.playerAge;
-  }
+  const elN = document.getElementById('inp-name');
+  if(elN) elN.value = S.playerName || '';
+  const elA = document.getElementById('inp-age');
+  if(elA) elA.value = S.playerAge || '';
+  const sel = document.getElementById('team-selected-display');
+  if(sel) sel.style.display = 'none';
   if(S.favoriteTeam){
-    showSelectedTeam(TEAMS_48.find(t=>t.n===S.favoriteTeam));
+    const t = TEAMS_48.find(t=>t.n===S.favoriteTeam);
+    if(t) showSelectedTeam(t);
   }
-})();
+}
+initPortadaGrid();
 
 function renderTeamGrid(query){
   const grid = document.getElementById('team-grid');
@@ -2021,8 +2201,17 @@ function generarPDF(){
 // ============================================================
 // INIT
 // ============================================================
-renderHomeGrid();
-document.getElementById('stars-count').textContent = S.stars;
+(async function(){
+  // Check if user already logged in
+  let saved = null;
+  try{ saved = JSON.parse(localStorage.getItem(LSK_USER)); }catch(e){}
+  if(saved && saved.key){
+    await enterAsUser(saved.name||saved.key, saved.key);
+  } else {
+    showScreen('login');
+    loadUsersList();
+  }
+})();
 </script>
 </body>
 </html>
