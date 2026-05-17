@@ -2092,7 +2092,7 @@ function saveFinal(){
 // PDF + EMAIL
 // ============================================================
 
-// Carga una imagen como base64 DataURL vía canvas (soporta CORS)
+// Carga imagen como base64 DataURL + dimensiones naturales
 function loadImgB64(src){
   return new Promise(res=>{
     const img=new Image();
@@ -2102,11 +2102,10 @@ function loadImgB64(src){
         const c=document.createElement('canvas');
         c.width=img.naturalWidth; c.height=img.naturalHeight;
         c.getContext('2d').drawImage(img,0,0);
-        res(c.toDataURL('image/jpeg',0.92));
+        res({data: c.toDataURL('image/jpeg',0.92), nw: img.naturalWidth, nh: img.naturalHeight});
       }catch(e){ res(null); }
     };
     img.onerror=()=>res(null);
-    // cache buster para evitar problemas CORS en GitHub Pages
     img.src=src+(src.includes('?')?'&':'?')+'_cb='+Date.now();
   });
 }
@@ -2145,10 +2144,13 @@ async function generarPDF(){
   const doc = new jsPDF({unit:'mm', format:'a4', compress:true});
   const W=210, H=297, M=14;
 
-  // Helper seguro para agregar imágenes
-  const addImg=(b64,x,y,w,h,fmt='JPEG')=>{
-    if(!b64) return;
-    try{ doc.addImage(b64,fmt,x,y,w,h); }catch(e){}
+  // Helper con aspect ratio: centra imagen dentro de un box (bx,by,bw,bh)
+  const addImgAR=(imgObj, bx, by, bw, bh)=>{
+    if(!imgObj||!imgObj.data) return;
+    const ratio=Math.min(bw/imgObj.nw, bh/imgObj.nh);
+    const fw=imgObj.nw*ratio, fh=imgObj.nh*ratio;
+    const ox=(bw-fw)/2, oy=(bh-fh)/2;
+    try{ doc.addImage(imgObj.data,'JPEG', bx+ox, by+oy, fw, fh); }catch(e){}
   };
 
   // ================================================================
@@ -2171,8 +2173,8 @@ async function generarPDF(){
   doc.setTextColor(9,25,77);
   doc.text('FIFA WORLD CUP 2026  ·  USA · CANADA · MEXICO', W/2, 6.8, {align:'center'});
 
-  // Logo FIFA centrado
-  addImg(logoB64, W/2-28, 14, 56, 38, 'JPEG');
+  // Logo FIFA centrado — aspect ratio preservado en box 56x38
+  addImgAR(logoB64, W/2-28, 14, 56, 38);
 
   // Línea decorativa dorada
   doc.setFillColor(255,215,0);
@@ -2205,40 +2207,42 @@ async function generarPDF(){
   doc.setFontSize(13);
   doc.text(`★  ${S.stars} / ${TOTAL_STARS} ESTRELLAS GANADAS  ★`, W/2, 115, {align:'center'});
 
-  // Imagen de Messi — protagonista central
-  addImg(messiB64, W/2-38, 122, 76, 98);
+  // Imagen de Messi — protagonista central, AR preservado en box 90x95
+  addImgAR(messiB64, W/2-45, 122, 90, 95);
 
-  // Bloque equipo favorito — abajo izquierda
-  if(S.favoriteTeam){
+  // ---- CARDS INFERIORES ----
+  // Dos tarjetas: selección favorita (izq) y camiseta Argentina (der)
+  const botY=222, cardW=88, cardH=58;
+  const c1x=M, c2x=M+cardW+6;   // gap de 6mm entre cards
+
+  // Función para dibujar header de card dorado
+  const cardHdr=(cx,lbl)=>{
     doc.setFillColor(20,50,150);
-    doc.roundedRect(M, 228, 80, 42, 4, 4, 'F');
+    doc.roundedRect(cx, botY, cardW, cardH, 3, 3, 'F');
     doc.setFillColor(255,215,0);
-    doc.roundedRect(M, 228, 80, 9, 4, 4, 'F');
-    doc.rect(M, 232, 80, 5, 'F');
+    doc.roundedRect(cx, botY, cardW, 9, 3, 3, 'F');
+    doc.rect(cx, botY+6, cardW, 3, 'F');
     doc.setTextColor(9,25,77);
-    doc.setFontSize(7);
     doc.setFont('helvetica','bold');
-    doc.text('MI SELECCIÓN FAVORITA', M+40, 234.5, {align:'center'});
-    // Bandera
-    addImg(flagB64, M+4, 240, 32, 21);
-    // Nombre del equipo
-    doc.setTextColor(255,255,255);
-    doc.setFontSize(11);
-    const teamLines = doc.splitTextToSize((S.favoriteTeam||'').toUpperCase(), 36);
-    doc.text(teamLines, M+42, 247, {align:'center'});
-  }
+    doc.setFontSize(6);
+    doc.text(lbl, cx+cardW/2, botY+6, {align:'center'});
+  };
 
-  // Camiseta Argentina — abajo derecha
-  doc.setFillColor(20,50,150);
-  doc.roundedRect(116, 228, 80, 42, 4, 4, 'F');
-  doc.setFillColor(255,215,0);
-  doc.roundedRect(116, 228, 80, 9, 4, 4, 'F');
-  doc.rect(116, 232, 80, 5, 'F');
-  doc.setTextColor(9,25,77);
-  doc.setFontSize(7);
+  // Card 1 — MI SELECCIÓN FAVORITA
+  cardHdr(c1x, 'MI SELECCION FAVORITA');
+  // Bandera: box de 80x30, centrado en el área de imagen (y=botY+10 a botY+40)
+  addImgAR(flagB64, c1x+4, botY+10, cardW-8, 30);
+  // Nombre del equipo DEBAJO de la imagen (y=botY+43)
+  doc.setTextColor(255,255,255);
   doc.setFont('helvetica','bold');
-  doc.text('CAMISETA ARGENTINA', 156, 234.5, {align:'center'});
-  addImg(jerseyB64, 130, 239, 52, 28);
+  doc.setFontSize(9);
+  const teamLabel=(S.favoriteTeam||'SIN SELECCION').toUpperCase();
+  doc.text(doc.splitTextToSize(teamLabel, cardW-6), c1x+cardW/2, botY+45, {align:'center'});
+
+  // Card 2 — CAMISETA ARGENTINA
+  cardHdr(c2x, 'CAMISETA ARGENTINA');
+  // Jersey: box 80x42, centrado (deja 7mm de padding vertical)
+  addImgAR(jerseyB64, c2x+4, botY+10, cardW-8, 40);
 
   // Franja dorada inferior
   doc.setFillColor(200,160,0);
@@ -2263,7 +2267,8 @@ async function generarPDF(){
   const pHdr=()=>{
     doc.setFillColor(9,25,77);
     doc.rect(0,0,W,18,'F');
-    addImg(logoB64, 4, 1, 14, 15, 'JPEG');
+    // Logo en header con AR, box 14x15
+    addImgAR(logoB64, 4, 1.5, 14, 15);
     doc.setTextColor(255,215,0);
     doc.setFont('helvetica','bold');
     doc.setFontSize(10);
@@ -2305,36 +2310,34 @@ async function generarPDF(){
   // --- DATOS DEL JUGADOR ---
   sec('Datos del jugador', [9,25,77]);
 
-  // Card visual con bandera + jersey
+  // Card visual con bandera + jersey — altura 52mm
   const cardY = y;
+  const cardTotalH = 52;
   doc.setFillColor(235,240,255);
-  doc.roundedRect(M, cardY, W-M*2, 48, 3, 3, 'F');
+  doc.roundedRect(M, cardY, W-M*2, cardTotalH, 3, 3, 'F');
   doc.setDrawColor(27,77,228);
-  doc.roundedRect(M, cardY, W-M*2, 48, 3, 3, 'S');
+  doc.roundedRect(M, cardY, W-M*2, cardTotalH, 3, 3, 'S');
 
-  // Bandera equipo dentro del card
-  if(flagB64) addImg(flagB64, M+4, cardY+4, 42, 28);
-  else{
-    doc.setFillColor(200,210,235);
-    doc.roundedRect(M+4, cardY+4, 42, 28, 2, 2, 'F');
-  }
-  // Nombre equipo bajo bandera
+  // Columna 1: Bandera en box 44x30, AR preservado, sin superposición de texto
+  addImgAR(flagB64, M+3, cardY+3, 44, 30);
+  // Nombre equipo centrado BAJO la bandera
   doc.setFont('helvetica','bold');
-  doc.setFontSize(7.5);
+  doc.setFontSize(7);
   doc.setTextColor(9,25,77);
-  const teamTxt = (S.favoriteTeam||'Sin equipo').toUpperCase();
-  doc.text(doc.splitTextToSize(teamTxt,42), M+25, cardY+36, {align:'center'});
+  const teamTxt2=(S.favoriteTeam||'SIN EQUIPO').toUpperCase();
+  doc.text(doc.splitTextToSize(teamTxt2, 44), M+25, cardY+36, {align:'center'});
 
-  // Jersey Argentina en el card
-  addImg(jerseyB64, M+52, cardY+3, 32, 42);
+  // Columna 2: Jersey en box 30x44, AR preservado
+  addImgAR(jerseyB64, M+52, cardY+3, 30, 44);
 
-  // Datos de texto en el card
-  const dx=M+90, dw=W-M-dx-2;
+  // Columna 3: Datos de texto
+  const dx=M+88;
   const txtRow=(lbl,val,ty)=>{
     doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(27,77,228);
     doc.text(lbl, dx, ty);
     doc.setFont('helvetica','normal'); doc.setTextColor(40,40,40); doc.setFontSize(9);
-    doc.text(String(val||'—'), dx, ty+4.5);
+    const wrapped=doc.splitTextToSize(String(val||'—'), W-M-dx-3);
+    doc.text(wrapped, dx, ty+4.5);
   };
   txtRow('NOMBRE:', S.playerName||'(sin nombre)', cardY+10);
   txtRow('EDAD:', S.playerAge ? S.playerAge+' años' : '—', cardY+22);
@@ -2342,17 +2345,17 @@ async function generarPDF(){
 
   // Barra de estrellas
   const starPct = Math.min(S.stars/TOTAL_STARS,1);
-  const barX=M+90, barW=W-M-barX-3;
+  const barX=M+88, barW=W-M-barX-3;
+  doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(9,25,77);
+  doc.text(`${S.stars}/${TOTAL_STARS} ESTRELLAS`, barX, cardY+46);
   doc.setFillColor(220,225,240);
-  doc.roundedRect(barX, cardY+44, barW, 5, 2, 2, 'F');
+  doc.roundedRect(barX, cardY+47, barW, 4, 1.5, 1.5, 'F');
   if(starPct>0){
     doc.setFillColor(255,215,0);
-    doc.roundedRect(barX, cardY+44, barW*starPct, 5, 2, 2, 'F');
+    doc.roundedRect(barX, cardY+47, barW*starPct, 4, 1.5, 1.5, 'F');
   }
-  doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(9,25,77);
-  doc.text(`${S.stars}/${TOTAL_STARS} ESTRELLAS`, barX, cardY+42);
 
-  y = cardY + 52;
+  y = cardY + cardTotalH + 4;
 
   // --- ACTIVIDADES ---
   sec('Actividades completadas', [27,77,228]);
