@@ -1657,7 +1657,28 @@ function checkJug(idx){
 // ============================================================
 // SILABAS
 // ============================================================
-function initSil(){ if(!S.sil.placed) S.sil.placed=[]; renderSil(); }
+function initSil(){
+  if(!S.sil.placed) S.sil.placed=[];
+  if(!S.sil.orders) S.sil.orders={};
+  renderSil();
+}
+
+// Genera un orden aleatorio garantizado ≠ al orden original
+function getShuffleOrder(cur, len){
+  if(S.sil.orders && S.sil.orders[cur]) return S.sil.orders[cur];
+  let arr = Array.from({length:len},(_,i)=>i);
+  // Fisher-Yates
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  // Si quedó en orden original, forzar swap del primero y el último
+  if(arr.every((v,i)=>v===i) && len>1) [arr[0],arr[len-1]]=[arr[len-1],arr[0]];
+  if(!S.sil.orders) S.sil.orders={};
+  S.sil.orders[cur]=arr;
+  save();
+  return arr;
+}
 
 function renderSil(){
   const cur = S.sil.current;
@@ -1673,7 +1694,7 @@ function renderSil(){
       <div class="card text-c">
         <div style="font-size:4rem">🔤🎉</div>
         <div style="font-family:var(--fh);font-size:1.5rem;color:var(--red-dark);margin:10px 0">¡Armaste todos los países!</div>
-        <button class="btn btn-g btn-full" onclick="S.sil={current:0,placed:[]};save();renderSil()">🔄 Jugar de nuevo</button>
+        <button class="btn btn-g btn-full" onclick="S.sil={current:0,placed:[],orders:{}};save();renderSil()">🔄 Jugar de nuevo</button>
       </div>`;
     if(!S.completed['silabas']){ markDone('silabas',4); renderHomeGrid(); }
     return;
@@ -1681,8 +1702,9 @@ function renderSil(){
 
   const g = SILABA_GAMES[cur];
   const placed = S.sil.placed || [];
-  // shuffle syllables once per game load (stable order using game index as seed)
-  const shuffled = shuffleSeed(g.syllables.map((s,i)=>({s,i})), cur*7+13);
+  // Orden aleatorio persistido en estado (garantizado ≠ al original)
+  const order = getShuffleOrder(cur, g.syllables.length);
+  const shuffled = order.map(i=>({s:g.syllables[i], i}));
 
   cont.innerHTML = `
     <div class="card sil-game">
@@ -1709,14 +1731,6 @@ function renderSil(){
     </div>`;
 }
 
-function shuffleSeed(arr, seed){
-  const a=[...arr];
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.abs(Math.sin(seed+i)*1000000|0)%(i+1);
-    [a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
-}
 
 function tapSyl(origIdx){
   const placed = S.sil.placed || [];
@@ -2077,7 +2091,27 @@ function saveFinal(){
 // ============================================================
 // PDF + EMAIL
 // ============================================================
-function generarPDF(){
+
+// Carga una imagen como base64 DataURL vía canvas (soporta CORS)
+function loadImgB64(src){
+  return new Promise(res=>{
+    const img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=()=>{
+      try{
+        const c=document.createElement('canvas');
+        c.width=img.naturalWidth; c.height=img.naturalHeight;
+        c.getContext('2d').drawImage(img,0,0);
+        res(c.toDataURL('image/jpeg',0.92));
+      }catch(e){ res(null); }
+    };
+    img.onerror=()=>res(null);
+    // cache buster para evitar problemas CORS en GitHub Pages
+    img.src=src+(src.includes('?')?'&':'?')+'_cb='+Date.now();
+  });
+}
+
+async function generarPDF(){
   const email = document.getElementById('inp-email').value.trim();
   const fb = document.getElementById('pdf-fb');
   if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
@@ -2091,131 +2125,373 @@ function generarPDF(){
     return;
   }
 
+  // Estado de carga
+  fb.style.display='block'; fb.className='fb-msg';
+  fb.innerHTML='⏳ Cargando imágenes y generando PDF...';
+
+  // Obtener código de bandera del equipo favorito
+  const teamCode = S.favoriteTeam ? COUNTRY_CODE[S.favoriteTeam] : null;
+  const flagUrl  = teamCode ? `https://flagcdn.com/w160/${teamCode}.png` : null;
+
+  // Carga paralela de todas las imágenes
+  const [logoB64, messiB64, jerseyB64, flagB64] = await Promise.all([
+    loadImgB64('img/logo.png'),
+    loadImgB64('img/messi levantando copa.jfif'),
+    loadImgB64('img/argentina.jpg'),
+    flagUrl ? loadImgB64(flagUrl) : Promise.resolve(null),
+  ]);
+
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({unit:'mm',format:'a4'});
-  const W = 210, M = 15;
-  let y = 20;
+  const doc = new jsPDF({unit:'mm', format:'a4', compress:true});
+  const W=210, H=297, M=14;
 
-  // HEADER
-  doc.setFillColor(13,43,142); doc.rect(0,0,W,32,'F');
-  doc.setTextColor(255,215,0); doc.setFontSize(22); doc.setFont('helvetica','bold');
-  doc.text('MI LIBRO DEL MUNDIAL 2026', W/2, 14, {align:'center'});
-  doc.setFontSize(10); doc.setTextColor(255,255,255);
-  doc.text('Estados Unidos · México · Canadá', W/2, 22, {align:'center'});
-  doc.setFontSize(9);
-  doc.text('Generado: '+new Date().toLocaleDateString('es-AR'), W/2, 28, {align:'center'});
-  y = 42;
-
-  // SECTION HELPER
-  const sec = (title)=>{
-    doc.setFillColor(27,77,228); doc.rect(M,y,W-M*2,8,'F');
-    doc.setTextColor(255,255,255); doc.setFontSize(11); doc.setFont('helvetica','bold');
-    doc.text(title, M+3, y+5.5); y += 12;
-    doc.setTextColor(40,40,40); doc.setFontSize(10); doc.setFont('helvetica','normal');
-  };
-  const line = (label, val)=>{
-    if(y > 275){ doc.addPage(); y = 20; }
-    doc.setFont('helvetica','bold'); doc.text(label+':', M, y);
-    doc.setFont('helvetica','normal'); doc.text(String(val||'(sin completar)'), M+50, y);
-    y += 6;
+  // Helper seguro para agregar imágenes
+  const addImg=(b64,x,y,w,h,fmt='JPEG')=>{
+    if(!b64) return;
+    try{ doc.addImage(b64,fmt,x,y,w,h); }catch(e){}
   };
 
-  // DATOS PERSONALES
-  sec('👤 DATOS DEL CAMPEÓN');
-  line('Nombre', S.playerName);
-  line('Edad', S.playerAge ? S.playerAge+' años' : '');
-  line('Selección favorita', S.favoriteTeam);
-  line('Estrellas ganadas', S.stars+' ⭐');
-  y += 4;
+  // ================================================================
+  // PÁGINA 1 — PORTADA
+  // ================================================================
 
-  // ACTIVIDADES
-  sec('✅ ACTIVIDADES COMPLETADAS');
-  ACTIVITIES.forEach(a=>{
-    if(y > 275){ doc.addPage(); y = 20; }
-    const done = S.completed[a.id];
-    doc.setFont('helvetica','normal');
-    doc.text((done?'[X] ':'[ ] ')+a.title, M, y);
-    y += 5.5;
-  });
-  y += 4;
+  // Fondo azul marino oscuro
+  doc.setFillColor(9,25,77);
+  doc.rect(0,0,W,H,'F');
 
-  // EQUIPO IDEAL
-  if(S.equipo && Object.keys(S.equipo).length){
-    if(y > 240){ doc.addPage(); y = 20; }
-    sec('⚽ MI EQUIPO IDEAL');
-    const labels = {arq:'Arquero',def1:'Defensor 1',def2:'Defensor 2',def3:'Defensor 3',def4:'Defensor 4',
-      med1:'Mediocampista 1',med2:'Mediocampista 2',med3:'Mediocampista 3',
-      del1:'Delantero 1',del2:'Delantero 2',del3:'Delantero 3'};
-    ['arq','def1','def2','def3','def4','med1','med2','med3','del1','del2','del3'].forEach(k=>{
-      line(labels[k], S.equipo[k]);
-    });
-    y += 4;
+  // Franja dorada superior
+  doc.setFillColor(255,215,0);
+  doc.rect(0,0,W,11,'F');
+  doc.setFillColor(200,160,0);
+  doc.rect(0,9,W,2,'F');
+
+  // Texto en franja dorada
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(9,25,77);
+  doc.text('FIFA WORLD CUP 2026  ·  USA · CANADA · MEXICO', W/2, 6.8, {align:'center'});
+
+  // Logo FIFA centrado
+  addImg(logoB64, W/2-28, 14, 56, 38, 'JPEG');
+
+  // Línea decorativa dorada
+  doc.setFillColor(255,215,0);
+  doc.rect(M, 56, W-M*2, 1.2, 'F');
+  doc.setFillColor(255,255,255);
+  doc.rect(M, 58, W-M*2, 0.4, 'F');
+
+  // Título principal
+  doc.setTextColor(255,215,0);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(26);
+  doc.text('MI LIBRO DEL MUNDIAL', W/2, 71, {align:'center'});
+  doc.setFontSize(20);
+  doc.setTextColor(255,255,255);
+  doc.text('2026', W/2, 81, {align:'center'});
+
+  // Nombre del jugador - grande y dorado
+  doc.setFillColor(255,215,0);
+  doc.roundedRect(M, 86, W-M*2, 18, 4, 4, 'F');
+  doc.setTextColor(9,25,77);
+  doc.setFontSize(22);
+  doc.setFont('helvetica','bold');
+  const nombre = (S.playerName||'CAMPEÓN').toUpperCase();
+  doc.text(nombre, W/2, 98, {align:'center'});
+
+  // Estrellas ganadas
+  doc.setFillColor(27,77,228);
+  doc.roundedRect(M, 107, W-M*2, 12, 3, 3, 'F');
+  doc.setTextColor(255,215,0);
+  doc.setFontSize(13);
+  doc.text(`★  ${S.stars} / ${TOTAL_STARS} ESTRELLAS GANADAS  ★`, W/2, 115, {align:'center'});
+
+  // Imagen de Messi — protagonista central
+  addImg(messiB64, W/2-38, 122, 76, 98);
+
+  // Bloque equipo favorito — abajo izquierda
+  if(S.favoriteTeam){
+    doc.setFillColor(20,50,150);
+    doc.roundedRect(M, 228, 80, 42, 4, 4, 'F');
+    doc.setFillColor(255,215,0);
+    doc.roundedRect(M, 228, 80, 9, 4, 4, 'F');
+    doc.rect(M, 232, 80, 5, 'F');
+    doc.setTextColor(9,25,77);
+    doc.setFontSize(7);
+    doc.setFont('helvetica','bold');
+    doc.text('MI SELECCIÓN FAVORITA', M+40, 234.5, {align:'center'});
+    // Bandera
+    addImg(flagB64, M+4, 240, 32, 21);
+    // Nombre del equipo
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(11);
+    const teamLines = doc.splitTextToSize((S.favoriteTeam||'').toUpperCase(), 36);
+    doc.text(teamLines, M+42, 247, {align:'center'});
   }
 
-  // ELIMINATORIAS
+  // Camiseta Argentina — abajo derecha
+  doc.setFillColor(20,50,150);
+  doc.roundedRect(116, 228, 80, 42, 4, 4, 'F');
+  doc.setFillColor(255,215,0);
+  doc.roundedRect(116, 228, 80, 9, 4, 4, 'F');
+  doc.rect(116, 232, 80, 5, 'F');
+  doc.setTextColor(9,25,77);
+  doc.setFontSize(7);
+  doc.setFont('helvetica','bold');
+  doc.text('CAMISETA ARGENTINA', 156, 234.5, {align:'center'});
+  addImg(jerseyB64, 130, 239, 52, 28);
+
+  // Franja dorada inferior
+  doc.setFillColor(200,160,0);
+  doc.rect(0,H-13,W,2,'F');
+  doc.setFillColor(255,215,0);
+  doc.rect(0,H-11,W,11,'F');
+  doc.setTextColor(9,25,77);
+  doc.setFontSize(8);
+  doc.setFont('helvetica','bold');
+  doc.text('Generado el '+new Date().toLocaleDateString('es-AR')+' · nicofm5.github.io/libro-mundial', W/2, H-4, {align:'center'});
+
+  // ================================================================
+  // PÁGINA 2 — CONTENIDO
+  // ================================================================
+  doc.addPage();
+
+  // Helpers para página 2+
+  let y = 0;
+  const newPageCheck=(needed=12)=>{
+    if(y+needed>277){ doc.addPage(); pHdr(); }
+  };
+  const pHdr=()=>{
+    doc.setFillColor(9,25,77);
+    doc.rect(0,0,W,18,'F');
+    addImg(logoB64, 4, 1, 14, 15, 'JPEG');
+    doc.setTextColor(255,215,0);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(10);
+    doc.text('MI LIBRO DEL MUNDIAL 2026', W/2, 11, {align:'center'});
+    doc.setFillColor(255,215,0);
+    doc.rect(0,18,W,1.5,'F');
+    y=24;
+  };
+  const sec=(title, color=[27,77,228])=>{
+    newPageCheck(14);
+    doc.setFillColor(...color);
+    doc.roundedRect(M,y,W-M*2,8,2,2,'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(10);
+    doc.setFont('helvetica','bold');
+    doc.text(title.toUpperCase(), M+4, y+5.5);
+    y+=11;
+    doc.setTextColor(40,40,40);
+    doc.setFontSize(9.5);
+    doc.setFont('helvetica','normal');
+  };
+  const dataRow=(label, val, bold=false)=>{
+    newPageCheck(7);
+    doc.setDrawColor(220,225,240);
+    doc.setFillColor(248,249,255);
+    doc.rect(M,y,W-M*2,6,'FD');
+    doc.setFont('helvetica','bold');
+    doc.setTextColor(9,25,77);
+    doc.text(label+':', M+3, y+4.2);
+    doc.setFont('helvetica', bold?'bold':'normal');
+    doc.setTextColor(40,40,40);
+    const txt=String(val||'(sin completar)');
+    doc.text(txt, M+55, y+4.2);
+    y+=6.5;
+  };
+
+  pHdr();
+
+  // --- DATOS DEL JUGADOR ---
+  sec('Datos del jugador', [9,25,77]);
+
+  // Card visual con bandera + jersey
+  const cardY = y;
+  doc.setFillColor(235,240,255);
+  doc.roundedRect(M, cardY, W-M*2, 48, 3, 3, 'F');
+  doc.setDrawColor(27,77,228);
+  doc.roundedRect(M, cardY, W-M*2, 48, 3, 3, 'S');
+
+  // Bandera equipo dentro del card
+  if(flagB64) addImg(flagB64, M+4, cardY+4, 42, 28);
+  else{
+    doc.setFillColor(200,210,235);
+    doc.roundedRect(M+4, cardY+4, 42, 28, 2, 2, 'F');
+  }
+  // Nombre equipo bajo bandera
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(9,25,77);
+  const teamTxt = (S.favoriteTeam||'Sin equipo').toUpperCase();
+  doc.text(doc.splitTextToSize(teamTxt,42), M+25, cardY+36, {align:'center'});
+
+  // Jersey Argentina en el card
+  addImg(jerseyB64, M+52, cardY+3, 32, 42);
+
+  // Datos de texto en el card
+  const dx=M+90, dw=W-M-dx-2;
+  const txtRow=(lbl,val,ty)=>{
+    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(27,77,228);
+    doc.text(lbl, dx, ty);
+    doc.setFont('helvetica','normal'); doc.setTextColor(40,40,40); doc.setFontSize(9);
+    doc.text(String(val||'—'), dx, ty+4.5);
+  };
+  txtRow('NOMBRE:', S.playerName||'(sin nombre)', cardY+10);
+  txtRow('EDAD:', S.playerAge ? S.playerAge+' años' : '—', cardY+22);
+  txtRow('SELECCION:', S.favoriteTeam||'—', cardY+34);
+
+  // Barra de estrellas
+  const starPct = Math.min(S.stars/TOTAL_STARS,1);
+  const barX=M+90, barW=W-M-barX-3;
+  doc.setFillColor(220,225,240);
+  doc.roundedRect(barX, cardY+44, barW, 5, 2, 2, 'F');
+  if(starPct>0){
+    doc.setFillColor(255,215,0);
+    doc.roundedRect(barX, cardY+44, barW*starPct, 5, 2, 2, 'F');
+  }
+  doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(9,25,77);
+  doc.text(`${S.stars}/${TOTAL_STARS} ESTRELLAS`, barX, cardY+42);
+
+  y = cardY + 52;
+
+  // --- ACTIVIDADES ---
+  sec('Actividades completadas', [27,77,228]);
+  const completed = ACTIVITIES.filter(a=>S.completed[a.id]).length;
+  const total = ACTIVITIES.length;
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.setTextColor(27,77,228);
+  doc.text(`${completed} de ${total} actividades completadas`, M, y);
+  y+=6;
+
+  // Grid de actividades 2 columnas
+  const colW=(W-M*2)/2;
+  let col=0;
+  const actStartY=y;
+  ACTIVITIES.forEach((a,idx)=>{
+    const ax = M + col*colW;
+    const ay = y;
+    newPageCheck(8);
+    const done=!!S.completed[a.id];
+    doc.setFillColor(done?220:245, done?240:245, done?225:248);
+    doc.roundedRect(ax+1,ay,colW-3,7,1.5,1.5,'F');
+    if(done){ doc.setFillColor(39,174,96); doc.circle(ax+5.5,ay+3.5,2.5,'F'); }
+    else{ doc.setDrawColor(180,180,190); doc.circle(ax+5.5,ay+3.5,2.5,'S'); }
+    doc.setFont('helvetica', done?'bold':'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(done?20:100, done?80:100, done?40:110);
+    const title=doc.splitTextToSize(a.title,colW-14);
+    doc.text(title, ax+10, ay+4.2);
+    // Estrellas de la actividad
+    if(a.stars){
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(6.5);
+      doc.setTextColor(200,160,0);
+      doc.text('★'.repeat(a.stars||0), ax+colW-10, ay+4.5, {align:'right'});
+    }
+    col=(col+1)%2;
+    if(col===0) y+=8; else if(idx===ACTIVITIES.length-1) y+=8;
+  });
+  y+=4;
+
+  // --- EQUIPO IDEAL ---
+  if(S.equipo && Object.keys(S.equipo).length){
+    newPageCheck(20);
+    sec('Mi equipo ideal', [0,120,80]);
+    const posLabels={arq:'Arquero',def1:'Defensor 1',def2:'Defensor 2',def3:'Defensor 3',def4:'Defensor 4',
+      med1:'Volante 1',med2:'Volante 2',med3:'Volante 3',del1:'Delantero 1',del2:'Delantero 2',del3:'Delantero 3'};
+    const keys=['arq','def1','def2','def3','def4','med1','med2','med3','del1','del2','del3'];
+    let ecol=0;
+    keys.forEach((k,ki)=>{
+      const v=S.equipo[k]; if(!v) return;
+      const ex=M+ecol*(W-M*2)/2;
+      newPageCheck(7);
+      doc.setFillColor(240,255,245);
+      doc.rect(ex+1,y,((W-M*2)/2)-3,6,'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(0,100,60);
+      doc.text(posLabels[k]+':', ex+3, y+4.2);
+      doc.setFont('helvetica','normal'); doc.setTextColor(20,20,20);
+      doc.text(v, ex+28, y+4.2);
+      ecol=(ecol+1)%2;
+      if(ecol===0) y+=7; else if(ki===keys.length-1) y+=7;
+    });
+    y+=4;
+  }
+
+  // --- ELIMINATORIAS ---
   if(S.elim && Object.keys(S.elim).length){
-    if(y > 240){ doc.addPage(); y = 20; }
-    sec('🗓️ ELIMINATORIAS');
+    newPageCheck(20);
+    sec('Eliminatorias', [140,30,30]);
     ELIM_ROUNDS.forEach(r=>{
-      let hasData = false;
-      for(let mi=0; mi<r.matches; mi++){
-        const d = S.elim[r.key+'_'+mi];
-        if(d && (d.t1||d.t2||d.s1||d.s2)){ hasData = true; break; }
+      let hasData=false;
+      for(let mi=0;mi<r.matches;mi++){
+        const d=S.elim[r.key+'_'+mi];
+        if(d&&(d.t1||d.t2||d.s1||d.s2)){hasData=true;break;}
       }
       if(!hasData) return;
-      if(y > 270){ doc.addPage(); y = 20; }
-      doc.setFont('helvetica','bold'); doc.setFontSize(10);
-      doc.text(r.title, M, y); y += 5;
-      doc.setFont('helvetica','normal'); doc.setFontSize(9);
-      for(let mi=0; mi<r.matches; mi++){
-        const d = S.elim[r.key+'_'+mi] || {};
-        if(!d.t1 && !d.t2) continue;
-        if(y > 280){ doc.addPage(); y = 20; }
-        const line = `Partido ${mi+1}:  ${d.t1||'?'}  ${d.s1||'-'}  vs  ${d.s2||'-'}  ${d.t2||'?'}`;
-        doc.text(line, M+4, y); y += 4.5;
+      newPageCheck(10);
+      doc.setFillColor(240,235,235);
+      doc.rect(M,y,W-M*2,6,'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(140,30,30);
+      doc.text(r.title, M+3, y+4.2); y+=7;
+      doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(40,40,40);
+      for(let mi=0;mi<r.matches;mi++){
+        const d=S.elim[r.key+'_'+mi]||{};
+        if(!d.t1&&!d.t2) continue;
+        newPageCheck(6);
+        doc.text(`  Partido ${mi+1}:  ${d.t1||'?'}  ${d.s1||'-'} vs ${d.s2||'-'}  ${d.t2||'?'}`, M+4, y+4);
+        y+=5.5;
       }
-      y += 3;
+      y+=3;
     });
   }
 
-  // GRAN FINAL
-  if(S.final && (S.final.team1 || S.final.winner)){
-    if(y > 250){ doc.addPage(); y = 20; }
-    sec('🏆 LA GRAN FINAL');
-    line('Equipo 1', S.final.team1);
-    line('Equipo 2', S.final.team2);
-    line('Resultado', (S.final.score1||'-')+' a '+(S.final.score2||'-'));
-    line('¡CAMPEÓN!', S.final.winner);
+  // --- GRAN FINAL ---
+  if(S.final&&(S.final.team1||S.final.winner)){
+    newPageCheck(30);
+    sec('LA GRAN FINAL', [180,130,0]);
+    doc.setFillColor(255,248,220);
+    doc.roundedRect(M,y,W-M*2,26,3,3,'F');
+    doc.setDrawColor(255,215,0);
+    doc.roundedRect(M,y,W-M*2,26,3,3,'S');
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(9,25,77);
+    doc.text((S.final.team1||'?')+' vs '+(S.final.team2||'?'), W/2, y+8, {align:'center'});
+    doc.setFontSize(13); doc.setTextColor(140,30,30);
+    doc.text((S.final.score1||'-')+' - '+(S.final.score2||'-'), W/2, y+17, {align:'center'});
+    if(S.final.winner){
+      doc.setFontSize(11); doc.setTextColor(9,25,77);
+      doc.text('CAMPEON: '+S.final.winner.toUpperCase(), W/2, y+24, {align:'center'});
+    }
+    y+=30;
   }
 
-  // FOOTER
-  const pages = doc.internal.getNumberOfPages();
-  for(let i=1; i<=pages; i++){
+  // --- FOOTER en todas las páginas ---
+  const pages=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pages;i++){
     doc.setPage(i);
-    doc.setFontSize(8); doc.setTextColor(150,150,150);
-    doc.text('Mi Libro del Mundial 2026 - Página '+i+' de '+pages, W/2, 290, {align:'center'});
+    doc.setFillColor(9,25,77);
+    doc.rect(0,H-8,W,8,'F');
+    doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(180,190,220);
+    doc.text('MI LIBRO DEL MUNDIAL 2026  ·  Página '+i+' de '+pages, W/2, H-3, {align:'center'});
   }
 
-  const fileName = `mundial2026-${(S.playerName||'campeon').replace(/[^a-z0-9]/gi,'_').toLowerCase()}.pdf`;
+  const fileName=`mundial2026-${(S.playerName||'campeon').replace(/[^a-z0-9]/gi,'_').toLowerCase()}.pdf`;
   doc.save(fileName);
 
-  // OPEN MAILTO
-  const subject = encodeURIComponent('Mis respuestas del Mundial 2026');
-  const body = encodeURIComponent(
+  // Mailto
+  const subject=encodeURIComponent('Mis respuestas del Mundial 2026');
+  const body=encodeURIComponent(
     `¡Hola!\n\nAcabo de completar mi Libro del Mundial 2026.\n\n`+
     `Nombre: ${S.playerName||'(sin nombre)'}\n`+
     `Edad: ${S.playerAge||'?'} años\n`+
     `Selección favorita: ${S.favoriteTeam||'(sin elegir)'}\n`+
-    `Estrellas ganadas: ${S.stars} ⭐\n\n`+
-    `Te adjunto el PDF con todas mis respuestas (se descargó en tu dispositivo, adjuntalo a este mail).\n\n`+
-    `¡Saludos!`
+    `Estrellas ganadas: ${S.stars} / ${TOTAL_STARS} ⭐\n\n`+
+    `Te adjunto el PDF (se descargó en tu dispositivo, adjuntalo a este mail).\n\n¡Saludos!`
   );
-  setTimeout(()=>{
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-  }, 800);
+  setTimeout(()=>{ window.location.href=`mailto:${email}?subject=${subject}&body=${body}`; }, 900);
 
   fb.style.display='block'; fb.className='fb-msg fb-ok';
-  fb.innerHTML='✅ ¡PDF generado! Se descargó como <strong>'+fileName+'</strong>.<br>Se abrió tu mail — solo adjuntá el PDF y enviá.';
+  fb.innerHTML='✅ ¡PDF generado! Descargado como <strong>'+fileName+'</strong>.<br>Se abrió tu mail — adjuntá el PDF y enviá.';
   confetti(60); sndFanfare();
 }
 
