@@ -353,6 +353,29 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 .title-btn.no{background:#F8D7DA;border-color:#E74C3C;color:#721C24}
 .title-btn:active{transform:scale(.9)}
 
+/* GOLEADORES */
+.gol-hdr{text-align:center;margin-bottom:14px;padding:18px 14px;
+  background:linear-gradient(135deg,var(--red-dark),var(--blue));border-radius:14px;
+  color:#fff;box-shadow:0 4px 14px rgba(27,77,228,.3);position:relative;overflow:hidden}
+.gol-hdr::before{content:'⚽';position:absolute;right:-10px;top:-10px;font-size:5rem;opacity:.13;transform:rotate(15deg)}
+.gol-year{font-family:var(--fh);font-size:2.6rem;letter-spacing:3px;line-height:1;color:var(--gold);text-shadow:0 2px 8px rgba(0,0,0,.3)}
+.gol-host{font-size:.95rem;font-weight:900;margin-top:6px;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:6px}
+.gol-host .ghf{font-size:1.6rem}
+.gol-question{font-size:1rem;font-weight:900;color:#333;text-align:center;margin-bottom:14px;line-height:1.3}
+.gol-question b{color:var(--red-dark)}
+.gol-opts{display:flex;flex-direction:column;gap:8px;max-width:380px;margin:0 auto}
+.gol-opt{background:#fff;border:3px solid #E0E0E0;border-radius:12px;padding:13px 14px;
+  text-align:left;font-size:.92rem;font-weight:900;color:#333;cursor:pointer;
+  transition:all .15s;font-family:var(--fb)}
+.gol-opt:active{transform:scale(.97)}
+.gol-opt.ok{border-color:var(--green);background:#D4EDDA;animation:bounce .4s}
+.gol-opt.no{border-color:#E74C3C;background:#F8D7DA;animation:shake .4s}
+.gol-opt.disabled{pointer-events:none;opacity:.5}
+.gol-opt.ok.disabled{opacity:1}
+.gol-fact{margin-top:14px;padding:10px 12px;background:#FFF9E6;border-radius:10px;
+  border-left:4px solid var(--gold);font-size:.85rem;font-weight:700;color:#555;
+  line-height:1.4;text-transform:none}
+
 /* FIXTURE CALENDARIO */
 .fix-tabs{display:flex;gap:8px;margin-bottom:14px}
 .fix-tab{flex:1;padding:10px 6px;border:2px solid var(--red);border-radius:10px;
@@ -817,6 +840,17 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
   </div>
 </div>
 
+<!-- ===== GOLEADORES (BOTAS DE ORO) — JUEGO FINAL ===== -->
+<div id="goleadores-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🥇 Botas de Oro</span>
+  </div>
+  <div class="info-box">⚽ La <strong>Bota de Oro</strong> es el premio al máximo goleador de cada Mundial. ¿Sabés quién la ganó en las últimas 7 Copas del Mundo? ¡7 estrellas en juego! ⭐</div>
+  <div class="prog-dots" id="gol-dots"></div>
+  <div id="goleadores-content"></div>
+</div>
+
 </main>
 
 <!-- CONFETTI -->
@@ -850,6 +884,7 @@ const ACTIVITIES = [
   {id:'campeones',  emoji:'🏆', title:'Los Campeones',     stars:2, game:true},
   {id:'anio',       emoji:'📅', title:'¿En qué año ganó?', stars:3, game:true},
   {id:'unir',       emoji:'🤝', title:'Unir Jugadores',    stars:3, game:true},
+  {id:'goleadores', emoji:'🥇', title:'Botas de Oro',      stars:7, game:true},
   {id:'equipoideal',emoji:'⚽', title:'Mi Equipo Ideal',   stars:0, game:false},
   {id:'eliminatorias',emoji:'🗓️',title:'Eliminatorias',   stars:0, game:false},
   {id:'granfinal',  emoji:'🎉', title:'¡La Gran Final!',   stars:0, game:false},
@@ -1111,6 +1146,7 @@ function defaultState(){
     playerName:'', favoriteTeam:'', playerAge:'', stars:0,
     completed:{},
     intruso:{round:0,score:0},
+    goleadores:{round:0,score:0,order:null},
     sel:{current:0,score:0},
     jug:{current:0,score:0,cluesShown:1},
     sil:{current:0,placed:[]},
@@ -1418,6 +1454,7 @@ function openActivity(id){
     campeones: initCampeones,
     anio: initAnio,
     unir: initUnir,
+    goleadores: renderGoleadores,
     equipoideal: initEquipoIdeal,
     eliminatorias: initElim,
     granfinal: initFinal,
@@ -1799,6 +1836,127 @@ function checkIntruso(idx){
     opts[idx].classList.add('no');
     fb.className='fb-msg fb-no'; fb.textContent='❌ ¡Sigue intentando! Hay otro intruso.';
     setTimeout(()=>{opts[idx].classList.remove('no'); fb.className='fb-msg'; fb.textContent='';},800);
+  }
+}
+
+// ============================================================
+// GOLEADORES (BOTAS DE ORO) - JUEGO FINAL
+// ============================================================
+const GOLEADORES_ROUNDS = [
+  {year:1998, host:'Francia', hostFlag:'🇫🇷', goals:6,
+   opts:['Davor Šuker 🇭🇷','Zinedine Zidane 🇫🇷','Ronaldo 🇧🇷','Roberto Baggio 🇮🇹'], correct:0,
+   fact:'Davor Šuker (Croacia) hizo 6 goles y llevó a su selección al 3° puesto en su primera Copa del Mundo.'},
+  {year:2002, host:'Corea/Japón', hostFlag:'🇰🇷', goals:8,
+   opts:['Oliver Kahn 🇩🇪','Rivaldo 🇧🇷','Ronaldo 🇧🇷','Miroslav Klose 🇩🇪'], correct:2,
+   fact:'Ronaldo "El Fenómeno" hizo 8 goles, ganó la Copa con Brasil y se vengó de la final perdida en 1998.'},
+  {year:2006, host:'Alemania', hostFlag:'🇩🇪', goals:5,
+   opts:['Zinedine Zidane 🇫🇷','Miroslav Klose 🇩🇪','Fabio Cannavaro 🇮🇹','Hernán Crespo 🇦🇷'], correct:1,
+   fact:'Miroslav Klose ganó la Bota de Oro siendo local. ¡Es el máximo goleador histórico de los Mundiales con 16 goles!'},
+  {year:2010, host:'Sudáfrica', hostFlag:'🇿🇦', goals:5,
+   opts:['Diego Forlán 🇺🇾','David Villa 🇪🇸','Wesley Sneijder 🇳🇱','Thomas Müller 🇩🇪'], correct:3,
+   fact:'4 jugadores empataron en 5 goles. Thomas Müller (Alemania, 20 años) ganó la Bota de Oro por más asistencias.'},
+  {year:2014, host:'Brasil', hostFlag:'🇧🇷', goals:6,
+   opts:['Lionel Messi 🇦🇷','Thomas Müller 🇩🇪','James Rodríguez 🇨🇴','Neymar 🇧🇷'], correct:2,
+   fact:'James Rodríguez deslumbró con 6 goles, incluido un golazo de volea ante Uruguay (mejor gol del Mundial).'},
+  {year:2018, host:'Rusia', hostFlag:'🇷🇺', goals:6,
+   opts:['Luka Modrić 🇭🇷','Antoine Griezmann 🇫🇷','Harry Kane 🏴󠁧󠁢󠁥󠁮󠁧󠁿','Romelu Lukaku 🇧🇪'], correct:2,
+   fact:'Harry Kane (capitán de Inglaterra) ganó la Bota de Oro con 6 goles y llevó a los Tres Leones a semifinales.'},
+  {year:2022, host:'Qatar', hostFlag:'🇶🇦', goals:8,
+   opts:['Lionel Messi 🇦🇷','Julián Álvarez 🇦🇷','Olivier Giroud 🇫🇷','Kylian Mbappé 🇫🇷'], correct:3,
+   fact:'Kylian Mbappé hizo 8 goles (incluido un hat-trick en la final), pero la Copa se la llevó Argentina con Messi. 🏆'},
+];
+
+// Genera orden aleatorio de opciones por ronda (estable por sesión)
+function getGolOptOrder(roundIdx, len){
+  if(!S.goleadores.order) S.goleadores.order = {};
+  if(S.goleadores.order[roundIdx]) return S.goleadores.order[roundIdx];
+  let arr = Array.from({length:len},(_,i)=>i);
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  S.goleadores.order[roundIdx] = arr;
+  save();
+  return arr;
+}
+
+function renderGoleadores(){
+  if(!S.goleadores) S.goleadores = {round:0,score:0,order:null};
+  const round = S.goleadores.round;
+  const dotsEl = document.getElementById('gol-dots');
+  dotsEl.innerHTML = GOLEADORES_ROUNDS.map((_,i)=>
+    `<div class="pd ${i<round?'done':i===round?'cur':''}"></div>`).join('');
+
+  const cont = document.getElementById('goleadores-content');
+
+  if(round >= GOLEADORES_ROUNDS.length){
+    const allCorrect = S.goleadores.score === GOLEADORES_ROUNDS.length;
+    cont.innerHTML = `
+      <div class="card text-c">
+        <div style="font-size:4rem">${allCorrect?'🏆':'🥇'}</div>
+        <div style="font-family:var(--fh);font-size:1.6rem;color:var(--red-dark);margin:10px 0">
+          ${allCorrect?'¡PERFECTO! ¡SOS UN EXPERTO!':'¡Terminaste!'}
+        </div>
+        <div style="font-size:1rem;font-weight:700;color:#555;margin-bottom:16px">
+          Puntaje: ${S.goleadores.score}/${GOLEADORES_ROUNDS.length} ⭐
+        </div>
+        <button class="btn btn-g btn-full" onclick="S.goleadores={round:0,score:0,order:null};save();renderGoleadores()">🔄 Jugar de nuevo</button>
+      </div>`;
+    if(!S.completed['goleadores']){ markDone('goleadores', 7); renderHomeGrid(); }
+    return;
+  }
+
+  const r = GOLEADORES_ROUNDS[round];
+  const order = getGolOptOrder(round, r.opts.length);
+  const newCorrectIdx = order.indexOf(r.correct);
+
+  cont.innerHTML = `
+    <div class="gol-hdr">
+      <div class="gol-year">MUNDIAL ${r.year}</div>
+      <div class="gol-host"><span class="ghf">${r.hostFlag}</span> ${r.host.toUpperCase()}</div>
+    </div>
+    <div class="round-ind">Ronda ${round+1} de ${GOLEADORES_ROUNDS.length}</div>
+    <div class="gol-question">⚽ ¿Quién ganó la <b>Bota de Oro</b> con <b>${r.goals} goles</b>?</div>
+    <div class="gol-opts" id="gol-opts">
+      ${order.map((origIdx,displayIdx)=>`
+        <button class="gol-opt" id="go-${displayIdx}" onclick="checkGoleador(${displayIdx},${newCorrectIdx})">
+          ${r.opts[origIdx]}
+        </button>`).join('')}
+    </div>
+    <div id="gol-fb" class="fb-msg"></div>
+  `;
+}
+
+function checkGoleador(idx, correctIdx){
+  const round = S.goleadores.round;
+  const r = GOLEADORES_ROUNDS[round];
+  const fb = document.getElementById('gol-fb');
+  const opts = document.querySelectorAll('.gol-opt');
+
+  if(idx === correctIdx){
+    sndOk();
+    opts[idx].classList.add('ok');
+    opts.forEach(o=>o.classList.add('disabled'));
+    fb.className='fb-msg fb-ok';
+    fb.innerHTML = `<div class="gol-fact">💡 ${r.fact}</div>`;
+    S.goleadores.score++;
+    save();
+    confetti(50);
+    setTimeout(()=>{
+      S.goleadores.round++;
+      save();
+      renderGoleadores();
+    }, 3400);
+  } else {
+    sndNo();
+    opts[idx].classList.add('no');
+    fb.className='fb-msg fb-no';
+    fb.textContent='❌ ¡Casi! Probá otra vez.';
+    setTimeout(()=>{
+      opts[idx].classList.remove('no');
+      fb.className='fb-msg';
+      fb.textContent='';
+    }, 900);
   }
 }
 
