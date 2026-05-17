@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>⚽ Mi Libro del Mundial 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red:#1B4DE4; --red-dark:#0D2B8E; --gold:#FFD700; --gold-dark:#D4A800;
+  --green:#27AE60; --lime:#8DC63F; --blue:#3B72F2; --white:#fff; --bg:#EEF3FF;
+  --shadow:0 4px 20px rgba(27,77,228,.15); --r:18px;
+  --fh:'Bebas Neue','Fredoka One',cursive; --fb:'Nunito',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidden;text-transform:uppercase}
+
+/* HEADER */
+#hdr{background:linear-gradient(135deg,var(--red-dark) 0%,var(--red) 60%,#3B72F2 100%);color:#fff;
+  padding:14px 18px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;box-shadow:0 4px 18px rgba(13,43,142,.4);
+  border-bottom:3px solid var(--gold)}
+#hdr h1{font-family:var(--fh);font-size:clamp(1.2rem,5vw,1.8rem);letter-spacing:2px;
+  text-transform:uppercase}
+#hdr h1 span{opacity:.85;font-size:.8em;color:var(--gold)}
+#stars-badge{background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);
+  border-radius:50px;padding:7px 14px;font-size:1rem;font-weight:900;
+  display:flex;align-items:center;gap:5px;backdrop-filter:blur(4px)}
+
+/* SCREENS */
+#main{max-width:680px;margin:0 auto;padding:0 0 80px}
+.screen{display:none;padding:18px 14px;animation:fIn .3s ease}
+.screen.active{display:block}
+@keyframes fIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* HOME */
+.home-banner{background:linear-gradient(135deg,var(--red-dark) 0%,var(--red) 55%,#3B72F2 100%);
+  color:#fff;border-radius:var(--r);padding:28px 20px 22px;text-align:center;
+  margin-bottom:20px;position:relative;overflow:hidden}
+.home-banner::before{content:'26';position:absolute;top:-10px;right:-8px;
+  font-family:var(--fh);font-size:9rem;color:rgba(255,255,255,.07);
+  line-height:1;pointer-events:none;letter-spacing:-4px}
+.home-banner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--gold),var(--lime),var(--gold))}
+.home-banner .trophy{font-size:3.8rem;margin-bottom:6px;
+  animation:trophyPulse 2.5s ease-in-out infinite}
+@keyframes trophyPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.home-banner h2{font-family:var(--fh);font-size:clamp(1.6rem,6vw,2.4rem);
+  margin-bottom:4px;letter-spacing:2px;text-transform:uppercase}
+.home-banner p{font-size:.95rem;font-weight:700;opacity:.85;text-transform:uppercase;
+  letter-spacing:1px}
+#player-name-display{background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);
+  border-radius:10px;padding:8px 16px;margin-top:12px;font-size:1rem;
+  font-weight:900;display:inline-block;text-transform:uppercase;letter-spacing:.5px}
+
+.act-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.act-card{background:#fff;border-radius:var(--r);padding:18px 12px;text-align:center;
+  cursor:pointer;box-shadow:0 4px 16px rgba(27,77,228,.1);border:3px solid transparent;
+  transition:transform .25s cubic-bezier(.175,.885,.32,1.275),box-shadow .25s,border-color .2s;
+  position:relative;min-height:115px;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  user-select:none}
+.act-card::before{content:'';position:absolute;inset:0;border-radius:var(--r);
+  background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.6) 50%,transparent 100%);
+  transform:translateX(-100%);transition:transform .6s ease;pointer-events:none}
+.act-card:hover::before{transform:translateX(100%)}
+.act-card:hover{transform:translateY(-5px) scale(1.02);
+  box-shadow:0 12px 32px rgba(27,77,228,.22);border-color:var(--red)}
+.act-card:active{transform:scale(.95)}
+.act-card.done{border-color:var(--green);
+  background:linear-gradient(135deg,#F0FFF4,#fff)}
+.act-card .ci{font-size:2.4rem;line-height:1;transition:transform .2s}
+.act-card:hover .ci{transform:scale(1.15) rotate(-5deg)}
+.act-card .ct{font-family:var(--fh);font-size:1rem;color:#222;line-height:1.2;
+  text-transform:uppercase;letter-spacing:.5px}
+.act-card .cs{font-size:.8rem;color:var(--gold-dark);font-weight:900}
+.done-badge{position:absolute;top:-7px;right:-7px;background:var(--green);color:#fff;
+  border-radius:50%;width:28px;height:28px;display:flex;align-items:center;
+  justify-content:center;font-size:.9rem;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+
+/* ACT HEADER */
+.act-hdr{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.back-btn{background:linear-gradient(135deg,var(--red-dark),var(--red));color:#fff;border:none;
+  border-radius:50px;padding:10px 18px;font-size:.9rem;font-weight:900;cursor:pointer;
+  font-family:var(--fh);flex-shrink:0;min-height:44px;letter-spacing:1px;
+  text-transform:uppercase;box-shadow:0 4px 12px rgba(27,77,228,.3);
+  transition:transform .15s,box-shadow .15s}
+.back-btn:active{transform:scale(.93);box-shadow:none}
+.act-ttl{font-family:var(--fh);font-size:clamp(1.3rem,5vw,2rem);color:var(--red-dark);
+  line-height:1.1;text-transform:uppercase;letter-spacing:1px}
+
+/* CARD */
+.card{background:#fff;border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:none;
+  border-radius:50px;padding:14px 26px;font-size:1.05rem;font-weight:900;
+  font-family:var(--fh);cursor:pointer;transition:all .2s;min-height:52px;
+  text-transform:uppercase;letter-spacing:1.5px;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);
+  transform:translateX(-100%);transition:transform .4s}
+.btn:hover::after{transform:translateX(100%)}
+.btn:active{transform:scale(.95)}
+.btn:disabled{opacity:.45;pointer-events:none}
+.btn-r{background:linear-gradient(135deg,var(--red-dark),var(--red));color:#fff;
+  box-shadow:0 4px 16px rgba(27,77,228,.35)}
+.btn-g{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#222;
+  box-shadow:0 4px 14px rgba(212,168,0,.35)}
+.btn-gr{background:linear-gradient(135deg,#219A52,var(--green));color:#fff;
+  box-shadow:0 4px 14px rgba(39,174,96,.35)}
+.btn-gray{background:#E0E0E0;color:#555}
+.btn-full{width:100%}
+
+/* INPUT */
+.big-inp{width:100%;border:3px solid #D0D8F5;border-radius:14px;padding:14px 18px;
+  font-size:1.1rem;font-weight:900;font-family:var(--fb);color:#222;background:#fff;outline:none;
+  transition:border-color .2s,box-shadow .2s}
+.big-inp:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(27,77,228,.12)}
+.big-lbl{display:block;font-family:var(--fh);font-size:1.2rem;color:var(--red-dark);
+  margin-bottom:7px;margin-top:16px;text-transform:uppercase;letter-spacing:1px}
+
+/* TEAM PICKER (portada) */
+.team-search-wrap{position:relative;margin-top:4px}
+.team-search-wrap .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  font-size:1.1rem;pointer-events:none}
+#team-search{padding-left:42px}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  max-height:270px;overflow-y:auto;margin-top:10px;padding:2px 2px 8px;
+  scrollbar-width:thin;scrollbar-color:var(--red) #EEF3FF}
+.team-btn{background:#fff;border:2.5px solid #D0D8F5;border-radius:12px;
+  padding:10px 5px;cursor:pointer;text-align:center;
+  transition:transform .2s cubic-bezier(.175,.885,.32,1.275),border-color .15s,box-shadow .15s;
+  user-select:none;min-height:68px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px}
+.team-btn:active{transform:scale(.9)}
+.team-btn:hover{border-color:var(--red);box-shadow:0 4px 12px rgba(27,77,228,.15)}
+.team-btn.selected{border-color:var(--red);background:linear-gradient(135deg,#EEF3FF,#fff);
+  box-shadow:0 0 0 3px rgba(27,77,228,.2);transform:scale(1.04)}
+.team-btn .tb-flag{font-size:1.9rem;line-height:1}
+.team-btn .tb-name{font-size:.6rem;font-weight:900;color:#333;line-height:1.2;
+  text-transform:uppercase;letter-spacing:.3px}
+.team-selected-display{background:linear-gradient(135deg,var(--red-dark),var(--red));
+  color:#fff;border-radius:14px;padding:18px 16px;text-align:center;margin:12px 0 4px;
+  animation:popIn .4s cubic-bezier(.175,.885,.32,1.275);display:none}
+.team-selected-display .tsd-flag{font-size:3.2rem;display:block;margin-bottom:6px}
+.team-selected-display .tsd-name{font-family:var(--fh);font-size:1.6rem;
+  letter-spacing:2px;text-transform:uppercase}
+.team-selected-display .tsd-group{font-size:.85rem;font-weight:700;
+  opacity:.8;margin-top:4px}
+
+/* FEEDBACK */
+.fb-msg{border-radius:14px;padding:14px 18px;font-size:1.1rem;font-weight:900;
+  text-align:center;margin-top:14px;display:none}
+.fb-ok{background:#D4EDDA;color:#155724;display:block}
+.fb-no{background:#F8D7DA;color:#721C24;display:block}
+
+/* INFO BOX */
+.info-box{background:linear-gradient(135deg,#EEF3FF,#F5F8FF);
+  border-left:5px solid var(--red);border-radius:12px;
+  padding:12px 16px;font-size:.9rem;font-weight:900;margin-bottom:14px;
+  line-height:1.5;color:#1a2a6c;text-transform:uppercase;letter-spacing:.3px}
+
+/* FLIP CARDS */
+.flip-wrap{perspective:1000px;height:200px;cursor:pointer;margin-bottom:14px}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .5s ease;transform-style:preserve-3d}
+.flip-wrap.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-f,.flip-b{position:absolute;inset:0;border-radius:var(--r);backface-visibility:hidden;
+  display:flex;align-items:center;padding:20px;box-shadow:var(--shadow)}
+.flip-f{background:linear-gradient(135deg,var(--red-dark),var(--red));color:#fff;
+  justify-content:center;flex-direction:column;text-align:center;gap:10px}
+.flip-f .ff{font-size:3.5rem}
+.flip-f h3{font-family:var(--fh);font-size:1.6rem}
+.flip-f .tap{font-size:.85rem;opacity:.8;font-weight:700}
+.flip-b{background:#fff;flex-direction:column;gap:8px;transform:rotateY(180deg);overflow-y:auto}
+.flip-b h3{font-family:var(--fh);font-size:1.2rem;color:var(--red-dark)}
+.flip-b .fr{display:flex;gap:8px;font-size:.9rem;font-weight:700;color:#444;line-height:1.4}
+
+/* GROUPS */
+.groups-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.gc{background:#fff;border-radius:14px;padding:12px;box-shadow:var(--shadow);border-top:5px solid var(--red)}
+.gc h3{font-family:var(--fh);font-size:1.1rem;color:var(--red);margin-bottom:8px;text-align:center}
+.tr{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:.85rem;
+  font-weight:800;border-bottom:1px solid #F0F0F0}
+.tr:last-child{border-bottom:none}
+.tf{font-size:1.3rem}
+
+/* INTRUSO */
+.round-ind{font-family:var(--fh);font-size:1rem;color:#888;margin-bottom:10px;text-align:center}
+.intr-hint{font-size:.95rem;font-weight:700;color:#555;margin-bottom:16px;
+  background:#F5F5F5;border-radius:10px;padding:10px 14px;text-align:center}
+.flags-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:380px;margin:0 auto 16px}
+.flag-opt{background:#fff;border:3px solid #E0E0E0;border-radius:14px;padding:14px 6px;
+  cursor:pointer;transition:all .2s;text-align:center;user-select:none}
+.flag-opt:active{transform:scale(.92)}
+.flag-opt .fe{font-size:2.3rem;display:block;margin-bottom:5px}
+.flag-opt .fn{font-size:.7rem;font-weight:800;color:#444;line-height:1.2}
+.flag-opt.ok{border-color:var(--green);background:#D4EDDA;animation:bounce .4s}
+.flag-opt.no{border-color:#E74C3C;background:#F8D7DA;animation:shake .4s}
+.flag-opt.disabled{pointer-events:none;opacity:.5}
+.flag-opt.ok.disabled{opacity:1}
+
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+/* SELECCIONES */
+.jersey-show{width:110px;height:95px;margin:0 auto 12px;border-radius:10px;position:relative;overflow:hidden}
+.jersey-desc{font-size:1rem;font-weight:700;color:#555;margin-bottom:18px;text-align:center}
+.ans-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.ans-opt{background:#fff;border:3px solid #E0E0E0;border-radius:12px;padding:13px 8px;
+  cursor:pointer;text-align:center;font-size:.95rem;font-weight:900;font-family:var(--fb);
+  transition:all .2s;user-select:none;min-height:52px;display:flex;align-items:center;justify-content:center}
+.ans-opt:active{transform:scale(.95)}
+.ans-opt.ok{background:#D4EDDA;border-color:var(--green);color:#155724}
+.ans-opt.no{background:#F8D7DA;border-color:#E74C3C;color:#721C24}
+.ans-opt.disabled{pointer-events:none}
+
+/* JUGADORES */
+.player-sil{font-size:4.5rem;text-align:center;margin-bottom:8px}
+.clues-list{list-style:none;margin-bottom:16px}
+.clue-item{background:#F5F5F5;border-radius:10px;padding:11px 14px;margin-bottom:7px;
+  font-size:.95rem;font-weight:700;display:flex;align-items:flex-start;gap:9px;line-height:1.4}
+.clue-hidden{display:none}
+.show-clue-btn{background:none;border:2px dashed var(--red);color:var(--red);
+  border-radius:10px;padding:11px 14px;margin-bottom:7px;font-size:.95rem;
+  font-weight:900;font-family:var(--fb);cursor:pointer;width:100%;text-align:left}
+.player-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px}
+.p-opt{background:#fff;border:3px solid #E0E0E0;border-radius:12px;padding:12px 6px;
+  cursor:pointer;text-align:center;font-size:.8rem;font-weight:900;font-family:var(--fb);
+  transition:all .2s;user-select:none;line-height:1.3}
+.p-opt .pf{font-size:1.8rem;display:block;margin-bottom:4px}
+.p-opt:active{transform:scale(.95)}
+.p-opt.ok{background:#D4EDDA;border-color:var(--green)}
+.p-opt.no{background:#F8D7DA;border-color:#E74C3C}
+.p-opt.disabled{pointer-events:none}
+.prog-dots{display:flex;gap:5px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
+.pd{width:11px;height:11px;border-radius:50%;background:#DDD;transition:background .3s}
+.pd.done{background:var(--green)}
+.pd.cur{background:var(--red)}
+
+/* SILABAS */
+.sil-flag{font-size:3.8rem;text-align:center;margin-bottom:6px}
+.sil-diff{font-size:.95rem;font-weight:900;color:var(--gold-dark);margin-bottom:14px;text-align:center}
+.ans-slots{display:flex;gap:7px;justify-content:center;margin-bottom:18px;flex-wrap:wrap}
+.a-slot{min-width:58px;height:52px;border:3px dashed #CCC;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;
+  color:var(--red-dark);background:#fff;transition:all .2s;padding:0 8px;cursor:pointer}
+.a-slot.filled{border-style:solid;border-color:var(--red);background:#FFF0F0;animation:popIn .2s}
+.a-slot.ok-slot{border-color:var(--green);background:#D4EDDA}
+.a-slot.no-slot{border-color:#E74C3C;background:#F8D7DA;animation:shake .4s}
+@keyframes popIn{0%{transform:scale(.8)}100%{transform:scale(1)}}
+.syl-bank{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.syl-tile{background:var(--gold);color:#333;border:none;border-radius:10px;
+  padding:11px 14px;font-size:1rem;font-weight:900;font-family:var(--fb);cursor:pointer;
+  transition:all .2s;box-shadow:0 4px 0 var(--gold-dark);user-select:none}
+.syl-tile:active{transform:translateY(3px);box-shadow:none}
+.syl-tile.used{opacity:.3;pointer-events:none}
+.sil-controls{display:flex;gap:9px;justify-content:center}
+
+/* CAMPEONES */
+.champ-row{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;
+  padding:12px;margin-bottom:9px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.champ-flag{font-size:1.8rem;flex-shrink:0}
+.champ-name{font-size:.95rem;font-weight:900;flex:1;color:#333}
+.title-sel{display:flex;gap:5px;flex-wrap:wrap}
+.title-btn{width:40px;height:40px;border-radius:9px;border:2px solid #DDD;background:#fff;
+  font-size:.85rem;font-weight:900;font-family:var(--fb);cursor:pointer;transition:all .15s}
+.title-btn.sel{background:var(--gold);border-color:var(--gold-dark);color:#333}
+.title-btn.ok{background:var(--green);border-color:#219A52;color:#fff}
+.title-btn.no{background:#F8D7DA;border-color:#E74C3C;color:#721C24}
+.title-btn:active{transform:scale(.9)}
+
+/* MATCHING (año / jugadores) */
+.match-game{display:flex;gap:10px}
+.match-col{flex:1;display:flex;flex-direction:column;gap:7px}
+.m-item{background:#fff;border:3px solid #E0E0E0;border-radius:11px;padding:11px 8px;
+  text-align:center;cursor:pointer;font-weight:900;font-size:.9rem;transition:all .2s;
+  user-select:none;min-height:52px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px}
+.m-item .mf{font-size:1.7rem}
+.m-item:active{transform:scale(.95)}
+.m-item.sel{border-color:var(--gold);background:#FFF8DC}
+.m-item.matched{border-color:var(--green);background:#D4EDDA;pointer-events:none}
+.m-item.no-match{border-color:#E74C3C;background:#F8D7DA;animation:shake .4s}
+
+/* EQUIPO IDEAL */
+.field{background:linear-gradient(180deg,#27AE60,#229954 50%,#27AE60);border-radius:var(--r);
+  padding:16px 12px;margin-bottom:18px;position:relative;display:flex;flex-direction:column;
+  align-items:center;gap:12px;border:3px solid #1E8449}
+.field-marks{position:absolute;inset:30px;border:2px solid rgba(255,255,255,.4);border-radius:6px;pointer-events:none}
+.form-row{display:flex;gap:10px;justify-content:center;position:relative;z-index:1}
+.pos-slot{width:54px;text-align:center}
+.pos-circle{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;
+  align-items:center;justify-content:center;font-size:.65rem;font-weight:900;
+  color:var(--red-dark);margin:0 auto 3px}
+.pos-inp{width:100%;border:1px solid rgba(255,255,255,.5);border-radius:6px;padding:3px 2px;
+  font-size:.6rem;font-weight:900;background:rgba(255,255,255,.85);text-align:center;
+  outline:none;font-family:var(--fb)}
+.ideal-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ideal-row{display:flex;flex-direction:column;gap:4px}
+.ideal-row label{font-size:.85rem;font-weight:900;color:var(--red-dark)}
+.ideal-row input{border:2px solid #DDD;border-radius:9px;padding:9px 12px;
+  font-size:.9rem;font-weight:900;font-family:var(--fb);outline:none}
+.ideal-row input:focus{border-color:var(--red)}
+
+/* BRACKET */
+.bracket-sec{margin-bottom:20px}
+.bracket-ttl{font-family:var(--fh);font-size:1.1rem;color:#fff;background:var(--red);
+  border-radius:9px;padding:9px 14px;margin-bottom:10px}
+.bracket-match{background:#fff;border-radius:10px;padding:10px;margin-bottom:7px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);display:grid;
+  grid-template-columns:1fr 32px 32px 10px 32px 32px 1fr;align-items:center;gap:4px}
+.b-inp{border:2px solid #E0E0E0;border-radius:7px;padding:7px 8px;font-size:.8rem;
+  font-weight:900;font-family:var(--fb);width:100%;outline:none;text-align:center}
+.b-score{width:32px;border:2px solid #E0E0E0;border-radius:7px;padding:7px 2px;
+  font-size:.9rem;font-weight:900;font-family:var(--fb);text-align:center;outline:none}
+.b-vs{font-size:.8rem;font-weight:900;color:#999;text-align:center}
+.match-label{font-size:.7rem;font-weight:900;color:#AAA;text-align:center;margin-bottom:4px}
+
+/* GRAN FINAL */
+.final-field{background:linear-gradient(180deg,#27AE60,#229954);border-radius:var(--r);
+  padding:24px;margin-bottom:20px;text-align:center}
+.final-field .ball{font-size:3rem}
+.vs-card{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;
+  background:#fff;border-radius:var(--r);padding:20px;box-shadow:var(--shadow);margin-bottom:14px}
+.vs-team{text-align:center}
+.vs-team input{width:100%;border:2px solid #E0E0E0;border-radius:10px;padding:10px;
+  font-size:1rem;font-weight:900;font-family:var(--fb);text-align:center;outline:none;margin-bottom:8px}
+.vs-team input:focus{border-color:var(--red)}
+.vs-label{font-family:var(--fh);font-size:2rem;color:var(--red)}
+.score-final{display:flex;align-items:center;gap:10px;justify-content:center;
+  background:#fff;border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+.score-inp{width:60px;height:60px;border:3px solid #E0E0E0;border-radius:12px;
+  font-size:1.8rem;font-weight:900;font-family:var(--fh);text-align:center;outline:none}
+.score-inp:focus{border-color:var(--red)}
+.score-dash{font-size:2rem;font-weight:900;color:#CCC}
+
+/* CONFETTI */
+#confetti-box{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.cp{position:absolute;width:10px;height:10px;border-radius:2px;animation:cFall linear forwards}
+@keyframes cFall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+}
+
+/* CELEBRATION */
+#celeb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;
+  align-items:center;justify-content:center}
+#celeb.show{display:flex}
+.celeb-card{background:#fff;border-radius:28px;padding:36px 28px;text-align:center;
+  max-width:300px;width:92%;animation:popIn .4s cubic-bezier(.175,.885,.32,1.275)}
+.celeb-ico{font-size:4.5rem;margin-bottom:12px}
+.celeb-ttl{font-family:var(--fh);font-size:1.9rem;color:var(--red-dark);margin-bottom:7px}
+.celeb-msg{font-size:.95rem;font-weight:700;color:#555;margin-bottom:20px;line-height:1.5}
+
+/* QUIZZ PROGRESS */
+.q-progress{text-align:center;font-family:var(--fh);font-size:1.1rem;color:#888;margin-bottom:12px}
+
+/* EQUIPOS INFO */
+.cont-card{background:#fff;border-radius:14px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px;
+  display:flex;align-items:center;gap:14px}
+.cont-icon{font-size:2rem;flex-shrink:0}
+.cont-info{flex:1}
+.cont-name{font-family:var(--fh);font-size:1.1rem;color:var(--red-dark)}
+.cont-count{font-size:.9rem;font-weight:700;color:#555}
+.cont-num{font-size:2rem;font-family:var(--fh);color:var(--red);flex-shrink:0}
+
+/* Sede flip back style override */
+.sede-back-bg{background:linear-gradient(135deg,#1a1a2e,#2c3e50)}
+.sede-back-bg h3{color:#FFD700}
+.sede-back-bg .fr{color:#ccc}
+
+/* UTILS */
+.sep{height:1px;background:#EEE;margin:14px 0}
+.text-c{text-align:center}
+.mt{margin-top:14px}
+.fw{font-weight:900}
+.section-sub{font-size:1rem;font-weight:700;color:#666;margin-bottom:16px;line-height:1.4}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <h1>⚽ MUNDIAL <span>2026</span></h1>
+  <div id="stars-badge">⭐ <span id="stars-count">0</span></div>
+</header>
+
+<main id="main">
+
+<!-- ===== HOME ===== -->
+<div id="home-screen" class="screen active">
+  <div class="home-banner">
+    <div class="trophy">🏆</div>
+    <h2>MI LIBRO DEL MUNDIAL</h2>
+    <p>Estados Unidos · México · Canadá</p>
+    <div id="player-name-display">👤 ¡Hola, campeón!</div>
+  </div>
+  <div class="act-grid" id="act-grid"></div>
+</div>
+
+<!-- ===== PORTADA ===== -->
+<div id="portada-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">📝 Mi Portada</span>
+  </div>
+  <div class="card">
+    <div style="text-align:center;font-size:2.8rem;margin-bottom:4px">🏆⚽🌎</div>
+    <div style="text-align:center;font-family:var(--fh);font-size:1rem;color:var(--red);
+      letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Mundial 2026</div>
+
+    <label class="big-lbl">¿CÓMO TE LLAMÁS?</label>
+    <input class="big-inp" id="inp-name" placeholder="Escribí tu nombre..." maxlength="30"
+      oninput="onNameChange()" style="text-transform:uppercase">
+
+    <label class="big-lbl">MI SELECCIÓN FAVORITA ES:</label>
+    <div class="team-search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="big-inp" id="team-search" placeholder="Buscá tu equipo..." oninput="filterTeams()">
+    </div>
+    <div class="team-selected-display" id="team-selected-display">
+      <span class="tsd-flag" id="tsd-flag"></span>
+      <div class="tsd-name" id="tsd-name"></div>
+      <div class="tsd-group" id="tsd-group"></div>
+    </div>
+    <div class="team-grid" id="team-grid"></div>
+
+    <label class="big-lbl">¿CUÁNTOS AÑOS TENÉS?</label>
+    <input class="big-inp" id="inp-age" type="number" placeholder="Escribí tu edad..."
+      min="1" max="18" oninput="onAgeChange()">
+
+    <div id="portada-hint" class="fb-msg" style="display:none"></div>
+    <div style="margin-top:20px">
+      <button class="btn btn-r btn-full" onclick="checkPortada()">¡LISTO! ✅</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ANFITRIONES ===== -->
+<div id="anfitriones-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🌎 Países Anfitriones</span>
+  </div>
+  <div class="info-box">🏟️ ¡3 países organizan el Mundial 2026! Tocá cada tarjeta para conocerlos.</div>
+  <div id="host-cards"></div>
+</div>
+
+<!-- ===== EQUIPOS ===== -->
+<div id="equipos-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🔢 ¿Cuántos Equipos?</span>
+  </div>
+  <div class="info-box">⚽ ¡El Mundial 2026 tiene <strong>48 selecciones</strong>! Son de 6 continentes diferentes.</div>
+  <div id="cont-cards"></div>
+  <div class="card" style="text-align:center">
+    <div style="font-family:var(--fh);font-size:1.3rem;color:var(--red-dark);margin-bottom:8px">TOTAL:</div>
+    <div style="font-size:3rem;font-family:'Fredoka One',cursive;color:var(--red)">🌍 48 🌎</div>
+    <div style="font-size:1rem;font-weight:700;color:#555;margin-top:4px">selecciones en total</div>
+    <div style="margin-top:14px"><button class="btn btn-gr btn-full" onclick="markDone('equipos')">¡Ya lo sé! ✅</button></div>
+  </div>
+</div>
+
+<!-- ===== FIXTURE ===== -->
+<div id="fixture-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">📋 El Fixture</span>
+  </div>
+  <div class="info-box">⚽ 48 selecciones divididas en 12 grupos de 4. Cada grupo juega 3 partidos.</div>
+  <div class="groups-grid" id="groups-grid"></div>
+  <div style="margin-top:16px"><button class="btn btn-gr btn-full" onclick="markDone('fixture')">¡Ya lo sé! ✅</button></div>
+</div>
+
+<!-- ===== INTRUSO ===== -->
+<div id="intruso-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🔍 El Intruso</span>
+  </div>
+  <div class="info-box">🕵️ ¡4 banderas son del mismo grupo y 1 se coló! Tocá al intruso.</div>
+  <div class="prog-dots" id="intr-dots"></div>
+  <div id="intruso-content"></div>
+</div>
+
+<!-- ===== SELECCIONES ===== -->
+<div id="selecciones-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">👕 Grandes Selecciones</span>
+  </div>
+  <div class="info-box">⚽ ¿Reconocés la selección por su camiseta? ¡Elegí el nombre correcto!</div>
+  <div class="prog-dots" id="sel-dots"></div>
+  <div class="q-progress" id="sel-progress"></div>
+  <div id="sel-content"></div>
+</div>
+
+<!-- ===== JUGADORES ===== -->
+<div id="jugadores-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">⭐ ¿Quién es este jugador?</span>
+  </div>
+  <div class="info-box">🧠 Leé las pistas y adiviná al jugador. ¡Cuantas menos pistas necesités, más inteligente sos!</div>
+  <div class="prog-dots" id="jug-dots"></div>
+  <div class="q-progress" id="jug-progress"></div>
+  <div id="jug-content"></div>
+</div>
+
+<!-- ===== SILABAS ===== -->
+<div id="silabas-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🔤 Rompecabezas de Sílabas</span>
+  </div>
+  <div class="info-box">🧩 Tocá las sílabas en el orden correcto para armar el nombre del país.</div>
+  <div class="prog-dots" id="sil-dots"></div>
+  <div class="q-progress" id="sil-progress"></div>
+  <div id="sil-content"></div>
+</div>
+
+<!-- ===== SEDES ===== -->
+<div id="sedes-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🏟️ Las Sedes</span>
+  </div>
+  <div class="info-box">🏟️ ¡El Mundial se juega en 16 estadios! Tocá cada tarjeta para conocerlos.</div>
+  <div id="sede-cards"></div>
+  <div style="margin-top:4px"><button class="btn btn-gr btn-full" onclick="markDone('sedes')">¡Ya los conozco! ✅</button></div>
+</div>
+
+<!-- ===== CAMPEONES ===== -->
+<div id="campeones-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🏆 Los Campeones</span>
+  </div>
+  <div class="info-box">🏆 Solo 8 países ganaron el Mundial alguna vez. Tocá el número correcto de títulos para cada campeón.</div>
+  <div id="champ-content"></div>
+  <div style="margin-top:8px"><button class="btn btn-r btn-full" onclick="checkCampeones()">¡Verificar! ⚡</button></div>
+  <div id="champ-fb" class="fb-msg"></div>
+</div>
+
+<!-- ===== AÑO ===== -->
+<div id="anio-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">📅 ¿En qué año ganó?</span>
+  </div>
+  <div class="info-box">🔗 Tocá una bandera y después tocá el año en que ganó su último Mundial.</div>
+  <div id="anio-progress" class="q-progress"></div>
+  <div class="match-game" id="anio-game"></div>
+  <div id="anio-fb" class="fb-msg mt"></div>
+</div>
+
+<!-- ===== UNIR JUGADORES ===== -->
+<div id="unir-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🤝 Unir Jugadores</span>
+  </div>
+  <div class="info-box">🔗 Tocá un jugador y después tocá la bandera de su selección.</div>
+  <div id="unir-progress" class="q-progress"></div>
+  <div class="match-game" id="unir-game"></div>
+  <div id="unir-fb" class="fb-msg mt"></div>
+</div>
+
+<!-- ===== EQUIPO IDEAL ===== -->
+<div id="equipoideal-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">⚽ Mi Equipo Ideal</span>
+  </div>
+  <div class="info-box">⚽ ¡Armá tu equipo de 11 jugadores! Escribí quién juega en cada posición.</div>
+  <div class="field">
+    <div class="field-marks"></div>
+    <div class="form-row">
+      <div class="pos-slot"><div class="pos-circle">DEL</div><input class="pos-inp" id="pi-del1" placeholder="Del 1"></div>
+      <div class="pos-slot"><div class="pos-circle">DEL</div><input class="pos-inp" id="pi-del2" placeholder="Del 2"></div>
+      <div class="pos-slot"><div class="pos-circle">DEL</div><input class="pos-inp" id="pi-del3" placeholder="Del 3"></div>
+    </div>
+    <div class="form-row">
+      <div class="pos-slot"><div class="pos-circle">MED</div><input class="pos-inp" id="pi-med1" placeholder="Med 1"></div>
+      <div class="pos-slot"><div class="pos-circle">MED</div><input class="pos-inp" id="pi-med2" placeholder="Med 2"></div>
+      <div class="pos-slot"><div class="pos-circle">MED</div><input class="pos-inp" id="pi-med3" placeholder="Med 3"></div>
+    </div>
+    <div class="form-row">
+      <div class="pos-slot"><div class="pos-circle">DEF</div><input class="pos-inp" id="pi-def1" placeholder="Def 1"></div>
+      <div class="pos-slot"><div class="pos-circle">DEF</div><input class="pos-inp" id="pi-def2" placeholder="Def 2"></div>
+      <div class="pos-slot"><div class="pos-circle">DEF</div><input class="pos-inp" id="pi-def3" placeholder="Def 3"></div>
+      <div class="pos-slot"><div class="pos-circle">DEF</div><input class="pos-inp" id="pi-def4" placeholder="Def 4"></div>
+    </div>
+    <div class="form-row">
+      <div class="pos-slot"><div class="pos-circle">ARQ</div><input class="pos-inp" id="pi-arq" placeholder="Arquero"></div>
+    </div>
+  </div>
+  <div style="margin-top:4px"><button class="btn btn-r btn-full" onclick="saveEquipo()">¡Guardar Equipo! 💾</button></div>
+  <div id="equipo-fb" class="fb-msg"></div>
+</div>
+
+<!-- ===== ELIMINATORIAS ===== -->
+<div id="eliminatorias-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🗓️ Eliminatorias</span>
+  </div>
+  <div class="info-box">⚡ ¡El que pierde se va a casa! Completá los equipos y resultados de cada ronda.</div>
+  <div id="elim-content"></div>
+  <div style="margin-top:8px"><button class="btn btn-gr btn-full" onclick="saveElim()">💾 Guardar Progreso</button></div>
+</div>
+
+<!-- ===== GRAN FINAL ===== -->
+<div id="granfinal-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🎉 ¡La Gran Final!</span>
+  </div>
+  <div class="final-field">
+    <div class="ball">⚽</div>
+    <div style="font-family:var(--fh);font-size:1.5rem;color:#fff;margin-top:6px">19 DE JULIO DE 2026</div>
+    <div style="font-size:.9rem;font-weight:700;color:rgba(255,255,255,.85);margin-top:4px">MetLife Stadium · Nueva York</div>
+  </div>
+  <div class="vs-card">
+    <div class="vs-team">
+      <div style="font-size:.8rem;font-weight:900;color:#888;margin-bottom:6px">EQUIPO 1</div>
+      <input id="fin-team1" placeholder="País..." style="width:100%;border:2px solid #DDD;border-radius:10px;padding:10px;font-size:1rem;font-weight:900;font-family:var(--fb);text-align:center;outline:none">
+      <div style="font-size:2rem;margin-top:8px" id="fin-flag1">🏳️</div>
+    </div>
+    <div class="vs-label">VS</div>
+    <div class="vs-team">
+      <div style="font-size:.8rem;font-weight:900;color:#888;margin-bottom:6px">EQUIPO 2</div>
+      <input id="fin-team2" placeholder="País..." style="width:100%;border:2px solid #DDD;border-radius:10px;padding:10px;font-size:1rem;font-weight:900;font-family:var(--fb);text-align:center;outline:none">
+      <div style="font-size:2rem;margin-top:8px" id="fin-flag2">🏳️</div>
+    </div>
+  </div>
+  <div class="score-final">
+    <input class="score-inp" id="fin-score1" type="number" min="0" placeholder="0">
+    <div class="score-dash">—</div>
+    <input class="score-inp" id="fin-score2" type="number" min="0" placeholder="0">
+  </div>
+  <div class="card text-c">
+    <div style="font-family:var(--fh);font-size:1.1rem;color:#888;margin-bottom:8px">🏆 EL CAMPEÓN FUE:</div>
+    <input id="fin-winner" class="big-inp" placeholder="¡El ganador del mundo!" style="text-align:center;font-size:1.3rem">
+    <div style="margin-top:14px"><button class="btn btn-g btn-full" onclick="saveFinal()">🏆 ¡GUARDAR CAMPEÓN!</button></div>
+    <div id="final-fb" class="fb-msg"></div>
+  </div>
+  <div style="margin-top:8px;text-align:center">
+    <div style="font-size:.8rem;font-weight:700;color:#AAA">🗓️ Final: 19 Jul · 3° Puesto: 18 Jul · Semis: 14-15 Jul</div>
+  </div>
+</div>
+
+</main>
+
+<!-- CONFETTI -->
+<div id="confetti-box"></div>
+
+<!-- CELEBRATION OVERLAY -->
+<div id="celeb">
+  <div class="celeb-card">
+    <div class="celeb-ico" id="celeb-ico">🌟</div>
+    <div class="celeb-ttl" id="celeb-ttl">¡MUY BIEN!</div>
+    <div class="celeb-msg" id="celeb-msg">¡Sos un crack!</div>
+    <button class="btn btn-r btn-full" onclick="closeCeleb()">¡SEGUIR! ➡️</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const ACTIVITIES = [
+  {id:'portada',     emoji:'📝', title:'Mi Portada',       stars:0, game:false},
+  {id:'anfitriones', emoji:'🌎', title:'Países Anfitriones', stars:0, game:false},
+  {id:'equipos',    emoji:'🔢', title:'¿Cuántos Equipos?', stars:0, game:false},
+  {id:'fixture',    emoji:'📋', title:'El Fixture',        stars:0, game:false},
+  {id:'intruso',    emoji:'🔍', title:'El Intruso',        stars:3, game:true},
+  {id:'selecciones',emoji:'👕', title:'Grandes Selecciones',stars:3, game:true},
+  {id:'jugadores',  emoji:'⭐', title:'¿Quién es este Jugador?', stars:5, game:true},
+  {id:'silabas',    emoji:'🔤', title:'Rompecabezas de Sílabas', stars:4, game:true},
+  {id:'sedes',      emoji:'🏟️', title:'Las Sedes',         stars:0, game:false},
+  {id:'campeones',  emoji:'🏆', title:'Los Campeones',     stars:2, game:true},
+  {id:'anio',       emoji:'📅', title:'¿En qué año ganó?', stars:3, game:true},
+  {id:'unir',       emoji:'🤝', title:'Unir Jugadores',    stars:3, game:true},
+  {id:'equipoideal',emoji:'⚽', title:'Mi Equipo Ideal',   stars:0, game:false},
+  {id:'eliminatorias',emoji:'🗓️',title:'Eliminatorias',   stars:0, game:false},
+  {id:'granfinal',  emoji:'🎉', title:'¡La Gran Final!',   stars:0, game:false},
+];
+
+const TEAMS_48 = [
+  {n:'México',flag:'🇲🇽',g:'A'},{n:'Sudáfrica',flag:'🇿🇦',g:'A'},{n:'Corea del Sur',flag:'🇰🇷',g:'A'},{n:'Rep. Checa',flag:'🇨🇿',g:'A'},
+  {n:'Canadá',flag:'🇨🇦',g:'B'},{n:'Bosnia y Herz.',flag:'🇧🇦',g:'B'},{n:'Qatar',flag:'🇶🇦',g:'B'},{n:'Suiza',flag:'🇨🇭',g:'B'},
+  {n:'Brasil',flag:'🇧🇷',g:'C'},{n:'Marruecos',flag:'🇲🇦',g:'C'},{n:'Haití',flag:'🇭🇹',g:'C'},{n:'Escocia',flag:'🏴󠁧󠁢󠁳󠁣󠁴󠁿',g:'C'},
+  {n:'Estados Unidos',flag:'🇺🇸',g:'D'},{n:'Paraguay',flag:'🇵🇾',g:'D'},{n:'Australia',flag:'🇦🇺',g:'D'},{n:'Turquía',flag:'🇹🇷',g:'D'},
+  {n:'Alemania',flag:'🇩🇪',g:'E'},{n:'Curazao',flag:'🇨🇼',g:'E'},{n:'Costa de Marfil',flag:'🇨🇮',g:'E'},{n:'Ecuador',flag:'🇪🇨',g:'E'},
+  {n:'Países Bajos',flag:'🇳🇱',g:'F'},{n:'Japón',flag:'🇯🇵',g:'F'},{n:'Suecia',flag:'🇸🇪',g:'F'},{n:'Túnez',flag:'🇹🇳',g:'F'},
+  {n:'Bélgica',flag:'🇧🇪',g:'G'},{n:'Egipto',flag:'🇪🇬',g:'G'},{n:'Irán',flag:'🇮🇷',g:'G'},{n:'Nueva Zelanda',flag:'🇳🇿',g:'G'},
+  {n:'España',flag:'🇪🇸',g:'H'},{n:'Cabo Verde',flag:'🇨🇻',g:'H'},{n:'Arabia Saudita',flag:'🇸🇦',g:'H'},{n:'Uruguay',flag:'🇺🇾',g:'H'},
+  {n:'Francia',flag:'🇫🇷',g:'I'},{n:'Senegal',flag:'🇸🇳',g:'I'},{n:'Irak',flag:'🇮🇶',g:'I'},{n:'Noruega',flag:'🇳🇴',g:'I'},
+  {n:'Argentina',flag:'🇦🇷',g:'J'},{n:'Argelia',flag:'🇩🇿',g:'J'},{n:'Austria',flag:'🇦🇹',g:'J'},{n:'Jordania',flag:'🇯🇴',g:'J'},
+  {n:'Portugal',flag:'🇵🇹',g:'K'},{n:'Congo',flag:'🇨🇬',g:'K'},{n:'Uzbekistán',flag:'🇺🇿',g:'K'},{n:'Colombia',flag:'🇨🇴',g:'K'},
+  {n:'Inglaterra',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',g:'L'},{n:'Croacia',flag:'🇭🇷',g:'L'},{n:'Ghana',flag:'🇬🇭',g:'L'},{n:'Panamá',flag:'🇵🇦',g:'L'},
+];
+
+const HOSTS = [
+  {flag:'🇺🇸',name:'Estados Unidos',num:1,
+   facts:[
+     ['🏙️','Capital: Washington D.C.'],['👥','Más de 330 millones de habitantes'],
+     ['🏟️','11 ciudades sedes en este Mundial'],['⚽','¡Es el país con más partidos!']
+   ]},
+  {flag:'🇲🇽',name:'México',num:2,
+   facts:[
+     ['🏙️','Capital: Ciudad de México'],['👥','Más de 130 millones de habitantes'],
+     ['🏟️','3 ciudades sedes'],['🏆','El Estadio Azteca fue sede en 1970, 1986 ¡y ahora en 2026!']
+   ]},
+  {flag:'🇨🇦',name:'Canadá',num:3,
+   facts:[
+     ['🏙️','Capital: Ottawa'],['👥','Más de 38 millones de habitantes'],
+     ['🏟️','2 ciudades sedes'],['🌟','¡Es la primera vez que Canadá organiza un Mundial!']
+   ]},
+];
+
+const CONTINENTS = [
+  {icon:'🏰',name:'Europa',count:16,teams:'Alemania, España, Francia, Inglaterra, Portugal y más'},
+  {icon:'🌴',name:'Sudamérica',count:6,teams:'Argentina, Brasil, Colombia, Ecuador, Uruguay, Paraguay'},
+  {icon:'🦁',name:'África',count:9,teams:'Marruecos, Senegal, Ghana, Egipto, Costa de Marfil y más'},
+  {icon:'🐉',name:'Asia',count:8,teams:'Japón, Arabia Saudita, Corea del Sur, Irak y más'},
+  {icon:'🌵',name:'CONCACAF',count:6,teams:'EE.UU., México, Canadá, Panamá, Honduras y más'},
+  {icon:'🥝',name:'Oceanía',count:1,teams:'Nueva Zelanda'},
+];
+
+const INTRUSO_ROUNDS = [
+  {flags:[
+    {n:'México',f:'🇲🇽'},{n:'Sudáfrica',f:'🇿🇦'},{n:'Brasil',f:'🇧🇷'},
+    {n:'Corea del Sur',f:'🇰🇷'},{n:'Rep. Checa',f:'🇨🇿'}
+  ], intruder:2, group:'A', hint:'4 banderas son del GRUPO A. ¿Cuál no es del Grupo A?'},
+  {flags:[
+    {n:'Brasil',f:'🇧🇷'},{n:'Marruecos',f:'🇲🇦'},{n:'Haití',f:'🇭🇹'},
+    {n:'Argentina',f:'🇦🇷'},{n:'Escocia',f:'🏴󠁧󠁢󠁳󠁣󠁴󠁿'}
+  ], intruder:3, group:'C', hint:'4 banderas son del GRUPO C. ¿Cuál no es del Grupo C?'},
+  {flags:[
+    {n:'España',f:'🇪🇸'},{n:'Cabo Verde',f:'🇨🇻'},{n:'Francia',f:'🇫🇷'},
+    {n:'Arabia Saudita',f:'🇸🇦'},{n:'Uruguay',f:'🇺🇾'}
+  ], intruder:2, group:'H', hint:'4 banderas son del GRUPO H. ¿Cuál no es del Grupo H?'},
+  {flags:[
+    {n:'Argentina',f:'🇦🇷'},{n:'Argelia',f:'🇩🇿'},{n:'Austria',f:'🇦🇹'},
+    {n:'Jordania',f:'🇯🇴'},{n:'Inglaterra',f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'}
+  ], intruder:4, group:'J', hint:'4 banderas son del GRUPO J. ¿Cuál no es del Grupo J?'},
+];
+
+const SELECCIONES_GAME = [
+  {bg:'linear-gradient(135deg,#75AADB 50%,#fff 50%)',desc:'Celeste y blanca con rayas verticales',
+   opts:['Argentina 🇦🇷','Uruguay 🇺🇾','Grecia 🇬🇷','Israel 🇮🇱'],correct:0},
+  {bg:'#FFDF00',desc:'Toda amarilla, letras verdes',
+   opts:['Colombia 🇨🇴','Brasil 🇧🇷','Ecuador 🇪🇨','Suecia 🇸🇪'],correct:1},
+  {bg:'#003189',desc:'Azul oscura con letras doradas',
+   opts:['Francia 🇫🇷','Italia 🇮🇹','Uruguay 🇺🇾','Bosnia 🇧🇦'],correct:0},
+  {bg:'#AA151B',desc:'Roja con letras doradas',
+   opts:['Turquía 🇹🇷','Marruecos 🇲🇦','España 🇪🇸','Dinamarca 🇩🇰'],correct:2},
+  {bg:'#FFFFFF',desc:'Toda blanca con letras negras y escudo negro',
+   opts:['Polonia 🇵🇱','Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿','Alemania 🇩🇪','Argentina 🇦🇷'],correct:2},
+  {bg:'linear-gradient(180deg,#fff 33%,#fff 33%)',desc:'Blanca con cruz roja (escudo de San Jorge)',
+   opts:['Suiza 🇨🇭','Portugal 🇵🇹','Polonia 🇵🇱','Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿'],correct:3,
+   extra:'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none"><div style="width:20%;height:100%;background:#CC0000;opacity:.7"></div></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none"><div style="width:100%;height:20%;background:#CC0000;opacity:.7"></div></div>'},
+];
+
+const PLAYERS = [
+  {name:'Lionel Messi',flag:'🇦🇷',sil:'🦸',
+   clues:['⚽ Juega en un club de Miami, Estados Unidos','🇦🇷 Es el capitán de Argentina','🏆 Ganó el Mundial 2022 en Qatar'],
+   opts:['Lionel Messi 🇦🇷','Cristiano Ronaldo 🇵🇹','Kylian Mbappé 🇫🇷'],correct:0},
+  {name:'Kylian Mbappé',flag:'🇫🇷',sil:'⚡',
+   clues:['⚽ Juega en el Real Madrid de España','🇫🇷 Es el capitán de Francia','🏆 Fue campeón del mundo en 2018'],
+   opts:['Erling Haaland 🇳🇴','Kylian Mbappé 🇫🇷','Harry Kane 🏴󠁧󠁢󠁥󠁮󠁧󠁿'],correct:1},
+  {name:'Erling Haaland',flag:'🇳🇴',sil:'🎯',
+   clues:['⚽ Juega en el Manchester City de Inglaterra','⚡ Es uno de los goleadores más letales del mundo','🇳🇴 Es el capitán de Noruega'],
+   opts:['Erling Haaland 🇳🇴','Kylian Mbappé 🇫🇷','Lamine Yamal 🇪🇸'],correct:0},
+  {name:'Vinicius Jr.',flag:'🇧🇷',sil:'🌟',
+   clues:['⚽ Juega en el Real Madrid de España','🌟 Es el jugador más importante de Brasil','7️⃣ Usa la camiseta amarilla con el número 7'],
+   opts:['Raphinha 🇧🇷','Vinicius Jr. 🇧🇷','Julián Álvarez 🇦🇷'],correct:1},
+  {name:'Lamine Yamal',flag:'🇪🇸',sil:'🌠',
+   clues:['⚽ Juega en el Barcelona de España','🏆 Ganó la Eurocopa 2024 con España','🌟 ¡Solo tiene 18 años en este Mundial!'],
+   opts:['Pedri 🇪🇸','Lamine Yamal 🇪🇸','Mohamed Salah 🇪🇬'],correct:1},
+  {name:'Cristiano Ronaldo',flag:'🇵🇹',sil:'🦁',
+   clues:['⚽ Juega en Arabia Saudita','🇵🇹 Es el capitán de Portugal','7️⃣ Siempre usa el número 7'],
+   opts:['Lionel Messi 🇦🇷','Harry Kane 🏴󠁧󠁢󠁥󠁮󠁧󠁿','Cristiano Ronaldo 🇵🇹'],correct:2},
+  {name:'Harry Kane',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',sil:'🎖️',
+   clues:['⚽ Juega en el Bayern Múnich de Alemania','🏴󠁧󠁢󠁥󠁮󠁧󠁿 Es el máximo goleador de la historia de Inglaterra','9️⃣ Usa la camiseta blanca con el número 9'],
+   opts:['Harry Kane 🏴󠁧󠁢󠁥󠁮󠁧󠁿','Erling Haaland 🇳🇴','Jude Bellingham 🏴󠁧󠁢󠁥󠁮󠁧󠁿'],correct:0},
+  {name:'Pedri',flag:'🇪🇸',sil:'🎨',
+   clues:['⚽ Juega de mediocampista en el Barcelona','🏆 Fue elegido mejor jugador joven en la Eurocopa 2020','🇪🇸 Juega para la selección de España'],
+   opts:['Lamine Yamal 🇪🇸','Pedri 🇪🇸','Vinicius Jr. 🇧🇷'],correct:1},
+  {name:'Mohamed Salah',flag:'🇪🇬',sil:'🔥',
+   clues:['⚽ Juega en el Liverpool de Inglaterra','🌍 Es el jugador más famoso de África','🇪🇬 Es la estrella de la selección de Egipto'],
+   opts:['Mohamed Salah 🇪🇬','Pedri 🇪🇸','Raphinha 🇧🇷'],correct:0},
+  {name:'Jude Bellingham',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',sil:'💎',
+   clues:['⚽ Juega en el Real Madrid de España','🏆 Fue el mejor jugador joven de la Eurocopa 2024','🏴󠁧󠁢󠁥󠁮󠁧󠁿 Es la estrella de la selección de Inglaterra'],
+   opts:['Harry Kane 🏴󠁧󠁢󠁥󠁮󠁧󠁿','Jude Bellingham 🏴󠁧󠁢󠁥󠁮󠁧󠁿','Erling Haaland 🇳🇴'],correct:1},
+  {name:'Raphinha',flag:'🇧🇷',sil:'🦅',
+   clues:['⚽ Juega en el Barcelona de España','🇧🇷 Es el capitán y figura de Brasil en este Mundial','1️⃣1️⃣ Usa la camiseta amarilla con el número 11'],
+   opts:['Vinicius Jr. 🇧🇷','Raphinha 🇧🇷','Julián Álvarez 🇦🇷'],correct:1},
+  {name:'Julián Álvarez',flag:'🇦🇷',sil:'🕷️',
+   clues:['⚽ Juega en el Atlético de Madrid de España','🏆 Fue campeón del mundo con Argentina en Qatar 2022','🕷️ Lo llaman "La Araña" por su forma de jugar'],
+   opts:['Lionel Messi 🇦🇷','Lamine Yamal 🇪🇸','Julián Álvarez 🇦🇷'],correct:2},
+];
+
+const SILABA_GAMES = [
+  {flag:'🇧🇷',syllables:['BRA','SIL'],answer:'BRASIL',group:'C',diff:'⭐ FÁCIL'},
+  {flag:'🇯🇵',syllables:['JA','PÓN'],answer:'JAPÓN',group:'F',diff:'⭐ FÁCIL'},
+  {flag:'🇲🇽',syllables:['CO','MÉ','XI'],answer:'MÉXICO',group:'A',diff:'⭐⭐ MEDIO'},
+  {flag:'🇪🇬',syllables:['GIP','E','TO'],answer:'EGIPTO',group:'G',diff:'⭐⭐ MEDIO'},
+  {flag:'🇳🇴',syllables:['GA','RUE','NO'],answer:'NORUEGA',group:'I',diff:'⭐⭐⭐ DIFÍCIL'},
+  {flag:'🇭🇷',syllables:['CIA','CROA'],answer:'CROACIA',group:'L',diff:'⭐⭐⭐ DIFÍCIL'},
+  {flag:'🇨🇦',syllables:['DÁ','CA','NA'],answer:'CANADÁ',group:'B',diff:'⭐ FÁCIL'},
+  {flag:'🇬🇭',syllables:['NA','GHA'],answer:'GHANA',group:'L',diff:'⭐ FÁCIL'},
+  {flag:'🇸🇳',syllables:['GAL','SE','NE'],answer:'SENEGAL',group:'I',diff:'⭐⭐ MEDIO'},
+  {flag:'🇪🇨',syllables:['DOR','E','CUA'],answer:'ECUADOR',group:'E',diff:'⭐⭐ MEDIO'},
+  {flag:'🇲🇦',syllables:['MA','RRUE','COS'],answer:'MARRUECOS',group:'C',diff:'⭐⭐⭐ DIFÍCIL'},
+  {flag:'🇺🇿',syllables:['TÁN','UZ','KIS','BE'],answer:'UZBEKISTÁN',group:'K',diff:'⭐⭐⭐ DIFÍCIL'},
+];
+
+const SEDES = [
+  {emoji:'🏟️',name:'Estadio Azteca',city:'Ciudad de México · México',
+   facts:[['👥','Caben 83.000 personas'],['📚','¡Es como llenar 830 aulas escolares!'],
+          ['🏆','Fue sede en 1970, 1986 ¡y ahora en 2026!'],['🌟','¡El único estadio con 3 Mundiales!']]},
+  {emoji:'🗽',name:'MetLife Stadium',city:'Nueva York · Estados Unidos',
+   facts:[['👥','Caben 82.500 personas'],['🎳','¡Es como 82 piletas olímpicas llenas!'],
+          ['🏆','ACÁ SE JUEGA LA GRAN FINAL el 19 de julio de 2026'],['⭐','El más importante del mundo']]},
+  {emoji:'⭐',name:'AT&T Stadium',city:'Dallas · Estados Unidos',
+   facts:[['👥','Caben 94.000 personas'],['🌎','¡Es el estadio MÁS GRANDE DEL MUNDO!'],
+          ['🌸','Su techo se abre y se cierra como una flor gigante'],['🎸','También alberga conciertos']]},
+  {emoji:'🌸',name:'Mercedes-Benz Stadium',city:'Atlanta · Estados Unidos',
+   facts:[['👥','Caben 75.000 personas'],['🏀','Son como 750 canchas de básquet llenas'],
+          ['🌸','Su techo se abre como una flor, único en el mundo'],['🎶','También alberga conciertos famosos']]},
+];
+
+const CHAMPIONS = [
+  {flag:'🇧🇷',name:'Brasil',titles:5},
+  {flag:'🇩🇪',name:'Alemania',titles:4},
+  {flag:'🇮🇹',name:'Italia',titles:4},
+  {flag:'🇦🇷',name:'Argentina',titles:3},
+  {flag:'🇫🇷',name:'Francia',titles:2},
+  {flag:'🇺🇾',name:'Uruguay',titles:2},
+  {flag:'🇪🇸',name:'España',titles:1},
+  {flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'Inglaterra',titles:1},
+];
+
+const ANIO_DATA = [
+  {flag:'🇧🇷',name:'Brasil',year:'2002'},
+  {flag:'🇩🇪',name:'Alemania',year:'2014'},
+  {flag:'🇮🇹',name:'Italia',year:'2006'},
+  {flag:'🇦🇷',name:'Argentina',year:'2022'},
+  {flag:'🇫🇷',name:'Francia',year:'2018'},
+  {flag:'🇺🇾',name:'Uruguay',year:'1950'},
+  {flag:'🇪🇸',name:'España',year:'2010'},
+  {flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'Inglaterra',year:'1966'},
+];
+
+const UNIR_DATA = [
+  {player:'Lionel Messi',pflag:'🇦🇷',country:'Argentina',cflag:'🇦🇷'},
+  {player:'Kylian Mbappé',pflag:'🇫🇷',country:'Francia',cflag:'🇫🇷'},
+  {player:'Erling Haaland',pflag:'🇳🇴',country:'Noruega',cflag:'🇳🇴'},
+  {player:'Vinicius Jr.',pflag:'🇧🇷',country:'Brasil',cflag:'🇧🇷'},
+  {player:'Lamine Yamal',pflag:'🇪🇸',country:'España',cflag:'🇪🇸'},
+  {player:'Harry Kane',pflag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',country:'Inglaterra',cflag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
+  {player:'Cristiano Ronaldo',pflag:'🇵🇹',country:'Portugal',cflag:'🇵🇹'},
+  {player:'Mohamed Salah',pflag:'🇪🇬',country:'Egipto',cflag:'🇪🇬'},
+];
+
+// ============================================================
+// FLAG IMAGE HELPERS (Windows no renderiza emojis de banderas)
+// ============================================================
+const COUNTRY_CODE = {
+  'Argentina':'ar','Brasil':'br','Uruguay':'uy','Paraguay':'py',
+  'Colombia':'co','Ecuador':'ec',
+  'México':'mx','Estados Unidos':'us','Canadá':'ca','Panamá':'pa',
+  'Haití':'ht','Curazao':'cw',
+  'España':'es','Francia':'fr','Alemania':'de','Inglaterra':'gb-eng',
+  'Portugal':'pt','Bélgica':'be','Países Bajos':'nl','Italia':'it',
+  'Suiza':'ch','Noruega':'no','Austria':'at','Croacia':'hr',
+  'Escocia':'gb-sct','Suecia':'se','Dinamarca':'dk','Polonia':'pl',
+  'Bosnia y Herz.':'ba','Bosnia':'ba','Rep. Checa':'cz',
+  'Turquía':'tr','Grecia':'gr','Israel':'il',
+  'Japón':'jp','Corea del Sur':'kr','Arabia Saudita':'sa',
+  'Irán':'ir','Irak':'iq','Jordania':'jo','Qatar':'qa',
+  'Uzbekistán':'uz','Australia':'au','Nueva Zelanda':'nz',
+  'Marruecos':'ma','Senegal':'sn','Ghana':'gh','Egipto':'eg',
+  'Argelia':'dz','Túnez':'tn','Costa de Marfil':'ci',
+  'Cabo Verde':'cv','Sudáfrica':'za','Congo':'cg',
+};
+
+const SPECIAL_FLAGS={'🏴󠁧󠁢󠁥󠁮󠁧󠁿':'gb-eng','🏴󠁧󠁢󠁳󠁣󠁴󠁿':'gb-sct'};
+
+function _fi(code,h,w,alt){
+  return `<img src="https://flagcdn.com/w${w}/${code}.png" alt="${alt}" style="height:${h}px;width:auto;border-radius:4px;vertical-align:middle;display:inline-block">`;
+}
+function flagImg(name,h=28,w=40){
+  const c=COUNTRY_CODE[name]; return c?_fi(c,h,w,name):'';
+}
+function flagImgFromEmoji(emoji,h=32,w=40){
+  if(!emoji) return '';
+  const sp=SPECIAL_FLAGS[emoji]; if(sp) return _fi(sp,h,w,'');
+  const pts=[...emoji].map(c=>c.codePointAt(0));
+  if(pts.length>=2&&pts[0]>=0x1F1E0&&pts[0]<=0x1F1FF){
+    const code=pts.slice(0,2).map(p=>String.fromCharCode(p-0x1F1E6+97)).join('');
+    return _fi(code,h,w,'');
+  }
+  return emoji;
+}
+function processFlags(str,h=18,w=20){
+  let r=str;
+  for(const [em,code] of Object.entries(SPECIAL_FLAGS))
+    r=r.split(em).join(_fi(code,h,w,''));
+  return r.replace(/[\u{1F1E0}-\u{1F1FF}]{2}/gu,m=>{
+    const pts=[...m].map(c=>c.codePointAt(0));
+    const code=pts.map(p=>String.fromCharCode(p-0x1F1E6+97)).join('');
+    return _fi(code,h,w,'');
+  });
+}
+
+// ============================================================
+// STATE
+// ============================================================
+const SK = 'mundial2026_v1';
+let S = loadState();
+
+function defaultState(){
+  return {
+    playerName:'', favoriteTeam:'', playerAge:'', stars:0,
+    completed:{},
+    intruso:{round:0,score:0},
+    sel:{current:0,score:0},
+    jug:{current:0,score:0,cluesShown:1},
+    sil:{current:0,placed:[]},
+    champ:{selected:{}},
+    anio:{leftSel:null,matched:{}},
+    unir:{leftSel:null,matched:{}},
+    equipo:{},
+    elim:{},
+    final:{team1:'',team2:'',score1:'',score2:'',winner:''},
+  };
+}
+
+function loadState(){
+  try{
+    const d = JSON.parse(localStorage.getItem(SK));
+    if(d) return {...defaultState(),...d};
+  }catch(e){}
+  return defaultState();
+}
+
+function save(){ localStorage.setItem(SK, JSON.stringify(S)); }
+
+// ============================================================
+// SOUND
+// ============================================================
+let audioCtx = null;
+function getAudio(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+function playNote(freq, dur, type='sine'){
+  try{
+    const ctx = getAudio();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = freq; osc.type = type;
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + dur);
+  }catch(e){}
+}
+function sndOk(){ playNote(523,.08);setTimeout(()=>playNote(659,.08),120);setTimeout(()=>playNote(784,.3),240); }
+function sndNo(){ playNote(300,.1);setTimeout(()=>playNote(220,.3),100); }
+function sndFanfare(){
+  [523,659,784,1047].forEach((f,i)=>setTimeout(()=>playNote(f,.15),i*120));
+}
+
+// ============================================================
+// CONFETTI
+// ============================================================
+function confetti(n=60){
+  const box = document.getElementById('confetti-box');
+  const colors = ['#C8102E','#FFD700','#27AE60','#3498DB','#9B59B6','#E67E22'];
+  for(let i=0;i<n;i++){
+    const p = document.createElement('div');
+    p.className='cp';
+    p.style.left = Math.random()*100+'vw';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration = (1.2+Math.random()*2)+'s';
+    p.style.animationDelay = (Math.random()*0.6)+'s';
+    p.style.borderRadius = Math.random()>0.5?'50%':'2px';
+    box.appendChild(p);
+    p.addEventListener('animationend',()=>p.remove());
+  }
+}
+
+// ============================================================
+// CELEBRATION
+// ============================================================
+let celebCallback = null;
+function celebrate(ico='🌟', ttl='¡MUY BIEN!', msg='¡Sos un crack!', cb=null){
+  document.getElementById('celeb-ico').textContent = ico;
+  document.getElementById('celeb-ttl').textContent = ttl;
+  document.getElementById('celeb-msg').textContent = msg;
+  document.getElementById('celeb').classList.add('show');
+  celebCallback = cb;
+  confetti(70); sndFanfare();
+}
+function closeCeleb(){
+  document.getElementById('celeb').classList.remove('show');
+  if(celebCallback){ celebCallback(); celebCallback=null; }
+}
+
+// ============================================================
+// STARS
+// ============================================================
+function addStars(n){
+  S.stars += n; save();
+  document.getElementById('stars-count').textContent = S.stars;
+  // animate
+  const badge = document.getElementById('stars-badge');
+  badge.style.transform='scale(1.4)';
+  setTimeout(()=>badge.style.transform='scale(1)',300);
+}
+
+function markDone(id, extraStars=0){
+  if(!S.completed[id]){
+    S.completed[id]=true;
+    if(extraStars) addStars(extraStars);
+    save();
+    renderHomeGrid();
+  }
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goHome(){
+  showScreen('home');
+  renderHomeGrid();
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById(id+'-screen');
+  if(el){ el.classList.add('active'); window.scrollTo(0,0); }
+}
+
+function openActivity(id){
+  showScreen(id);
+  const inits = {
+    anfitriones: initAnfitriones,
+    equipos: initEquipos,
+    fixture: initFixture,
+    intruso: renderIntruso,
+    selecciones: initSel,
+    jugadores: initJug,
+    silabas: initSil,
+    sedes: initSedes,
+    campeones: initCampeones,
+    anio: initAnio,
+    unir: initUnir,
+    equipoideal: initEquipoIdeal,
+    eliminatorias: initElim,
+    granfinal: initFinal,
+  };
+  if(inits[id]) inits[id]();
+}
+
+// ============================================================
+// HOME GRID
+// ============================================================
+function renderHomeGrid(){
+  const name = S.playerName || 'campeón';
+  document.getElementById('player-name-display').innerHTML = S.playerName
+    ? '👤 ' + S.playerName.toUpperCase() + (S.favoriteTeam ? '  •  ' + flagImg(S.favoriteTeam,18,20) + ' ' + S.favoriteTeam.toUpperCase() : '')
+    : '👤 ¡HOLA, CAMPEÓN!';
+  document.getElementById('stars-count').textContent = S.stars;
+
+  const grid = document.getElementById('act-grid');
+  grid.innerHTML = ACTIVITIES.map(a=>{
+    const done = S.completed[a.id];
+    const starsLabel = a.stars ? `⭐ Ganás ${a.stars} estrellas` : '';
+    return `<div class="act-card ${done?'done':''}" onclick="openActivity('${a.id}')">
+      ${done?'<div class="done-badge">✓</div>':''}
+      <div class="ci">${a.emoji}</div>
+      <div class="ct">${a.title}</div>
+      ${starsLabel?`<div class="cs">${starsLabel}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// PORTADA
+// ============================================================
+(function initPortadaGrid(){
+  renderTeamGrid('');
+  if(S.playerName){
+    const el = document.getElementById('inp-name');
+    if(el) el.value = S.playerName;
+  }
+  if(S.playerAge){
+    const el = document.getElementById('inp-age');
+    if(el) el.value = S.playerAge;
+  }
+  if(S.favoriteTeam){
+    showSelectedTeam(TEAMS_48.find(t=>t.n===S.favoriteTeam));
+  }
+})();
+
+function renderTeamGrid(query){
+  const grid = document.getElementById('team-grid');
+  if(!grid) return;
+  const q = query.trim().toLowerCase();
+  const filtered = q ? TEAMS_48.filter(t=>t.n.toLowerCase().includes(q)) : TEAMS_48;
+  grid.innerHTML = filtered.map(t=>`
+    <div class="team-btn${S.favoriteTeam===t.n?' selected':''}" onclick="selectTeam('${t.n.replace(/'/g,"\\'")}')">
+      <span class="tb-flag">${flagImg(t.n,32,40)}</span>
+      <span class="tb-name">${t.n}</span>
+    </div>`).join('');
+}
+
+function filterTeams(){
+  const q = document.getElementById('team-search').value;
+  renderTeamGrid(q);
+}
+
+function selectTeam(name){
+  const team = TEAMS_48.find(t=>t.n===name);
+  if(!team) return;
+  S.favoriteTeam = team.n;
+  save();
+  showSelectedTeam(team);
+  confetti(40);
+  renderTeamGrid(document.getElementById('team-search').value);
+}
+
+function showSelectedTeam(team){
+  if(!team) return;
+  const wrap = document.getElementById('team-selected-display');
+  document.getElementById('tsd-flag').textContent = team.flag;
+  document.getElementById('tsd-name').textContent = team.n;
+  document.getElementById('tsd-group').textContent = 'GRUPO ' + team.g;
+  wrap.style.display = 'block';
+}
+
+function onNameChange(){
+  S.playerName = document.getElementById('inp-name').value;
+  save();
+}
+function onAgeChange(){
+  S.playerAge = document.getElementById('inp-age').value;
+  save();
+}
+function checkPortada(){
+  const name = document.getElementById('inp-name').value.trim();
+  const team = S.favoriteTeam;
+  const age  = document.getElementById('inp-age').value.trim();
+  const hint = document.getElementById('portada-hint');
+  if(!name){
+    hint.className='fb-msg fb-no'; hint.style.display='block';
+    hint.textContent='¡Escribí tu nombre primero! 📝'; return;
+  }
+  if(!team){
+    hint.className='fb-msg fb-no'; hint.style.display='block';
+    hint.textContent='¡Elegí tu selección favorita! 🏳️'; return;
+  }
+  if(!age||isNaN(age)||+age<1||+age>18){
+    hint.className='fb-msg fb-no'; hint.style.display='block';
+    hint.textContent='¡Escribí cuántos años tenés! 🎂'; return;
+  }
+  S.playerName=name; S.playerAge=age; save();
+  markDone('portada');
+  renderHomeGrid();
+  confetti(60);
+  setTimeout(()=>celebrate('📝','¡Perfecto!','¡Hola '+name+'! Tenés '+age+' años y bancás a '+team+' 🌟',goHome), 400);
+}
+
+// ============================================================
+// ANFITRIONES
+// ============================================================
+function initAnfitriones(){
+  const cont = document.getElementById('host-cards');
+  cont.innerHTML = HOSTS.map((h,i)=>`
+    <div class="flip-wrap" id="host-flip-${i}" onclick="flipCard('host-flip-${i}')">
+      <div class="flip-inner">
+        <div class="flip-f">
+          <div class="ff">${flagImg(h.name,60,80)}</div>
+          <h3>${h.num}. ${h.name}</h3>
+          <div class="tap">👆 Tocá para conocerlo</div>
+        </div>
+        <div class="flip-b">
+          <h3>${flagImg(h.name,24,40)} ${h.name}</h3>
+          ${h.facts.map(f=>`<div class="fr"><span>${f[0]}</span><span>${f[1]}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('host-cards').insertAdjacentHTML('beforeend',
+    `<div style="margin-top:12px"><button class="btn btn-gr btn-full" onclick="markDone('anfitriones');renderHomeGrid()">¡Ya los conozco! ✅</button></div>`);
+}
+function flipCard(id){ document.getElementById(id).classList.toggle('flipped'); }
+
+// ============================================================
+// EQUIPOS
+// ============================================================
+function initEquipos(){
+  const cont = document.getElementById('cont-cards');
+  cont.innerHTML = CONTINENTS.map(c=>`
+    <div class="cont-card">
+      <div class="cont-icon">${c.icon}</div>
+      <div class="cont-info">
+        <div class="cont-name">${c.name}</div>
+        <div class="cont-count">${c.teams}</div>
+      </div>
+      <div class="cont-num">${c.count}</div>
+    </div>`).join('');
+}
+
+// ============================================================
+// FIXTURE
+// ============================================================
+function initFixture(){
+  const groups = {};
+  TEAMS_48.forEach(t=>{ if(!groups[t.g]) groups[t.g]=[]; groups[t.g].push(t); });
+  document.getElementById('groups-grid').innerHTML =
+    Object.entries(groups).map(([g,ts])=>`
+      <div class="gc">
+        <h3>GRUPO ${g}</h3>
+        ${ts.map(t=>`<div class="tr"><span class="tf">${flagImg(t.n,22,40)}</span><span>${t.n}</span></div>`).join('')}
+      </div>`).join('');
+}
+
+// ============================================================
+// INTRUSO
+// ============================================================
+function renderIntruso(){
+  const round = S.intruso.round;
+  const dotsEl = document.getElementById('intr-dots');
+  dotsEl.innerHTML = INTRUSO_ROUNDS.map((_,i)=>
+    `<div class="pd ${i<round?'done':i===round?'cur':''}"></div>`).join('');
+
+  const cont = document.getElementById('intruso-content');
+  if(round >= INTRUSO_ROUNDS.length){
+    cont.innerHTML = `
+      <div class="card text-c">
+        <div style="font-size:4rem">🎉</div>
+        <div style="font-family:var(--fh);font-size:1.6rem;color:var(--red-dark);margin:10px 0">¡Encontraste todos los intrusos!</div>
+        <div style="font-size:1rem;font-weight:700;color:#555;margin-bottom:16px">Puntaje: ${S.intruso.score}/${INTRUSO_ROUNDS.length} ⭐</div>
+        <button class="btn btn-g btn-full" onclick="S.intruso={round:0,score:0};save();renderIntruso()">🔄 Jugar de nuevo</button>
+      </div>`;
+    if(!S.completed['intruso']){ markDone('intruso',3); renderHomeGrid(); }
+    return;
+  }
+
+  const r = INTRUSO_ROUNDS[round];
+  cont.innerHTML = `
+    <div class="card">
+      <div class="round-ind">Ronda ${round+1} de ${INTRUSO_ROUNDS.length}</div>
+      <div class="intr-hint">🔍 ${r.hint}</div>
+      <div class="flags-grid">
+        ${r.flags.map((f,i)=>`
+          <div class="flag-opt" id="fo-${i}" onclick="checkIntruso(${i})">
+            <span class="fe">${flagImgFromEmoji(f.f,44,80)}</span>
+            <span class="fn">${f.n}</span>
+          </div>`).join('')}
+      </div>
+      <div id="intr-fb" class="fb-msg"></div>
+    </div>`;
+}
+
+function checkIntruso(idx){
+  const round = S.intruso.round;
+  const r = INTRUSO_ROUNDS[round];
+  const fb = document.getElementById('intr-fb');
+  const opts = document.querySelectorAll('.flag-opt');
+
+  if(idx === r.intruder){
+    sndOk();
+    opts[idx].classList.add('ok');
+    opts.forEach(o=>o.classList.add('disabled'));
+    fb.className='fb-msg fb-ok'; fb.textContent='✅ ¡MUY BIEN! '+r.flags[idx].n+' es del Grupo '+r.flags[idx === r.intruder ? 0 : 0]+' diferente.';
+    S.intruso.score++;
+    confetti(40);
+    setTimeout(()=>{
+      S.intruso.round++;
+      save();
+      renderIntruso();
+    }, 1600);
+  } else {
+    sndNo();
+    opts[idx].classList.add('no');
+    fb.className='fb-msg fb-no'; fb.textContent='❌ ¡Sigue intentando! Hay otro intruso.';
+    setTimeout(()=>{opts[idx].classList.remove('no'); fb.className='fb-msg'; fb.textContent='';},800);
+  }
+}
+
+// ============================================================
+// SELECCIONES
+// ============================================================
+function initSel(){
+  renderSel();
+}
+
+function renderSel(){
+  const cur = S.sel.current;
+  const dotsEl = document.getElementById('sel-dots');
+  dotsEl.innerHTML = SELECCIONES_GAME.map((_,i)=>
+    `<div class="pd ${i<cur?'done':i===cur?'cur':''}"></div>`).join('');
+  document.getElementById('sel-progress').textContent = cur < SELECCIONES_GAME.length
+    ? `Camiseta ${cur+1} de ${SELECCIONES_GAME.length}` : '¡Completado!';
+
+  const cont = document.getElementById('sel-content');
+  if(cur >= SELECCIONES_GAME.length){
+    cont.innerHTML = `
+      <div class="card text-c">
+        <div style="font-size:4rem">👕🌟</div>
+        <div style="font-family:var(--fh);font-size:1.5rem;color:var(--red-dark);margin:10px 0">¡Reconociste todas las camisetas!</div>
+        <div style="margin-bottom:14px;font-weight:700;color:#555">Puntaje: ${S.sel.score}/${SELECCIONES_GAME.length}</div>
+        <button class="btn btn-g btn-full" onclick="S.sel={current:0,score:0};save();renderSel()">🔄 Jugar de nuevo</button>
+      </div>`;
+    if(!S.completed['selecciones']){ markDone('selecciones',3); renderHomeGrid(); }
+    return;
+  }
+
+  const g = SELECCIONES_GAME[cur];
+  cont.innerHTML = `
+    <div class="card text-c">
+      <div class="jersey-show" style="background:${g.bg};position:relative;overflow:hidden">
+        ${g.extra||''}
+      </div>
+      <div class="jersey-desc">👕 ${g.desc}</div>
+      <div class="ans-opts">
+        ${g.opts.map((o,i)=>`
+          <button class="ans-opt" onclick="checkSel(${i})">${processFlags(o,18,20)}</button>`).join('')}
+      </div>
+      <div id="sel-fb" class="fb-msg"></div>
+    </div>`;
+}
+
+function checkSel(idx){
+  const g = SELECCIONES_GAME[S.sel.current];
+  const btns = document.querySelectorAll('.ans-opt');
+  btns.forEach(b=>b.classList.add('disabled'));
+  const fb = document.getElementById('sel-fb');
+  if(idx === g.correct){
+    sndOk(); btns[idx].classList.add('ok');
+    fb.className='fb-msg fb-ok'; fb.textContent='✅ ¡CORRECTO! 🌟';
+    S.sel.score++; confetti(30);
+  } else {
+    sndNo(); btns[idx].classList.add('no'); btns[g.correct].classList.add('ok');
+    fb.className='fb-msg fb-no'; fb.textContent='❌ Era '+g.opts[g.correct]+'. ¡Sigue intentando!';
+  }
+  S.sel.current++;
+  setTimeout(()=>{ save(); renderSel(); }, 1500);
+}
+
+// ============================================================
+// JUGADORES
+// ============================================================
+function initJug(){ renderJug(); }
+
+function renderJug(){
+  const cur = S.jug.current;
+  const dotsEl = document.getElementById('jug-dots');
+  dotsEl.innerHTML = PLAYERS.map((_,i)=>
+    `<div class="pd ${i<cur?'done':i===cur?'cur':''}"></div>`).join('');
+  document.getElementById('jug-progress').textContent = cur < PLAYERS.length
+    ? `Jugador ${cur+1} de ${PLAYERS.length}` : '¡Completado!';
+
+  const cont = document.getElementById('jug-content');
+  if(cur >= PLAYERS.length){
+    cont.innerHTML = `
+      <div class="card text-c">
+        <div style="font-size:4rem">🌟⭐🌟</div>
+        <div style="font-family:var(--fh);font-size:1.5rem;color:var(--red-dark);margin:10px 0">¡Adivinaste los 12 jugadores!</div>
+        <div style="margin-bottom:14px;font-weight:700;color:#555">Puntaje: ${S.jug.score}/${PLAYERS.length}</div>
+        <button class="btn btn-g btn-full" onclick="S.jug={current:0,score:0,cluesShown:1};save();renderJug()">🔄 Jugar de nuevo</button>
+      </div>`;
+    if(!S.completed['jugadores']){ markDone('jugadores',5); renderHomeGrid(); }
+    return;
+  }
+
+  const p = PLAYERS[cur];
+  const cluesShown = S.jug.cluesShown || 1;
+  cont.innerHTML = `
+    <div class="card">
+      <div class="player-sil">${p.sil}</div>
+      <ul class="clues-list">
+        ${p.clues.map((c,i)=>
+          i < cluesShown
+          ? `<div class="clue-item">💡 <span>${c}</span></div>`
+          : i === cluesShown
+          ? `<button class="show-clue-btn" onclick="showNextClue()">👁️ Ver otra pista (pista ${i+1})</button>`
+          : ``
+        ).join('')}
+      </ul>
+      <div class="player-opts">
+        ${p.opts.map((o,i)=>`
+          <button class="p-opt" onclick="checkJug(${i})">
+            <span class="pf">${flagImgFromEmoji(o.split(' ').pop(),32,40)}</span>
+            ${o.split(' ').slice(0,-1).join(' ')}
+          </button>`).join('')}
+      </div>
+      <div id="jug-fb" class="fb-msg"></div>
+    </div>`;
+}
+
+function showNextClue(){
+  if(S.jug.cluesShown < PLAYERS[S.jug.current].clues.length){
+    S.jug.cluesShown++; save(); renderJug();
+  }
+}
+
+function checkJug(idx){
+  const p = PLAYERS[S.jug.current];
+  const btns = document.querySelectorAll('.p-opt');
+  btns.forEach(b=>b.classList.add('disabled'));
+  const fb = document.getElementById('jug-fb');
+  if(idx === p.correct){
+    sndOk(); btns[idx].classList.add('ok');
+    fb.className='fb-msg fb-ok'; fb.textContent='✅ ¡CORRECTO! Es '+p.name+' '+p.flag+' 🌟';
+    S.jug.score++; confetti(30);
+  } else {
+    sndNo(); btns[idx].classList.add('no'); btns[p.correct].classList.add('ok');
+    fb.className='fb-msg fb-no'; fb.textContent='❌ Era '+p.name+' '+p.flag+'. ¡Casi!';
+  }
+  S.jug.current++; S.jug.cluesShown = 1;
+  setTimeout(()=>{ save(); renderJug(); }, 1600);
+}
+
+// ============================================================
+// SILABAS
+// ============================================================
+function initSil(){ if(!S.sil.placed) S.sil.placed=[]; renderSil(); }
+
+function renderSil(){
+  const cur = S.sil.current;
+  const dotsEl = document.getElementById('sil-dots');
+  dotsEl.innerHTML = SILABA_GAMES.map((_,i)=>
+    `<div class="pd ${i<cur?'done':i===cur?'cur':''}"></div>`).join('');
+  document.getElementById('sil-progress').textContent = cur < SILABA_GAMES.length
+    ? `País ${cur+1} de ${SILABA_GAMES.length}` : '¡Completado!';
+
+  const cont = document.getElementById('sil-content');
+  if(cur >= SILABA_GAMES.length){
+    cont.innerHTML = `
+      <div class="card text-c">
+        <div style="font-size:4rem">🔤🎉</div>
+        <div style="font-family:var(--fh);font-size:1.5rem;color:var(--red-dark);margin:10px 0">¡Armaste todos los países!</div>
+        <button class="btn btn-g btn-full" onclick="S.sil={current:0,placed:[]};save();renderSil()">🔄 Jugar de nuevo</button>
+      </div>`;
+    if(!S.completed['silabas']){ markDone('silabas',4); renderHomeGrid(); }
+    return;
+  }
+
+  const g = SILABA_GAMES[cur];
+  const placed = S.sil.placed || [];
+  // shuffle syllables once per game load (stable order using game index as seed)
+  const shuffled = shuffleSeed(g.syllables.map((s,i)=>({s,i})), cur*7+13);
+
+  cont.innerHTML = `
+    <div class="card sil-game">
+      <div class="sil-flag">${flagImgFromEmoji(g.flag,60,80)}</div>
+      <div class="sil-diff">${g.diff} · Grupo ${g.group}</div>
+      <div class="ans-slots" id="sil-slots">
+        ${g.syllables.map((_,i)=>{
+          const pi = placed[i];
+          return `<div class="a-slot ${pi!==undefined?'filled':''}" id="sil-slot-${i}" onclick="removeSylAt(${i})">
+            ${pi!==undefined ? g.syllables[placed[i]] : ''}
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="syl-bank" id="syl-bank">
+        ${shuffled.map(({s,i})=>{
+          const used = placed.includes(i);
+          return `<button class="syl-tile ${used?'used':''}" id="syl-tile-${i}" onclick="tapSyl(${i})">${s}</button>`;
+        }).join('')}
+      </div>
+      <div id="sil-fb" class="fb-msg"></div>
+      <div class="sil-controls">
+        <button class="btn btn-gray" onclick="clearSil()">🗑️ Borrar</button>
+      </div>
+    </div>`;
+}
+
+function shuffleSeed(arr, seed){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.abs(Math.sin(seed+i)*1000000|0)%(i+1);
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function tapSyl(origIdx){
+  const placed = S.sil.placed || [];
+  if(placed.includes(origIdx)) return;
+  const g = SILABA_GAMES[S.sil.current];
+  if(placed.length >= g.syllables.length) return;
+  S.sil.placed = [...placed, origIdx];
+  save();
+  if(S.sil.placed.length === g.syllables.length){
+    checkSil();
+  } else {
+    renderSil();
+  }
+}
+
+function removeSylAt(slotIdx){
+  const placed = [...(S.sil.placed||[])];
+  if(placed[slotIdx]===undefined) return;
+  placed.splice(slotIdx,1);
+  S.sil.placed = placed;
+  save(); renderSil();
+}
+
+function clearSil(){ S.sil.placed=[]; save(); renderSil(); }
+
+function checkSil(){
+  const g = SILABA_GAMES[S.sil.current];
+  const answer = (S.sil.placed||[]).map(i=>g.syllables[i]).join('');
+  const slots = document.querySelectorAll('.a-slot');
+  const fb = document.getElementById('sil-fb');
+  if(answer === g.answer){
+    sndOk();
+    slots.forEach(s=>s.classList.add('ok-slot'));
+    fb.className='fb-msg fb-ok'; fb.textContent='✅ ¡CORRECTO! Es '+g.answer+' 🌟';
+    confetti(40);
+    setTimeout(()=>{ S.sil.current++; S.sil.placed=[]; save(); renderSil(); }, 1500);
+  } else {
+    sndNo();
+    slots.forEach(s=>s.classList.add('no-slot'));
+    fb.className='fb-msg fb-no'; fb.textContent='❌ ¡Casi! Intentá de nuevo.';
+    setTimeout(()=>{ S.sil.placed=[]; save(); renderSil(); }, 1000);
+  }
+}
+
+// ============================================================
+// SEDES
+// ============================================================
+function initSedes(){
+  const cont = document.getElementById('sede-cards');
+  cont.innerHTML = SEDES.map((s,i)=>`
+    <div class="flip-wrap" id="sede-flip-${i}" onclick="flipCard('sede-flip-${i}')">
+      <div class="flip-inner">
+        <div class="flip-f" style="background:linear-gradient(135deg,#1a1a2e,#2c3e50)">
+          <div class="ff">${s.emoji}</div>
+          <h3>${s.name}</h3>
+          <div class="tap">${s.city}</div>
+          <div class="tap" style="margin-top:4px">👆 Tocá para conocerlo</div>
+        </div>
+        <div class="flip-b">
+          <h3>🏟️ ${s.name}</h3>
+          <div style="font-size:.85rem;font-weight:700;color:#888;margin-bottom:6px">${s.city}</div>
+          ${s.facts.map(f=>`<div class="fr"><span>${f[0]}</span><span>${f[1]}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ============================================================
+// CAMPEONES
+// ============================================================
+function initCampeones(){
+  const cont = document.getElementById('champ-content');
+  cont.innerHTML = CHAMPIONS.map((c,i)=>{
+    const sel = S.champ.selected[i];
+    return `
+      <div class="champ-row">
+        <div class="champ-flag">${flagImg(c.name,28,40)}</div>
+        <div class="champ-name">${c.name}</div>
+        <div class="title-sel" id="ts-${i}">
+          ${[1,2,3,4,5].map(n=>`
+            <button class="title-btn ${sel===n?'sel':''}" onclick="selTitle(${i},${n})">${n}</button>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function selTitle(champIdx, n){
+  S.champ.selected[champIdx] = n; save();
+  const row = document.getElementById('ts-'+champIdx);
+  row.querySelectorAll('.title-btn').forEach((b,i)=>{
+    b.classList.toggle('sel', i+1===n);
+    b.classList.remove('ok','no');
+  });
+}
+
+function checkCampeones(){
+  let correct=0;
+  CHAMPIONS.forEach((c,i)=>{
+    const sel = S.champ.selected[i];
+    const row = document.getElementById('ts-'+i);
+    if(!row) return;
+    row.querySelectorAll('.title-btn').forEach((b,j)=>{
+      b.classList.remove('ok','no','sel');
+      if(j+1===c.titles){ b.classList.add('ok'); }
+      else if(j+1===sel){ b.classList.add('no'); }
+    });
+    if(sel===c.titles) correct++;
+  });
+  const fb = document.getElementById('champ-fb');
+  if(correct===CHAMPIONS.length){
+    fb.className='fb-msg fb-ok'; fb.textContent='✅ ¡PERFECTO! Conocés todos los campeones del mundo 🏆';
+    sndOk(); confetti(60);
+    if(!S.completed['campeones']){ markDone('campeones',2); renderHomeGrid(); }
+  } else {
+    sndNo();
+    fb.className='fb-msg fb-no'; fb.textContent=`Correcto: ${correct} de ${CHAMPIONS.length}. Las marcadas en VERDE son las correctas. ¡Seguí intentando!`;
+  }
+}
+
+// ============================================================
+// AÑO QUE GANÓ
+// ============================================================
+function initAnio(){
+  const years = [...ANIO_DATA.map(d=>d.year)].sort(()=>Math.random()-.5);
+  const game = document.getElementById('anio-game');
+
+  const leftHTML = `<div class="match-col">${ANIO_DATA.map((d,i)=>`
+    <div class="m-item ${S.anio.matched[i]!==undefined?'matched':''}" id="anio-l-${i}" onclick="anioSelLeft(${i})">
+      <div class="mf">${flagImg(d.name,28,40)}</div>
+      <div style="font-size:.75rem">${d.name}</div>
+    </div>`).join('')}</div>`;
+
+  const rightHTML = `<div class="match-col">${years.map((y,i)=>`
+    <div class="m-item ${Object.values(S.anio.matched).includes(y)?'matched':''}" id="anio-r-${i}" data-year="${y}" onclick="anioSelRight('${y}',${i})">
+      <div style="font-family:var(--fh);font-size:1.2rem;color:var(--red)">${y}</div>
+    </div>`).join('')}</div>`;
+
+  game.innerHTML = leftHTML + rightHTML;
+  updateAnioProgress();
+}
+
+let anioYearOrder = null;
+function getAnioYears(){
+  if(!anioYearOrder) anioYearOrder = [...ANIO_DATA.map(d=>d.year)].sort(()=>Math.random()-.5);
+  return anioYearOrder;
+}
+
+function anioSelLeft(idx){
+  if(S.anio.matched[idx]!==undefined) return;
+  S.anio.leftSel = idx;
+  document.querySelectorAll('[id^=anio-l-]').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('anio-l-'+idx)?.classList.add('sel');
+}
+
+function anioSelRight(year, domIdx){
+  if(Object.values(S.anio.matched).includes(year)) return;
+  if(S.anio.leftSel===null){
+    const fb=document.getElementById('anio-fb');
+    fb.className='fb-msg fb-no'; fb.textContent='¡Primero elegí un país de la izquierda! 👈';
+    return;
+  }
+  const leftIdx = S.anio.leftSel;
+  const correct = ANIO_DATA[leftIdx].year;
+  const leftEl = document.getElementById('anio-l-'+leftIdx);
+  const rightEl = document.getElementById('anio-r-'+domIdx);
+  const fb = document.getElementById('anio-fb');
+  if(year===correct){
+    sndOk(); confetti(25);
+    S.anio.matched[leftIdx]=year;
+    leftEl?.classList.remove('sel'); leftEl?.classList.add('matched');
+    rightEl?.classList.add('matched');
+    fb.className='fb-msg fb-ok'; fb.textContent='✅ ¡Correcto! '+ANIO_DATA[leftIdx].name+' ganó en '+year+' 🌟';
+    S.anio.leftSel=null; save(); updateAnioProgress();
+    const matched = Object.keys(S.anio.matched).length;
+    if(matched===ANIO_DATA.length && !S.completed['anio']){
+      setTimeout(()=>{ markDone('anio',3); renderHomeGrid();
+        celebrate('📅','¡Perfecto!','¡Conocés todos los años campeones! 🏆'); },600);
+    }
+  } else {
+    sndNo();
+    rightEl?.classList.add('no-match');
+    fb.className='fb-msg fb-no'; fb.textContent='❌ No es ese año. ¡Intentá de nuevo!';
+    setTimeout(()=>rightEl?.classList.remove('no-match'),600);
+  }
+}
+
+function updateAnioProgress(){
+  const n = Object.keys(S.anio.matched).length;
+  document.getElementById('anio-progress').textContent = `Conectados: ${n} de ${ANIO_DATA.length}`;
+}
+
+// ============================================================
+// UNIR JUGADORES
+// ============================================================
+function initUnir(){
+  const flags = [...UNIR_DATA.map(d=>d.cflag)].sort(()=>Math.random()-.5);
+  const game = document.getElementById('unir-game');
+
+  const leftHTML = `<div class="match-col">${UNIR_DATA.map((d,i)=>`
+    <div class="m-item ${S.unir.matched[i]!==undefined?'matched':''}" id="unir-l-${i}" onclick="unirSelLeft(${i})">
+      <div style="font-size:.8rem;font-weight:900">${d.player}</div>
+    </div>`).join('')}</div>`;
+
+  const rightHTML = `<div class="match-col">${flags.map((f,i)=>`
+    <div class="m-item ${Object.values(S.unir.matched).includes(f)?'matched':''}" id="unir-r-${i}" data-flag="${f}" onclick="unirSelRight('${f}',${i})">
+      <div class="mf">${flagImgFromEmoji(f,28,40)}</div>
+    </div>`).join('')}</div>`;
+
+  game.innerHTML = leftHTML + rightHTML;
+  updateUnirProgress();
+}
+
+function unirSelLeft(idx){
+  if(S.unir.matched[idx]!==undefined) return;
+  S.unir.leftSel=idx;
+  document.querySelectorAll('[id^=unir-l-]').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('unir-l-'+idx)?.classList.add('sel');
+}
+
+function unirSelRight(flag, domIdx){
+  if(Object.values(S.unir.matched).includes(flag)) return;
+  if(S.unir.leftSel===null){
+    const fb=document.getElementById('unir-fb');
+    fb.className='fb-msg fb-no'; fb.textContent='¡Primero elegí un jugador de la izquierda! 👈';
+    return;
+  }
+  const leftIdx=S.unir.leftSel;
+  const correct=UNIR_DATA[leftIdx].cflag;
+  const leftEl=document.getElementById('unir-l-'+leftIdx);
+  const rightEl=document.getElementById('unir-r-'+domIdx);
+  const fb=document.getElementById('unir-fb');
+  if(flag===correct){
+    sndOk(); confetti(25);
+    S.unir.matched[leftIdx]=flag;
+    leftEl?.classList.remove('sel'); leftEl?.classList.add('matched');
+    rightEl?.classList.add('matched');
+    fb.className='fb-msg fb-ok'; fb.textContent='✅ ¡Correcto! '+UNIR_DATA[leftIdx].player+' juega para '+UNIR_DATA[leftIdx].country+' 🌟';
+    S.unir.leftSel=null; save(); updateUnirProgress();
+    if(Object.keys(S.unir.matched).length===UNIR_DATA.length && !S.completed['unir']){
+      setTimeout(()=>{ markDone('unir',3); renderHomeGrid();
+        celebrate('🤝','¡Genial!','¡Uniste a todos los jugadores! 🌟'); },600);
+    }
+  } else {
+    sndNo();
+    rightEl?.classList.add('no-match');
+    fb.className='fb-msg fb-no'; fb.textContent='❌ No es esa selección. ¡Intentá de nuevo!';
+    setTimeout(()=>rightEl?.classList.remove('no-match'),600);
+  }
+}
+
+function updateUnirProgress(){
+  const n=Object.keys(S.unir.matched).length;
+  document.getElementById('unir-progress').textContent=`Conectados: ${n} de ${UNIR_DATA.length}`;
+}
+
+// ============================================================
+// EQUIPO IDEAL
+// ============================================================
+function initEquipoIdeal(){
+  const ei = S.equipo || {};
+  const fields = ['del1','del2','del3','med1','med2','med3','def1','def2','def3','def4','arq'];
+  fields.forEach(f=>{
+    const el=document.getElementById('pi-'+f);
+    if(el && ei[f]) el.value=ei[f];
+  });
+}
+
+function saveEquipo(){
+  const fields=['del1','del2','del3','med1','med2','med3','def1','def2','def3','def4','arq'];
+  S.equipo={};
+  fields.forEach(f=>{
+    const el=document.getElementById('pi-'+f);
+    if(el) S.equipo[f]=el.value;
+  });
+  save(); markDone('equipoideal'); renderHomeGrid();
+  const fb=document.getElementById('equipo-fb');
+  fb.className='fb-msg fb-ok'; fb.textContent='💾 ¡Tu equipo ideal fue guardado! ⚽🌟';
+  confetti(40); sndOk();
+}
+
+// ============================================================
+// ELIMINATORIAS
+// ============================================================
+const ELIM_ROUNDS = [
+  {key:'r32',title:'DIECISEISAVOS DE FINAL · 28 Jun – 3 Jul',matches:8},
+  {key:'r16',title:'OCTAVOS DE FINAL · 4 al 7 de Julio',matches:8},
+  {key:'qf', title:'CUARTOS DE FINAL · 9 al 11 de Julio',matches:4},
+  {key:'sf', title:'SEMIFINALES · 14 y 15 de Julio',matches:2},
+  {key:'fin',title:'GRAN FINAL · 19 de Julio',matches:1},
+];
+
+function initElim(){
+  const cont=document.getElementById('elim-content');
+  cont.innerHTML = ELIM_ROUNDS.map(r=>`
+    <div class="bracket-sec">
+      <div class="bracket-ttl">⚡ ${r.title}</div>
+      ${Array.from({length:r.matches},(_, mi)=>{
+        const k=r.key+'_'+mi;
+        const d=S.elim[k]||{};
+        return `
+          <div style="font-size:.7rem;font-weight:900;color:#AAA;margin-bottom:2px;padding-left:4px">Partido ${mi+1}</div>
+          <div class="bracket-match">
+            <input class="b-inp" placeholder="Equipo 1" value="${d.t1||''}" onchange="saveElimField('${k}','t1',this.value)">
+            <input class="b-score" placeholder="0" value="${d.s1||''}" onchange="saveElimField('${k}','s1',this.value)" type="number" min="0">
+            <div class="b-vs">–</div>
+            <input class="b-score" placeholder="0" value="${d.s2||''}" onchange="saveElimField('${k}','s2',this.value)" type="number" min="0">
+            <input class="b-inp" placeholder="Equipo 2" value="${d.t2||''}" onchange="saveElimField('${k}','t2',this.value)">
+            <div></div>
+            <div style="font-size:.7rem;font-weight:900;color:#888;text-align:right">→</div>
+          </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+function saveElimField(key,field,val){
+  if(!S.elim[key]) S.elim[key]={};
+  S.elim[key][field]=val; save();
+}
+
+function saveElim(){
+  save(); markDone('eliminatorias'); renderHomeGrid();
+  sndOk(); confetti(30);
+  const fb=document.createElement('div');
+  fb.className='fb-msg fb-ok'; fb.textContent='💾 ¡Progreso guardado! ⚡';
+  document.getElementById('elim-content').insertAdjacentElement('afterend',fb);
+  setTimeout(()=>fb.remove(),2000);
+}
+
+// ============================================================
+// GRAN FINAL
+// ============================================================
+function initFinal(){
+  const f=S.final||{};
+  if(f.team1) document.getElementById('fin-team1').value=f.team1;
+  if(f.team2) document.getElementById('fin-team2').value=f.team2;
+  if(f.score1) document.getElementById('fin-score1').value=f.score1;
+  if(f.score2) document.getElementById('fin-score2').value=f.score2;
+  if(f.winner) document.getElementById('fin-winner').value=f.winner;
+}
+
+function saveFinal(){
+  S.final={
+    team1:document.getElementById('fin-team1').value,
+    team2:document.getElementById('fin-team2').value,
+    score1:document.getElementById('fin-score1').value,
+    score2:document.getElementById('fin-score2').value,
+    winner:document.getElementById('fin-winner').value,
+  };
+  save(); markDone('granfinal'); renderHomeGrid();
+  const fb=document.getElementById('final-fb');
+  fb.className='fb-msg fb-ok';
+  fb.textContent='🏆 ¡Campeón guardado! ¡'+S.final.winner+' Campeón del Mundo! 🎉';
+  confetti(100); sndFanfare();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderHomeGrid();
+document.getElementById('stars-count').textContent = S.stars;
+</script>
+</body>
+</html>
