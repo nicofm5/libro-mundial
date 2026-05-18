@@ -298,41 +298,92 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 .syl-tile.used{opacity:.3;pointer-events:none}
 .sil-controls{display:flex;gap:9px;justify-content:center}
 
-/* MODAL CAMPEON DEL MUNDO */
+/* ============================================
+   CEREMONIA DE ENTREGA DE COPA - MODAL CAMPEON
+   ============================================ */
 #champ-modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;
-  justify-content:center;background:rgba(0,0,0,.85);opacity:0;pointer-events:none;
-  transition:opacity .4s ease}
+  justify-content:center;background:radial-gradient(ellipse at center,#1a0d4d 0%,#000 75%);
+  opacity:0;pointer-events:none;transition:opacity .5s ease;overflow:hidden}
 #champ-modal.show{opacity:1;pointer-events:all}
+
+/* ---- STAGE 1: Ceremonia (reflectores + trofeo subiendo) ---- */
+.champ-ceremony{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;pointer-events:none}
+.spotlight{position:absolute;top:-20%;left:0;right:0;height:140%;width:100%;
+  background:radial-gradient(ellipse 28% 90% at 50% 0%,rgba(255,215,0,.35) 0%,transparent 60%);
+  mix-blend-mode:screen;pointer-events:none;transform-origin:50% 0%}
+.spotlight-l{animation:spotL 2.8s ease-in-out infinite}
+.spotlight-r{animation:spotR 2.8s ease-in-out infinite}
+@keyframes spotL{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(-3deg)}}
+@keyframes spotR{0%,100%{transform:rotate(18deg)}50%{transform:rotate(3deg)}}
+.ceremony-trophy{font-size:clamp(7rem,22vw,11rem);line-height:1;
+  filter:drop-shadow(0 0 28px rgba(255,215,0,.85)) drop-shadow(0 0 60px rgba(255,215,0,.45));
+  animation:trophyRise 1.4s cubic-bezier(.34,1.56,.64,1) both,
+            trophyPulseBig 1.6s ease-in-out 1.4s infinite}
+@keyframes trophyRise{from{transform:translateY(140%) scale(.25) rotate(-40deg);opacity:0}
+  to{transform:translateY(0) scale(1) rotate(0);opacity:1}}
+@keyframes trophyPulseBig{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.ceremony-title{font-family:var(--fh);font-size:clamp(2rem,9vw,3.2rem);
+  color:var(--gold);letter-spacing:5px;margin-top:24px;
+  text-shadow:0 0 22px rgba(255,215,0,.85),0 4px 0 rgba(0,0,0,.5);
+  opacity:0;animation:titleReveal .7s ease 1.3s both}
+@keyframes titleReveal{from{opacity:0;transform:translateY(20px) scale(.7);letter-spacing:0}
+  to{opacity:1;transform:translateY(0) scale(1);letter-spacing:5px}}
+.ceremony-sparkles{position:absolute;width:0;height:0;left:50%;top:50%;pointer-events:none}
+.ceremony-sparkle{position:absolute;font-size:1.6rem;left:0;top:0;
+  animation:sparkleFloat 1.6s ease-out infinite}
+@keyframes sparkleFloat{
+  0%{opacity:0;transform:translate(0,0) scale(.3)}
+  25%{opacity:1}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.4)}}
+
+/* ---- STAGE 2: Tarjeta del campeón ---- */
 .champ-modal-box{background:linear-gradient(160deg,#0D2B8E 0%,#1B4DE4 45%,#0a1f6e 100%);
-  border:4px solid var(--gold);border-radius:24px;padding:0;max-width:360px;width:92%;
-  text-align:center;overflow:hidden;position:relative;
-  box-shadow:0 0 60px rgba(255,215,0,.4),0 20px 60px rgba(0,0,0,.6);
-  animation:champIn .5s cubic-bezier(.34,1.56,.64,1) both}
-@keyframes champIn{from{transform:scale(.6) translateY(60px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+  border:4px solid var(--gold);border-radius:24px;padding:0;max-width:380px;width:92%;
+  text-align:center;overflow:hidden;position:relative;z-index:2;
+  box-shadow:0 0 70px rgba(255,215,0,.55),0 20px 60px rgba(0,0,0,.7);
+  animation:champCardIn .7s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes champCardIn{from{transform:scale(.35) translateY(80px) rotate(-3deg);opacity:0}
+  to{transform:scale(1) translateY(0) rotate(0);opacity:1}}
 .champ-top-bar{background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-dark));
-  padding:8px 16px;font-family:var(--fh);font-size:.85rem;color:#0D2B8E;
+  padding:9px 16px;font-family:var(--fh);font-size:.9rem;color:#0D2B8E;
   letter-spacing:3px;font-weight:900}
-.champ-trophy-line{font-size:3.2rem;padding:14px 0 6px;
-  animation:trophyBounce 1.2s ease-in-out infinite}
+.champ-trophy-line{font-size:3.4rem;padding:12px 0 4px;
+  animation:trophyBounce 1.2s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(255,215,0,.7))}
 @keyframes trophyBounce{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.15) rotate(3deg)}}
-.champ-title{font-family:var(--fh);font-size:clamp(1.8rem,8vw,2.6rem);color:#fff;
-  letter-spacing:2px;line-height:1;padding:0 12px 4px;text-shadow:0 0 20px rgba(255,215,0,.5)}
-.champ-sub{color:var(--gold);font-family:var(--fh);font-size:1rem;letter-spacing:3px;
-  padding-bottom:10px}
-.champ-messi{width:100%;max-height:220px;object-fit:cover;object-position:center top;
+.champ-title{font-family:var(--fh);font-size:clamp(1.9rem,8vw,2.8rem);color:#fff;
+  letter-spacing:2px;line-height:1;padding:0 12px 4px;
+  text-shadow:0 0 20px rgba(255,215,0,.6),0 2px 0 rgba(0,0,0,.4);
+  animation:titleShake .55s ease}
+@keyframes titleShake{0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-4px)}40%{transform:translateX(4px)}
+  60%{transform:translateX(-2px)}80%{transform:translateX(2px)}}
+.champ-sub{color:var(--gold);font-family:var(--fh);font-size:1rem;letter-spacing:3px;padding-bottom:10px}
+.champ-messi{width:100%;max-height:240px;object-fit:cover;object-position:center top;
   display:block;border-top:3px solid var(--gold);border-bottom:3px solid var(--gold)}
-.champ-stars-row{padding:12px 16px 6px;display:flex;justify-content:center;
-  gap:4px;flex-wrap:wrap}
-.champ-star{font-size:1.2rem;animation:starPop .4s ease both}
-@keyframes starPop{from{transform:scale(0)}to{transform:scale(1)}}
-.champ-name-line{color:#fff;font-weight:900;font-size:1.1rem;
-  padding:0 16px 6px;text-shadow:0 2px 8px rgba(0,0,0,.4)}
-.champ-flag-line{font-size:.85rem;color:rgba(255,255,255,.7);padding-bottom:14px;
+.champ-stars-row{padding:12px 14px 6px;display:flex;justify-content:center;gap:2px;flex-wrap:wrap}
+.champ-star{font-size:1.05rem;animation:starPop .4s ease both;
+  filter:drop-shadow(0 0 3px rgba(255,215,0,.5))}
+@keyframes starPop{from{transform:scale(0) rotate(-180deg)}to{transform:scale(1) rotate(0)}}
+.champ-name-line{color:#fff;font-weight:900;font-size:1.15rem;padding:4px 16px;
+  text-shadow:0 2px 8px rgba(0,0,0,.4);letter-spacing:.5px}
+.champ-flag-line{font-size:.85rem;color:rgba(255,255,255,.8);padding-bottom:14px;
   display:flex;align-items:center;justify-content:center;gap:6px}
-.champ-close{background:var(--gold);border:none;border-radius:0;width:100%;
-  padding:14px;font-family:var(--fh);font-size:1.1rem;color:#0D2B8E;
-  letter-spacing:2px;cursor:pointer;transition:background .15s}
-.champ-close:hover{background:var(--gold-dark);color:#fff}
+
+/* ACTIONS - 2 botones */
+.champ-actions{display:flex;flex-direction:column;gap:0}
+.champ-btn{border:none;border-radius:0;width:100%;padding:14px 10px;
+  font-family:var(--fh);font-size:1.05rem;letter-spacing:2px;cursor:pointer;
+  transition:all .15s;border-top:2px solid rgba(0,0,0,.15)}
+.champ-btn-pdf{background:linear-gradient(90deg,var(--gold-dark),var(--gold));color:#0D2B8E;font-weight:900}
+.champ-btn-pdf:hover{background:linear-gradient(90deg,var(--gold),#fff);color:#0D2B8E}
+.champ-btn-pdf:active{transform:scale(.98)}
+.champ-btn-close{background:rgba(255,255,255,.08);color:#fff}
+.champ-btn-close:hover{background:rgba(255,255,255,.18)}
+.champ-btn-close:active{transform:scale(.98)}
+
+/* Estrellas flotantes de fondo (dentro de la tarjeta) */
 .champ-stars-bg{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;
   overflow:hidden;border-radius:20px}
 .champ-star-float{position:absolute;font-size:1.4rem;opacity:0;
@@ -1389,29 +1440,85 @@ function addStars(n){
   }
 }
 
+// ===== CEREMONIA DE ENTREGA DE COPA =====
+// Secuencia: ceremonia (3s) -> tarjeta del campeon con confetti
+// Para previsualizar sin completar 30 estrellas, ejecuta en la consola: showChampModal()
 function showChampModal(){
-  // stars row: 23 estrellas
+  const modal    = document.getElementById('champ-modal');
+  const ceremony = document.getElementById('champ-ceremony');
+  const card     = document.getElementById('champ-card');
+  if(!modal || !ceremony || !card) return;
+
+  // RESET: arrancar siempre por la ceremonia
+  card.style.display = 'none';
+  ceremony.style.display = '';
+  // force reflow para que animaciones reinicien
+  ceremony.querySelectorAll('.ceremony-trophy,.ceremony-title').forEach(el=>{
+    el.style.animation='none'; void el.offsetWidth; el.style.animation='';
+  });
+
+  // Generar destellos alrededor del trofeo (14 sparkles en circulo + ruido)
+  const sparkleC = document.getElementById('ceremony-sparkles');
+  if(sparkleC){
+    const emojis = ['✨','⭐','🌟','💫'];
+    sparkleC.innerHTML = Array.from({length:14},(_,i)=>{
+      const ang  = (i*360/14) + (Math.random()*30-15);
+      const dist = 90 + Math.random()*70;
+      const dx   = (Math.cos(ang*Math.PI/180)*dist).toFixed(0)+'px';
+      const dy   = (Math.sin(ang*Math.PI/180)*dist).toFixed(0)+'px';
+      const dly  = (Math.random()*1.3 + 0.4).toFixed(2);
+      return `<span class="ceremony-sparkle" style="--dx:${dx};--dy:${dy};animation-delay:${dly}s">${emojis[i%4]}</span>`;
+    }).join('');
+  }
+
+  // SHOW: arranca STAGE 1
+  modal.classList.add('show');
+  sndFanfare();
+
+  // STAGE 2 (a los 3s): switch a la tarjeta del campeon + confetti explosion
+  setTimeout(()=>{
+    ceremony.style.display = 'none';
+    card.style.display = '';
+    populateChampCard();
+    confetti(150);
+    sndFanfare();
+    // bursts adicionales escalonados
+    setTimeout(()=>confetti(80), 700);
+    setTimeout(()=>confetti(60), 1500);
+  }, 3000);
+}
+
+function populateChampCard(){
+  // 30 estrellas con pop staggered
   const sr = document.getElementById('champ-stars-row');
   if(sr) sr.innerHTML = Array.from({length:TOTAL_STARS},(_,i)=>
-    `<span class="champ-star" style="animation-delay:${i*0.06}s">⭐</span>`
+    `<span class="champ-star" style="animation-delay:${(i*0.035).toFixed(3)}s">⭐</span>`
   ).join('');
-  // nombre del jugador
+
+  // Subtitulo dinamico
+  const sub = document.getElementById('champ-sub');
+  if(sub) sub.textContent = `COMPLETASTE LAS ${TOTAL_STARS} ESTRELLAS`;
+
+  // Nombre del jugador
   const nl = document.getElementById('champ-name-line');
-  if(nl) nl.textContent = (S.playerName || 'CAMPEÓN').toUpperCase();
-  // equipo favorito
+  if(nl) nl.textContent = '🏆 ' + (S.playerName || 'CAMPEÓN').toUpperCase() + ' 🏆';
+
+  // Equipo favorito (si lo eligio)
   const fl = document.getElementById('champ-flag-line');
-  if(fl && S.favoriteTeam){
-    const t = (typeof TEAMS_48!=='undefined') ? TEAMS_48.find(x=>x.n===S.favoriteTeam) : null;
-    const flagUrl = t ? `https://flagcdn.com/w40/${t.c.toLowerCase()}.png` : '';
-    fl.innerHTML = flagUrl
-      ? `<img src="${flagUrl}" style="height:18px;border-radius:2px"> ${S.favoriteTeam.toUpperCase()}`
-      : S.favoriteTeam.toUpperCase();
-  } else if(fl){ fl.style.display='none'; }
-  // estrellas flotantes de fondo
+  if(fl){
+    if(S.favoriteTeam){
+      fl.innerHTML = `Equipo favorito: ${S.favoriteTeam.toUpperCase()}`;
+      fl.style.display = '';
+    } else {
+      fl.style.display = 'none';
+    }
+  }
+
+  // Estrellas flotantes de fondo
   const bg = document.getElementById('champ-stars-bg');
   if(bg){
-    const emojis=['⭐','🏆','🌟','🎉'];
-    bg.innerHTML = Array.from({length:12},(_,i)=>{
+    const emojis=['⭐','🏆','🌟','🎉','🥇'];
+    bg.innerHTML = Array.from({length:14},(_,i)=>{
       const e=emojis[i%emojis.length];
       const left=Math.random()*90+2;
       const delay=Math.random()*2.5;
@@ -1419,10 +1526,6 @@ function showChampModal(){
       return `<span class="champ-star-float" style="left:${left}%;animation-delay:${delay}s;animation-duration:${dur}s">${e}</span>`;
     }).join('');
   }
-  // mostrar modal
-  document.getElementById('champ-modal').classList.add('show');
-  confetti(120);
-  sndFanfare();
 }
 
 function closeChampModal(){
@@ -2984,19 +3087,31 @@ async function generarPDF(){
 })();
 </script>
 
-<!-- ===== MODAL CAMPEON DEL MUNDO ===== -->
+<!-- ===== CEREMONIA + MODAL CAMPEON DEL MUNDO ===== -->
 <div id="champ-modal">
-  <div class="champ-modal-box">
+  <!-- STAGE 1: Ceremonia (reflectores + trofeo subiendo) -->
+  <div class="champ-ceremony" id="champ-ceremony">
+    <div class="spotlight spotlight-l"></div>
+    <div class="spotlight spotlight-r"></div>
+    <div class="ceremony-sparkles" id="ceremony-sparkles"></div>
+    <div class="ceremony-trophy">🏆</div>
+    <div class="ceremony-title">MUNDIAL 2026</div>
+  </div>
+  <!-- STAGE 2: Tarjeta del campeón -->
+  <div class="champ-modal-box" id="champ-card" style="display:none">
     <div class="champ-stars-bg" id="champ-stars-bg"></div>
     <div class="champ-top-bar">⭐ MUNDIAL 2026 ⭐</div>
     <div class="champ-trophy-line">🏆</div>
     <div class="champ-title">¡SOS CAMPEÓN<br>DEL MUNDO!</div>
-    <div class="champ-sub">COMPLETASTE LAS 23 ESTRELLAS</div>
+    <div class="champ-sub" id="champ-sub">COMPLETASTE LAS 30 ESTRELLAS</div>
     <img class="champ-messi" src="img/messi levantando copa.jfif" alt="Messi campeón">
     <div class="champ-stars-row" id="champ-stars-row"></div>
     <div class="champ-name-line" id="champ-name-line"></div>
     <div class="champ-flag-line" id="champ-flag-line"></div>
-    <button class="champ-close" onclick="closeChampModal()">🎉 ¡LO LOGRÉ! 🎉</button>
+    <div class="champ-actions">
+      <button class="champ-btn champ-btn-pdf" onclick="closeChampModal();setTimeout(()=>generarPDF(),200)">🏆 DESCARGAR CERTIFICADO</button>
+      <button class="champ-btn champ-btn-close" onclick="closeChampModal()">🔄 SEGUIR EXPLORANDO</button>
+    </div>
   </div>
 </div>
 
