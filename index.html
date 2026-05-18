@@ -592,6 +592,13 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 .sede-back-bg{background:linear-gradient(135deg,#1a1a2e,#2c3e50)}
 .sede-back-bg h3{color:#FFD700}
 .sede-back-bg .fr{color:#ccc}
+.sede-country-hdr{display:flex;align-items:center;gap:10px;margin:18px 0 10px;
+  padding:10px 14px;background:linear-gradient(90deg,var(--red-dark),var(--blue));
+  border-radius:12px;color:#fff;box-shadow:0 3px 10px rgba(27,77,228,.25)}
+.sede-country-hdr .scf{font-size:1.8rem;line-height:1}
+.sede-country-hdr .scn{font-family:var(--fh);font-size:1.1rem;letter-spacing:2px;flex:1}
+.sede-country-hdr .scc{font-size:.7rem;font-weight:900;background:var(--gold);
+  color:#0D2B8E;padding:3px 9px;border-radius:8px;letter-spacing:1px}
 
 /* UTILS */
 .sep{height:1px;background:#EEE;margin:14px 0}
@@ -803,9 +810,9 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
     <button class="back-btn" onclick="goHome()">← Volver</button>
     <span class="act-ttl">🏟️ Las Sedes</span>
   </div>
-  <div class="info-box">🏟️ ¡El Mundial se juega en 16 estadios! Tocá cada tarjeta para conocerlos.</div>
+  <div class="info-box">🏟️ El Mundial 2026 se juega en <strong>16 estadios</strong> de 3 países: 11 en EE.UU., 3 en México y 2 en Canadá. Tocá cada tarjeta para conocerlos.</div>
   <div id="sede-cards"></div>
-  <div style="margin-top:4px"><button class="btn btn-gr btn-full" onclick="markDone('sedes')">¡Ya los conozco! ✅</button></div>
+  <div style="margin-top:14px"><button class="btn btn-gr btn-full" onclick="markDone('sedes')">¡Ya los conozco! ✅</button></div>
 </div>
 
 <!-- ===== CAMPEONES ===== -->
@@ -1109,18 +1116,94 @@ const SILABA_GAMES = [
 ];
 
 const SEDES = [
-  {emoji:'🏟️',name:'Estadio Azteca',city:'Ciudad de México · México',
-   facts:[['👥','Caben 83.000 personas'],['📚','¡Es como llenar 830 aulas escolares!'],
-          ['🏆','Fue sede en 1970, 1986 ¡y ahora en 2026!'],['🌟','¡El único estadio con 3 Mundiales!']]},
-  {emoji:'🗽',name:'MetLife Stadium',city:'Nueva York · Estados Unidos',
-   facts:[['👥','Caben 82.500 personas'],['🎳','¡Es como 82 piletas olímpicas llenas!'],
-          ['🏆','ACÁ SE JUEGA LA GRAN FINAL el 19 de julio de 2026'],['⭐','El más importante del mundo']]},
-  {emoji:'⭐',name:'AT&T Stadium',city:'Dallas · Estados Unidos',
-   facts:[['👥','Caben 94.000 personas'],['🌎','¡Es el estadio MÁS GRANDE DEL MUNDO!'],
-          ['🌸','Su techo se abre y se cierra como una flor gigante'],['🎸','También alberga conciertos']]},
-  {emoji:'🌸',name:'Mercedes-Benz Stadium',city:'Atlanta · Estados Unidos',
-   facts:[['👥','Caben 75.000 personas'],['🏀','Son como 750 canchas de básquet llenas'],
-          ['🌸','Su techo se abre como una flor, único en el mundo'],['🎶','También alberga conciertos famosos']]},
+  // ===== 🇲🇽 MÉXICO (3 sedes) =====
+  {country:'México',cflag:'🇲🇽',emoji:'🏛️',name:'Estadio Azteca',city:'Ciudad de México',
+   facts:[['👥','Capacidad: 87.000 personas'],
+          ['📚','¡Es como llenar 870 aulas escolares!'],
+          ['🎉','ACÁ SE JUEGA EL PARTIDO INAUGURAL (11 de junio)'],
+          ['🏆','Fue sede en 1970, 1986 ¡y ahora 2026!'],
+          ['🌟','¡El único estadio con 3 Mundiales en la historia!']]},
+  {country:'México',cflag:'🇲🇽',emoji:'🌮',name:'Estadio Akron',city:'Guadalajara',
+   facts:[['👥','Capacidad: 49.850 personas'],
+          ['🏗️','Inaugurado en 2010, parece un volcán por su forma'],
+          ['🐐','Casa del Club Deportivo Guadalajara (Chivas)'],
+          ['⚽','Recibe 4 partidos del Mundial 2026']]},
+  {country:'México',cflag:'🇲🇽',emoji:'🏔️',name:'Estadio BBVA',city:'Monterrey',
+   facts:[['👥','Capacidad: 53.500 personas'],
+          ['🌄','Tiene vista al Cerro de la Silla, muy famoso'],
+          ['🐯','Es la casa de los Tigres de la UANL'],
+          ['⚽','Recibe 4 partidos del Mundial 2026']]},
+
+  // ===== 🇺🇸 ESTADOS UNIDOS (11 sedes) =====
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'🗽',name:'MetLife Stadium',city:'Nueva York / Nueva Jersey',
+   facts:[['👥','Capacidad: 82.500 personas'],
+          ['🎳','¡Es como 82 piletas olímpicas llenas de gente!'],
+          ['🏆','ACÁ SE JUEGA LA GRAN FINAL el 19 de julio'],
+          ['⭐','El partido más importante del mundo'],
+          ['🏈','También es casa de los New York Giants y Jets (NFL)']]},
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'🤠',name:'AT&T Stadium',city:'Dallas (Arlington, Texas)',
+   facts:[['👥','Capacidad: 80.000 personas (hasta 100.000 en conciertos)'],
+          ['📺','Tiene la pantalla más grande del mundo, ¡colgada del techo!'],
+          ['🌸','Su techo se abre y cierra como una flor gigante'],
+          ['🥈','Recibe una de las SEMIFINALES'],
+          ['🏈','Casa de los Dallas Cowboys']]},
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'🌸',name:'Mercedes-Benz Stadium',city:'Atlanta',
+   facts:[['👥','Capacidad: 71.000 personas'],
+          ['🌸','Su techo se abre como pétalos de flor — único en el mundo'],
+          ['🥈','Recibe la otra SEMIFINAL'],
+          ['🏈','Casa de los Atlanta Falcons (NFL)']]},
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'🌴',name:'Hard Rock Stadium',city:'Miami (Miami Gardens)',
+   facts:[['👥','Capacidad: 65.300 personas'],
+          ['🥉','Recibe el partido por el TERCER PUESTO (18 de julio)'],
+          ['🎶','También se hace acá la Copa América y conciertos enormes'],
+          ['🐬','Casa de los Miami Dolphins']]},
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'🌟',name:'SoFi Stadium',city:'Los Ángeles (Inglewood, California)',
+   facts:[['👥','Capacidad: 70.000 personas'],
+          ['💰','Es el estadio más caro jamás construido (¡5 mil millones de dólares!)'],
+          ['📺','Tiene una pantalla 360° de doble cara colgando del techo'],
+          ['🏈','Casa de los LA Rams y LA Chargers']]},
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'🚀',name:'NRG Stadium',city:'Houston',
+   facts:[['👥','Capacidad: 72.220 personas'],
+          ['🌸','Techo retráctil que se abre en 7 minutos'],
+          ['🤠','Acá se hace el rodeo más grande del mundo'],
+          ['🏈','Casa de los Houston Texans']]},
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'🔔',name:'Lincoln Financial Field',city:'Filadelfia',
+   facts:[['👥','Capacidad: 67.600 personas'],
+          ['🦅','Casa de los Philadelphia Eagles (NFL)'],
+          ['🇺🇸','Filadelfia es la cuna de la independencia de EE.UU.'],
+          ['⚽','Recibe 6 partidos del Mundial 2026']]},
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'🌉',name:"Levi's Stadium",city:'San Francisco Bay Area (Santa Clara)',
+   facts:[['👥','Capacidad: 68.500 personas'],
+          ['♻️','Es uno de los estadios más ecológicos del mundo'],
+          ['🌞','El techo tiene paneles solares que generan energía'],
+          ['🏈','Casa de los San Francisco 49ers']]},
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'🌧️',name:'Lumen Field',city:'Seattle',
+   facts:[['👥','Capacidad: 68.740 personas'],
+          ['📢','Tiene el récord del estadio más RUIDOSO del mundo (137.6 decibeles)'],
+          ['🌲','Está rodeado por el verde paisaje del noroeste'],
+          ['🏈','Casa de los Seattle Seahawks']]},
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'🏹',name:'Arrowhead Stadium',city:'Kansas City',
+   facts:[['👥','Capacidad: 76.400 personas'],
+          ['🔥','Casa de los Kansas City Chiefs (campeones de la NFL varias veces)'],
+          ['📢','También compite por el récord de estadio más ruidoso'],
+          ['⚽','¡Acá juega ARGENTINA su primer partido vs Argelia! 🇦🇷']]},
+  {country:'Estados Unidos',cflag:'🇺🇸',emoji:'⚓',name:'Gillette Stadium',city:'Boston (Foxborough)',
+   facts:[['👥','Capacidad: 65.900 personas'],
+          ['🏈','Casa de los New England Patriots'],
+          ['🌉','Tiene un puente y un faro como decoración (tema marítimo)'],
+          ['⚽','Recibe 7 partidos, ¡uno de los más importantes!']]},
+
+  // ===== 🇨🇦 CANADÁ (2 sedes) =====
+  {country:'Canadá',cflag:'🇨🇦',emoji:'🍁',name:'BMO Field',city:'Toronto',
+   facts:[['👥','Capacidad: 45.500 personas (ampliado para el Mundial)'],
+          ['🥇','Es la PRIMERA VEZ que Canadá organiza un Mundial'],
+          ['🇨🇦','Casa del Toronto FC'],
+          ['❄️','Está al lado del lago Ontario']]},
+  {country:'Canadá',cflag:'🇨🇦',emoji:'🏔️',name:'BC Place',city:'Vancouver',
+   facts:[['👥','Capacidad: 54.500 personas'],
+          ['🌟','Tiene un techo retráctil con tecnología única en Canadá'],
+          ['🏔️','Vancouver está rodeada de montañas nevadas'],
+          ['🏐','También fue sede de las Olimpíadas de Invierno 2010']]},
 ];
 
 const CHAMPIONS = [
@@ -2402,8 +2485,15 @@ function checkSil(){
 // ============================================================
 function initSedes(){
   const cont = document.getElementById('sede-cards');
-  cont.innerHTML = SEDES.map((s,i)=>`
-    <div class="flip-wrap" id="sede-flip-${i}" onclick="flipCard('sede-flip-${i}')">
+  // Agrupar por pais respetando el orden original (Mexico, EE.UU., Canada)
+  const groups = [];
+  SEDES.forEach((s,i)=>{
+    let g = groups.find(x=>x.country===s.country);
+    if(!g){ g = {country:s.country, cflag:s.cflag, sedes:[]}; groups.push(g); }
+    g.sedes.push({...s, idx:i});
+  });
+  const cardHtml = s => `
+    <div class="flip-wrap" id="sede-flip-${s.idx}" onclick="flipCard('sede-flip-${s.idx}')">
       <div class="flip-inner">
         <div class="flip-f" style="background:linear-gradient(135deg,#1a1a2e,#2c3e50)">
           <div class="ff">${s.emoji}</div>
@@ -2413,11 +2503,19 @@ function initSedes(){
         </div>
         <div class="flip-b">
           <h3>🏟️ ${s.name}</h3>
-          <div style="font-size:.85rem;font-weight:700;color:#888;margin-bottom:6px">${s.city}</div>
+          <div style="font-size:.85rem;font-weight:700;color:#888;margin-bottom:6px">${s.cflag} ${s.city}</div>
           ${s.facts.map(f=>`<div class="fr"><span>${f[0]}</span><span>${f[1]}</span></div>`).join('')}
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  cont.innerHTML = groups.map(g=>`
+    <div class="sede-country-hdr">
+      <span class="scf">${g.cflag}</span>
+      <span class="scn">${g.country.toUpperCase()}</span>
+      <span class="scc">${g.sedes.length} ${g.sedes.length===1?'sede':'sedes'}</span>
+    </div>
+    ${g.sedes.map(cardHtml).join('')}
+  `).join('');
 }
 
 // ============================================================
