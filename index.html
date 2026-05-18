@@ -79,6 +79,28 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 
 .act-grid{display:block}
 .act-grid-inner{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+/* Onboarding: portada obligatoria primero */
+.act-grid-single{display:flex;justify-content:center}
+.act-grid-single .act-card{max-width:240px;width:100%}
+.onboarding-hint{background:linear-gradient(135deg,#FFF9E6,#fff);
+  border:2px dashed var(--gold-dark);border-radius:12px;padding:14px 16px;
+  text-align:center;margin:14px 0;font-weight:900;color:var(--red-dark);
+  font-size:.95rem;letter-spacing:.5px;line-height:1.4}
+.onboarding-hint .oh-arrow{font-size:1.6rem;display:block;margin-bottom:6px;
+  animation:bounceArrow 1.2s ease-in-out infinite}
+.onboarding-hint .oh-locked{display:block;font-size:.75rem;color:#888;
+  margin-top:6px;font-weight:700}
+@keyframes bounceArrow{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+.act-card.must-do{border:3px solid var(--gold);
+  background:linear-gradient(135deg,#FFFDF0,#fff);
+  box-shadow:0 4px 18px rgba(255,215,0,.4);
+  animation:mustDoPulse 1.6s ease-in-out infinite;position:relative}
+@keyframes mustDoPulse{0%,100%{box-shadow:0 4px 18px rgba(255,215,0,.4)}
+  50%{box-shadow:0 4px 28px rgba(255,215,0,.7)}}
+.must-do-badge{position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+  background:var(--red);color:#fff;font-family:var(--fh);font-size:.7rem;
+  padding:3px 10px;border-radius:10px;letter-spacing:1px;white-space:nowrap;
+  box-shadow:0 2px 6px rgba(0,0,0,.25)}
 .act-section-lbl{font-family:var(--fh);font-size:1.05rem;color:var(--red-dark);
   letter-spacing:1px;margin-bottom:10px;padding-left:2px;text-transform:uppercase}
 .game-banner{background:linear-gradient(135deg,var(--red-dark) 0%,var(--red) 60%,#3B72F2 100%);
@@ -620,15 +642,6 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
     </div>
   </div>
 
-  <!-- RANKING -->
-  <div class="card" id="ranking-card" style="margin-top:14px;background:linear-gradient(135deg,#FFF8DC,#FFFEF5);border:2px solid var(--gold)">
-    <div style="text-align:center;margin-bottom:10px">
-      <div style="font-size:2rem">🏆</div>
-      <div style="font-family:var(--fh);font-size:1.3rem;color:var(--red-dark);letter-spacing:1px;margin-top:2px">RANKING DEL MUNDIAL</div>
-      <div style="font-size:.75rem;font-weight:700;color:#888">¡El que más estrellas tiene es el CAMPEÓN!</div>
-    </div>
-    <div id="ranking-list" style="min-height:40px"></div>
-  </div>
   <div class="act-grid" id="act-grid"></div>
 
   <!-- EMAIL + PDF -->
@@ -644,6 +657,16 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
       <button class="btn btn-g btn-full" onclick="generarPDF()">📄 GENERAR Y ENVIAR PDF</button>
     </div>
     <div id="pdf-fb" class="fb-msg" style="margin-top:10px;display:none"></div>
+  </div>
+
+  <!-- RANKING (al final de todo) -->
+  <div class="card" id="ranking-card" style="margin-top:18px;background:linear-gradient(135deg,#FFF8DC,#FFFEF5);border:2px solid var(--gold)">
+    <div style="text-align:center;margin-bottom:10px">
+      <div style="font-size:2rem">🏆</div>
+      <div style="font-family:var(--fh);font-size:1.3rem;color:var(--red-dark);letter-spacing:1px;margin-top:2px">RANKING DEL MUNDIAL</div>
+      <div style="font-size:.75rem;font-weight:700;color:#888">¡El que más estrellas tiene es el CAMPEÓN!</div>
+    </div>
+    <div id="ranking-list" style="min-height:40px"></div>
   </div>
 </div>
 
@@ -1591,31 +1614,57 @@ function renderHomeGrid(){
 
   const grid = document.getElementById('act-grid');
 
-  const cardHtml = a => {
+  const cardHtml = (a, opts={}) => {
     const done = S.completed[a.id];
     const starsLabel = a.stars ? `⭐ Ganás ${a.stars} ${a.stars===1?'estrella':'estrellas'}` : '';
-    return `<div class="act-card ${done?'done':''}" onclick="openActivity('${a.id}')">
+    const classes = ['act-card'];
+    if(done) classes.push('done');
+    if(opts.mustDo) classes.push('must-do');
+    return `<div class="${classes.join(' ')}" onclick="openActivity('${a.id}')">
       ${done?'<div class="done-badge">✓</div>':''}
+      ${opts.mustDo?'<div class="must-do-badge">¡EMPEZÁ ACÁ!</div>':''}
       <div class="ci">${a.emoji}</div>
       <div class="ct">${a.title}</div>
       ${starsLabel?`<div class="cs">${starsLabel}</div>`:''}
     </div>`;
   };
 
-  const infoActs = ACTIVITIES.filter(a => !a.game);
-  const gameActs = ACTIVITIES.filter(a =>  a.game);
+  // Portada SIEMPRE primero como onboarding obligatorio
+  const portada    = ACTIVITIES.find(a => a.id === 'portada');
+  const portadaDone = !!S.completed['portada'];
+  const restInfo   = ACTIVITIES.filter(a => !a.game && a.id !== 'portada');
+  const gameActs   = ACTIVITIES.filter(a => a.game);
   const totalStarsAvail = gameActs.reduce((s,a)=>s+(a.stars||0),0);
 
-  grid.innerHTML = `
-    <div class="act-section-lbl">📚 CONOCÉ EL MUNDIAL</div>
-    <div class="act-grid-inner">${infoActs.map(cardHtml).join('')}</div>
+  let html = `
+    <div class="act-section-lbl">👤 TU PERFIL</div>
+    <div class="act-grid-inner act-grid-single">
+      ${cardHtml(portada, {mustDo: !portadaDone})}
+    </div>`;
 
-    <div class="game-banner">
-      ⚽ ¡JUGÁ Y GANÁ ESTRELLAS! ⭐
-      <div class="gb-sub">COMPLETÁ TODO Y SALÍ CAMPEÓN DEL MUNDO · ${totalStarsAvail} ESTRELLAS EN JUEGO</div>
-    </div>
-    <div class="act-grid-inner">${gameActs.map(cardHtml).join('')}</div>
-  `;
+  if(!portadaDone){
+    // Estado bloqueado: solo portada visible + hint
+    html += `
+      <div class="onboarding-hint">
+        <span class="oh-arrow">⬆️</span>
+        ¡EMPEZÁ POR TU PORTADA!<br>
+        Contanos quién sos, tu selección favorita y tu edad
+        <span class="oh-locked">🔒 Después se desbloquean todas las actividades y juegos</span>
+      </div>`;
+  } else {
+    // Portada completa: mostrar el resto del flujo
+    html += `
+      <div class="act-section-lbl" style="margin-top:18px">📚 CONOCÉ EL MUNDIAL</div>
+      <div class="act-grid-inner">${restInfo.map(a => cardHtml(a)).join('')}</div>
+
+      <div class="game-banner">
+        ⚽ ¡JUGÁ Y GANÁ ESTRELLAS! ⭐
+        <div class="gb-sub">COMPLETÁ TODO Y SALÍ CAMPEÓN DEL MUNDO · ${totalStarsAvail} ESTRELLAS EN JUEGO</div>
+      </div>
+      <div class="act-grid-inner">${gameActs.map(a => cardHtml(a)).join('')}</div>`;
+  }
+
+  grid.innerHTML = html;
 }
 
 // ============================================================
