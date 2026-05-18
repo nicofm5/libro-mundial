@@ -1989,7 +1989,7 @@ function renderFixCalendar(){
   const isArg = m => m.t1==='Argentina'||m.t2==='Argentina';
   const matchCard = m => {
     const arg = isArg(m);
-    const f1 = flagImg(m.t1,26,36)||'🏳️', f2 = flagImg(m.t2,26,36)||'🏳️';
+    const f1 = flagImg(m.t1,26,40)||'🏳️', f2 = flagImg(m.t2,26,40)||'🏳️';
     const n1 = m.t1.length>12 ? m.t1.replace(' y ','/'): m.t1;
     const n2 = m.t2.length>12 ? m.t2.replace(' y ','/'): m.t2;
     return `<div class="fix-match${arg?' arg':''}">
