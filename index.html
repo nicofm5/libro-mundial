@@ -479,7 +479,7 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
   border:2px solid var(--gold);box-shadow:0 3px 14px rgba(255,215,0,.3)}
 .fix-team{flex:1;display:flex;flex-direction:column;align-items:center;
   gap:2px;font-size:.68rem;font-weight:900;color:#333;text-align:center;line-height:1.2;min-width:0}
-.fix-team .ft-flag{font-size:1.7rem;line-height:1}
+.fix-team .ft-flag{line-height:1;display:flex;justify-content:center;align-items:center;min-height:26px}
 .fix-center{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;min-width:46px}
 .fix-center .fc-time{font-family:var(--fh);font-size:1.05rem;color:var(--red-dark);line-height:1}
 .fix-center .fc-hs{font-size:.55rem;color:#999;font-weight:900}
@@ -1980,9 +1980,6 @@ function switchFixTab(idx){
 }
 
 function renderFixCalendar(){
-  // Build flag map from TEAMS_48
-  const fm = {};
-  TEAMS_48.forEach(t=>{ fm[t.n]=t.flag; });
   // Group matches by date
   const byDate = {};
   FIXTURE_MATCHES.forEach(m=>{
@@ -1992,7 +1989,7 @@ function renderFixCalendar(){
   const isArg = m => m.t1==='Argentina'||m.t2==='Argentina';
   const matchCard = m => {
     const arg = isArg(m);
-    const f1 = fm[m.t1]||'🏳️', f2 = fm[m.t2]||'🏳️';
+    const f1 = flagImg(m.t1,26,36)||'🏳️', f2 = flagImg(m.t2,26,36)||'🏳️';
     const n1 = m.t1.length>12 ? m.t1.replace(' y ','/'): m.t1;
     const n2 = m.t2.length>12 ? m.t2.replace(' y ','/'): m.t2;
     return `<div class="fix-match${arg?' arg':''}">
