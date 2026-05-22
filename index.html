@@ -849,6 +849,52 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 .celeb-ttl{font-family:var(--fh);font-size:1.9rem;color:var(--red-dark);margin-bottom:7px}
 .celeb-msg{font-size:.95rem;font-weight:700;color:#555;margin-bottom:20px;line-height:1.5}
 
+/* WELCOME MODAL */
+#welcome-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:10001;
+  align-items:flex-start;justify-content:center;padding:20px 12px;overflow-y:auto}
+#welcome-modal.show{display:flex}
+.welcome-card{background:#fff;border-radius:22px;padding:0;
+  max-width:440px;width:100%;animation:popIn .45s cubic-bezier(.175,.885,.32,1.275);
+  margin:auto;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.welcome-hdr{background:linear-gradient(135deg,var(--red-dark) 0%,var(--red) 55%,#3B72F2 100%);
+  color:#fff;padding:26px 22px 22px;text-align:center;position:relative;overflow:hidden;
+  border-bottom:4px solid var(--gold)}
+.welcome-hdr::before{content:'26';position:absolute;top:-15px;right:-10px;
+  font-family:var(--fh);font-size:9rem;color:rgba(255,255,255,.07);
+  line-height:1;pointer-events:none;letter-spacing:-4px}
+.welcome-hdr .we-trophy{font-size:3.4rem;margin-bottom:4px;display:block;
+  animation:trophyPulse 2.5s ease-in-out infinite}
+.welcome-hdr h2{font-family:var(--fh);font-size:1.45rem;letter-spacing:1.5px;
+  line-height:1.1;text-shadow:0 2px 4px rgba(0,0,0,.3)}
+.welcome-hdr .we-sub{font-size:.82rem;font-weight:900;letter-spacing:1px;
+  margin-top:6px;color:var(--gold);text-transform:uppercase}
+.welcome-body{padding:18px 18px 8px}
+.welcome-section{display:grid;grid-template-columns:48px 1fr;gap:12px;
+  margin-bottom:14px;align-items:flex-start}
+.welcome-section .we-em{font-size:2.2rem;line-height:1;text-align:center}
+.welcome-section .we-content h3{font-family:var(--fh);font-size:.95rem;
+  color:var(--red-dark);letter-spacing:1px;margin-bottom:3px;line-height:1.1}
+.welcome-section .we-content p{font-size:.82rem;font-weight:700;color:#333;
+  line-height:1.4;text-transform:none;letter-spacing:.2px}
+.welcome-section.adult-warning{background:linear-gradient(135deg,#FFF9E6,#FFFEF5);
+  border:2px dashed var(--gold-dark);border-radius:12px;padding:12px;
+  margin:6px 0 14px}
+.welcome-section.adult-warning .we-em{font-size:1.9rem}
+.welcome-section.adult-warning .we-content h3{color:#8a6300}
+.welcome-foot{padding:0 18px 22px;text-align:center}
+.welcome-foot .we-flag{font-size:1.3rem;margin-bottom:8px;letter-spacing:6px}
+.welcome-foot .btn{font-size:1.05rem;padding:14px}
+.welcome-foot .we-sign{font-size:.7rem;color:#999;margin-top:10px;
+  font-weight:700;letter-spacing:.5px}
+
+/* Boton info en header */
+.info-btn{background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);
+  border-radius:50%;width:36px;height:36px;color:#fff;font-size:1rem;font-weight:900;
+  cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;
+  margin-right:8px;padding:0;font-family:var(--fb)}
+.info-btn:hover{background:rgba(255,255,255,.3);transform:scale(1.1)}
+.info-btn:active{transform:scale(.92)}
+
 /* QUIZZ PROGRESS */
 .q-progress{text-align:center;font-family:var(--fh);font-size:1.1rem;color:#888;margin-bottom:12px}
 
@@ -885,8 +931,68 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 
 <header id="hdr">
   <h1>⚽ MUNDIAL <span>2026</span></h1>
-  <div id="stars-badge">⭐ <span id="stars-count">0</span></div>
+  <div style="display:flex;align-items:center;gap:0">
+    <button class="info-btn" onclick="showWelcome()" title="Acerca de esta app">ℹ️</button>
+    <div id="stars-badge">⭐ <span id="stars-count">0</span></div>
+  </div>
 </header>
+
+<!-- ===== MODAL DE BIENVENIDA ===== -->
+<div id="welcome-modal" onclick="if(event.target===this)closeWelcome()">
+  <div class="welcome-card">
+    <div class="welcome-hdr">
+      <span class="we-trophy">🏆</span>
+      <h2>¡BIENVENIDOS A MI<br>LIBRO DEL MUNDIAL 2026!</h2>
+      <div class="we-sub">Para grandes y chicos · En familia ⚽</div>
+    </div>
+    <div class="welcome-body">
+      <div class="welcome-section">
+        <div class="we-em">🌎</div>
+        <div class="we-content">
+          <h3>¿DE QUÉ SE TRATA?</h3>
+          <p>Una app interactiva para aprender sobre el <strong>Mundial 2026</strong>: su historia, los países que juegan, las sedes, los grandes campeones y todo lo que se viene del torneo más esperado.</p>
+        </div>
+      </div>
+
+      <div class="welcome-section">
+        <div class="we-em">🇦🇷</div>
+        <div class="we-content">
+          <h3>SELECCIÓN ARGENTINA Y MESSI</h3>
+          <p>Vas a encontrar una sección especial sobre la <strong>Scaloneta</strong>: su historia mundial, Qatar 2022, el plantel para el 2026 y datos exclusivos sobre Lionel <strong>Messi</strong>.</p>
+        </div>
+      </div>
+
+      <div class="welcome-section">
+        <div class="we-em">🎮</div>
+        <div class="we-content">
+          <h3>JUEGOS Y ESTRELLAS</h3>
+          <p>Hay <strong>8 juegos</strong> para ganar <strong>40 estrellas</strong>: trivias, rompecabezas, matching y más. El que las gana todas... ¡es CAMPEÓN DEL MUNDO! 🏆</p>
+        </div>
+      </div>
+
+      <div class="welcome-section adult-warning">
+        <div class="we-em">🤝</div>
+        <div class="we-content">
+          <h3>PARA COMPARTIR EN FAMILIA</h3>
+          <p>Está pensada para que <strong>grandes y chicos disfruten juntos</strong>. Los más chiquitos van a necesitar la <strong>ayuda de un adulto</strong> para leer, escribir y jugar mejor. ¡Es una excusa hermosa para pasar tiempo juntos!</p>
+        </div>
+      </div>
+
+      <div class="welcome-section">
+        <div class="we-em">📲</div>
+        <div class="we-content">
+          <h3>COMPARTILA</h3>
+          <p>Si te gusta, <strong>compartila</strong> con familiares y amigos. Vivamos el Mundial juntos.</p>
+        </div>
+      </div>
+    </div>
+    <div class="welcome-foot">
+      <div class="we-flag">🇦🇷 ⚽ 🇲🇽 ⚽ 🇺🇸 ⚽ 🇨🇦</div>
+      <button class="btn btn-r btn-full" onclick="closeWelcome()">¡EMPECEMOS! ➡️</button>
+      <div class="we-sign">Hecho con ❤️ para vivir el Mundial 2026</div>
+    </div>
+  </div>
+</div>
 
 <main id="main">
 
@@ -1847,6 +1953,28 @@ function closeCeleb(){
   document.getElementById('celeb').classList.remove('show');
   if(celebCallback){ celebCallback(); celebCallback=null; }
 }
+
+// ============================================================
+// MODAL DE BIENVENIDA
+// ============================================================
+function showWelcome(){
+  const m = document.getElementById('welcome-modal');
+  if(m){ m.classList.add('show'); m.scrollTop = 0; }
+}
+function closeWelcome(){
+  const m = document.getElementById('welcome-modal');
+  if(m) m.classList.remove('show');
+  try{ localStorage.setItem('welcomeSeen','1'); }catch(e){}
+}
+// Auto-mostrar la primera vez
+(function autoShowWelcome(){
+  try{
+    if(!localStorage.getItem('welcomeSeen')){
+      // Pequeño delay para que se vea bien al cargar
+      setTimeout(showWelcome, 350);
+    }
+  }catch(e){}
+})();
 
 // ============================================================
 // STARS
