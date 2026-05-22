@@ -471,6 +471,201 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
   background:#fff;font-family:var(--fh);font-size:.95rem;color:var(--red-dark);
   cursor:pointer;transition:all .15s;letter-spacing:1px}
 .fix-tab.active{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* ============ SELECCION ARGENTINA ============ */
+:root{--arg-sky:#75AADB;--arg-sky-dark:#3B83C9;--arg-gold:#F1B43A}
+
+/* Home card destacada */
+.act-card.featured-arg{
+  border:3px solid var(--arg-sky-dark);
+  background:linear-gradient(135deg,#E8F2FB,#fff 50%,#E8F2FB);
+  box-shadow:0 4px 18px rgba(59,131,201,.4);
+  animation:argPulse 1.8s ease-in-out infinite;
+  position:relative;overflow:visible}
+@keyframes argPulse{0%,100%{box-shadow:0 4px 18px rgba(59,131,201,.35)}
+  50%{box-shadow:0 4px 28px rgba(241,180,58,.65)}}
+.act-card.featured-arg .ci{font-size:2.8rem}
+.nuevo-badge{position:absolute;top:-9px;right:-9px;
+  background:linear-gradient(135deg,var(--arg-gold),#FFD566);color:#5a3700;
+  font-family:var(--fh);font-size:.75rem;padding:4px 9px;border-radius:50px;
+  letter-spacing:1.5px;font-weight:900;border:2px solid #fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);transform:rotate(8deg);
+  animation:nuevoBlink 1.4s ease-in-out infinite}
+@keyframes nuevoBlink{0%,100%{transform:rotate(8deg) scale(1)}
+  50%{transform:rotate(8deg) scale(1.12)}}
+
+/* Tabs Argentina */
+.arg-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:nowrap}
+.arg-tab{flex:1;padding:9px 4px;border:2px solid var(--arg-sky-dark);border-radius:10px;
+  background:#fff;font-family:var(--fh);font-size:.75rem;color:var(--arg-sky-dark);
+  cursor:pointer;transition:all .15s;letter-spacing:.6px;line-height:1.1;
+  display:flex;flex-direction:column;align-items:center;gap:2px}
+.arg-tab .at-em{font-size:1.1rem}
+.arg-tab.active{background:linear-gradient(135deg,var(--arg-sky),var(--arg-sky-dark));
+  color:#fff;border-color:var(--arg-sky-dark);
+  box-shadow:0 3px 10px rgba(59,131,201,.4)}
+
+/* Hero Argentina */
+.arg-hero{background:linear-gradient(135deg,var(--arg-sky) 0%,#fff 50%,var(--arg-sky) 100%);
+  border-radius:18px;padding:22px 18px;text-align:center;margin-bottom:16px;
+  position:relative;overflow:hidden;border:3px solid var(--arg-sky-dark);
+  box-shadow:0 6px 22px rgba(59,131,201,.35)}
+.arg-hero::before{content:'☀️';position:absolute;top:-6px;left:50%;
+  transform:translateX(-50%);font-size:2.4rem;
+  filter:drop-shadow(0 0 8px rgba(241,180,58,.6))}
+.arg-hero h2{font-family:var(--fh);font-size:1.7rem;color:var(--arg-sky-dark);
+  letter-spacing:2px;margin-top:14px;text-shadow:0 1px 0 #fff}
+.arg-hero .ah-sub{font-size:.85rem;font-weight:900;color:#1a4f7a;
+  letter-spacing:.5px;margin-top:4px}
+.arg-hero .ah-stars{font-size:1.4rem;margin-top:8px;letter-spacing:6px}
+.arg-hero .ah-stars span{display:inline-block;animation:argStar 1.6s ease-in-out infinite}
+.arg-hero .ah-stars span:nth-child(2){animation-delay:.2s}
+.arg-hero .ah-stars span:nth-child(3){animation-delay:.4s}
+@keyframes argStar{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+/* Cards mundial historia */
+.mundial-card{background:#fff;border-radius:14px;padding:12px 14px;margin-bottom:8px;
+  display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;
+  border-left:5px solid #BBB;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.mundial-card.champ{border-left-color:var(--arg-gold);
+  background:linear-gradient(90deg,#FFF8DC,#fff);
+  box-shadow:0 3px 14px rgba(241,180,58,.35)}
+.mundial-card.sub{border-left-color:#C0C0C0;background:linear-gradient(90deg,#F5F5F5,#fff)}
+.mc-year{font-family:var(--fh);font-size:1.5rem;color:var(--arg-sky-dark);
+  text-align:center;line-height:1}
+.mundial-card.champ .mc-year{color:#8a6300}
+.mc-info{line-height:1.2}
+.mc-host{font-size:.95rem;font-weight:900;color:#222;text-transform:uppercase}
+.mc-host img{height:16px;vertical-align:middle;margin-right:4px;border-radius:2px}
+.mc-pos{font-size:.7rem;font-weight:900;color:#666;margin-top:2px;letter-spacing:.5px}
+.mc-trophy{font-size:1.8rem;line-height:1}
+
+/* Qatar 2022 */
+.qatar-final-card{background:linear-gradient(135deg,#7B1E2C,#A82E3F 50%,#7B1E2C);
+  color:#fff;border-radius:16px;padding:18px 14px;text-align:center;
+  margin-bottom:14px;box-shadow:0 5px 18px rgba(123,30,44,.4);
+  border:3px solid var(--arg-gold);position:relative;overflow:hidden}
+.qatar-final-card::before{content:'🏆';position:absolute;top:-10px;right:-10px;
+  font-size:5rem;opacity:.12;transform:rotate(15deg)}
+.qatar-final-card .qfc-ttl{font-family:var(--fh);font-size:1.2rem;letter-spacing:2px;
+  color:var(--arg-gold)}
+.qatar-final-card .qfc-date{font-size:.75rem;font-weight:900;opacity:.85;
+  letter-spacing:1px;margin-top:2px}
+.qatar-final-card .qfc-score{display:flex;align-items:center;justify-content:center;
+  gap:10px;margin:14px 0 6px;font-family:var(--fh)}
+.qatar-final-card .qfc-team{flex:1;text-align:center}
+.qatar-final-card .qfc-team img{height:42px;border-radius:4px;
+  box-shadow:0 2px 6px rgba(0,0,0,.4);margin-bottom:4px;display:block;margin:0 auto 4px}
+.qatar-final-card .qfc-team-name{font-size:.85rem;letter-spacing:1px;display:block}
+.qatar-final-card .qfc-goals{font-size:2.6rem;color:#fff;line-height:1}
+.qatar-final-card .qfc-vs{font-size:1.1rem;opacity:.7}
+.qatar-final-card .qfc-pen{background:rgba(0,0,0,.25);border-radius:10px;
+  padding:6px 12px;font-size:.85rem;font-weight:900;letter-spacing:1px;
+  display:inline-block;margin-top:6px}
+
+.qatar-camino{background:#fff;border-radius:14px;padding:14px;margin-bottom:14px;
+  box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.qatar-camino h4{font-family:var(--fh);font-size:1rem;color:var(--arg-sky-dark);
+  letter-spacing:1px;margin-bottom:10px;text-align:center}
+.camino-row{display:grid;grid-template-columns:30px 1fr 60px;gap:8px;
+  padding:7px 0;border-bottom:1px dashed #E0E0E0;align-items:center;font-size:.8rem}
+.camino-row:last-child{border-bottom:0}
+.camino-rd{font-family:var(--fh);font-size:.75rem;color:#888;letter-spacing:.5px}
+.camino-rival{font-weight:900;color:#222}
+.camino-rival img{height:14px;vertical-align:middle;margin-right:4px;border-radius:2px}
+.camino-res{font-family:var(--fh);text-align:right;font-size:.95rem}
+.camino-res.win{color:var(--green)}
+.camino-res.loss{color:#C62828}
+
+.qatar-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:10px}
+.qstat{background:linear-gradient(135deg,#fff,#F8FBFF);border:2px solid var(--arg-sky);
+  border-radius:12px;padding:10px;text-align:center}
+.qstat-em{font-size:1.5rem}
+.qstat-val{font-family:var(--fh);font-size:1.3rem;color:var(--arg-sky-dark);
+  letter-spacing:1px}
+.qstat-lbl{font-size:.65rem;font-weight:900;color:#555;letter-spacing:.5px;
+  line-height:1.2;margin-top:2px}
+
+/* Plantel 2026 */
+.plantel-pos{margin-bottom:14px}
+.plantel-pos-hdr{background:linear-gradient(90deg,var(--arg-sky-dark),var(--arg-sky));
+  color:#fff;padding:8px 14px;border-radius:10px;
+  font-family:var(--fh);font-size:.95rem;letter-spacing:2px;margin-bottom:8px;
+  display:flex;align-items:center;gap:8px}
+.plantel-pos-hdr .ppc{background:rgba(255,255,255,.3);border-radius:50px;
+  padding:1px 8px;font-size:.7rem;margin-left:auto}
+.player-card{background:#fff;border-radius:10px;padding:8px 12px;margin-bottom:5px;
+  display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:3px solid var(--arg-sky)}
+.player-card.captain{border-left-color:var(--arg-gold);background:linear-gradient(90deg,#FFF8DC,#fff)}
+.player-circle{width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--arg-sky),var(--arg-sky-dark));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fh);font-size:.95rem}
+.player-card.captain .player-circle{background:linear-gradient(135deg,var(--arg-gold),#D89A1A);
+  color:#fff;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--arg-gold)}
+.player-name{font-weight:900;font-size:.88rem;color:#222;line-height:1.1}
+.player-club{font-size:.7rem;color:#777;font-weight:700;margin-top:1px;text-transform:uppercase}
+.player-cap{font-size:1.1rem}
+.dt-card{background:linear-gradient(135deg,var(--arg-sky-dark),#1a4f7a);color:#fff;
+  border-radius:12px;padding:12px 14px;text-align:center;margin-top:10px;
+  border:2px solid var(--arg-gold)}
+.dt-card .dt-lbl{font-family:var(--fh);font-size:.8rem;letter-spacing:2px;
+  color:var(--arg-gold)}
+.dt-card .dt-name{font-family:var(--fh);font-size:1.3rem;letter-spacing:1px;margin-top:2px}
+
+/* Messi */
+.messi-hero{background:linear-gradient(135deg,#1a4f7a,#3B83C9 50%,#75AADB);
+  color:#fff;border-radius:18px;padding:18px;text-align:center;
+  margin-bottom:14px;position:relative;overflow:hidden;
+  box-shadow:0 6px 22px rgba(26,79,122,.4);border:3px solid var(--arg-gold)}
+.messi-hero::before{content:'10';position:absolute;top:-20px;right:-15px;
+  font-family:var(--fh);font-size:11rem;color:rgba(255,255,255,.08);
+  line-height:1;pointer-events:none}
+.messi-hero img{width:100%;max-width:280px;border-radius:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,.5);margin-bottom:10px}
+.messi-hero h3{font-family:var(--fh);font-size:1.6rem;letter-spacing:2px;
+  color:var(--arg-gold);text-shadow:0 2px 4px rgba(0,0,0,.3)}
+.messi-hero .mh-sub{font-size:.85rem;font-weight:900;letter-spacing:.5px;
+  margin-top:2px;opacity:.95}
+
+.messi-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.mstat{background:#fff;border:2px solid var(--arg-sky);border-radius:12px;
+  padding:10px 6px;text-align:center;box-shadow:0 2px 6px rgba(59,131,201,.15)}
+.mstat-val{font-family:var(--fh);font-size:1.5rem;color:var(--arg-sky-dark);
+  line-height:1}
+.mstat-lbl{font-size:.62rem;font-weight:900;color:#555;letter-spacing:.5px;
+  line-height:1.15;margin-top:3px}
+
+.messi-section-ttl{font-family:var(--fh);font-size:1rem;color:var(--arg-sky-dark);
+  letter-spacing:2px;margin:14px 0 8px;padding-left:8px;
+  border-left:4px solid var(--arg-gold)}
+.trofeo-card{background:linear-gradient(135deg,#FFF8DC,#fff);
+  border:2px solid var(--arg-gold);border-radius:12px;padding:10px 12px;
+  margin-bottom:6px;display:flex;align-items:center;gap:10px;
+  box-shadow:0 2px 6px rgba(241,180,58,.25)}
+.trofeo-em{font-size:1.5rem}
+.trofeo-name{font-weight:900;font-size:.85rem;color:#5a3700;line-height:1.2}
+.trofeo-yr{font-family:var(--fh);font-size:.95rem;color:var(--arg-sky-dark);
+  margin-left:auto}
+
+.messi-fact{background:#fff;border-radius:12px;padding:11px 13px;margin-bottom:6px;
+  display:flex;gap:10px;align-items:flex-start;border-left:4px solid var(--arg-sky);
+  box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.messi-fact-em{font-size:1.4rem;flex-shrink:0;line-height:1}
+.messi-fact-txt{font-size:.82rem;font-weight:700;color:#333;line-height:1.35}
+.messi-fact-txt strong{color:var(--arg-sky-dark);font-weight:900}
+
+.messi-2026{background:linear-gradient(135deg,#7B1E2C,#A82E3F);color:#fff;
+  border-radius:14px;padding:14px;margin-top:10px;border:3px solid var(--arg-gold);
+  box-shadow:0 4px 14px rgba(123,30,44,.35);position:relative;overflow:hidden}
+.messi-2026::before{content:'🏆';position:absolute;bottom:-15px;right:-10px;
+  font-size:5.5rem;opacity:.12;transform:rotate(-10deg)}
+.messi-2026 h4{font-family:var(--fh);font-size:1.2rem;letter-spacing:2px;
+  color:var(--arg-gold);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.messi-2026 p{font-size:.85rem;font-weight:700;line-height:1.45;margin-bottom:6px;
+  position:relative;z-index:1}
+.messi-2026 p strong{color:var(--arg-gold)}
 .fix-date-hdr{background:linear-gradient(90deg,var(--red-dark),var(--blue));
   color:#fff;padding:7px 14px;border-radius:10px;margin:14px 0 6px;
   font-family:var(--fh);font-size:.9rem;letter-spacing:2px}
@@ -817,6 +1012,30 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
   <div style="margin-top:14px"><button class="btn btn-gr btn-full" onclick="markDone('sedes')">¡Ya los conozco! ✅</button></div>
 </div>
 
+<!-- ===== SELECCION ARGENTINA ===== -->
+<div id="argentina-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🇦🇷 Selección Argentina</span>
+  </div>
+  <div class="arg-hero">
+    <h2>🇦🇷 LA SCALONETA 🇦🇷</h2>
+    <div class="ah-sub">CAMPEONES DEL MUNDO · QATAR 2022</div>
+    <div class="ah-stars"><span>⭐</span><span>⭐</span><span>⭐</span></div>
+  </div>
+  <div class="arg-tabs">
+    <button class="arg-tab active" id="arg-tab-btn-0" onclick="switchArgTab(0)"><span class="at-em">🏆</span><span>HISTORIA</span></button>
+    <button class="arg-tab" id="arg-tab-btn-1" onclick="switchArgTab(1)"><span class="at-em">⭐</span><span>QATAR 22</span></button>
+    <button class="arg-tab" id="arg-tab-btn-2" onclick="switchArgTab(2)"><span class="at-em">👕</span><span>PLANTEL</span></button>
+    <button class="arg-tab" id="arg-tab-btn-3" onclick="switchArgTab(3)"><span class="at-em">🐐</span><span>MESSI</span></button>
+  </div>
+  <div id="arg-panel-0"></div>
+  <div id="arg-panel-1" style="display:none"></div>
+  <div id="arg-panel-2" style="display:none"></div>
+  <div id="arg-panel-3" style="display:none"></div>
+  <div style="margin-top:14px"><button class="btn btn-gr btn-full" onclick="markDone('argentina')">¡VAMOS ARGENTINA! ✅</button></div>
+</div>
+
 <!-- ===== CAMPEONES ===== -->
 <div id="campeones-screen" class="screen">
   <div class="act-hdr">
@@ -973,6 +1192,7 @@ const ACTIVITIES = [
   {id:'anfitriones', emoji:'🌎', title:'Países Anfitriones', stars:0, game:false},
   {id:'equipos',    emoji:'🔢', title:'¿Cuántos Equipos?', stars:0, game:false},
   {id:'fixture',    emoji:'📋', title:'El Fixture',        stars:0, game:false},
+  {id:'argentina',  emoji:'🇦🇷', title:'Selección Argentina', stars:0, game:false, featured:true},
   {id:'intruso',    emoji:'🔍', title:'El Intruso',        stars:3, game:true},
   {id:'selecciones',emoji:'👕', title:'Grandes Selecciones',stars:3, game:true},
   {id:'jugadores',  emoji:'⭐', title:'¿Quién es este Jugador?', stars:5, game:true},
@@ -1676,6 +1896,7 @@ function openActivity(id){
     jugadores: initJug,
     silabas: initSil,
     sedes: initSedes,
+    argentina: initArgentina,
     campeones: initCampeones,
     anio: initAnio,
     unir: initUnir,
@@ -1705,9 +1926,11 @@ function renderHomeGrid(){
     const classes = ['act-card'];
     if(done) classes.push('done');
     if(opts.mustDo) classes.push('must-do');
+    if(a.featured) classes.push('featured-arg');
     return `<div class="${classes.join(' ')}" onclick="openActivity('${a.id}')">
       ${done?'<div class="done-badge">✓</div>':''}
       ${opts.mustDo?'<div class="must-do-badge">¡EMPEZÁ ACÁ!</div>':''}
+      ${a.featured && !done?'<div class="nuevo-badge">¡NUEVO!</div>':''}
       <div class="ci">${a.emoji}</div>
       <div class="ct">${a.title}</div>
       ${starsLabel?`<div class="cs">${starsLabel}</div>`:''}
@@ -2525,6 +2748,282 @@ function initSedes(){
     </div>
     ${g.sedes.map(cardHtml).join('')}
   `).join('');
+}
+
+// ============================================================
+// SELECCION ARGENTINA
+// ============================================================
+const MUNDIALES_ARG = [
+  {year:1930, host:'Uruguay',     hostCode:'uy', result:'SUBCAMPEÓN',          type:'sub'},
+  {year:1934, host:'Italia',      hostCode:'it', result:'Octavos de final',    type:''},
+  {year:1958, host:'Suecia',      hostCode:'se', result:'Fase de grupos',      type:''},
+  {year:1962, host:'Chile',       hostCode:'cl', result:'Fase de grupos',      type:''},
+  {year:1966, host:'Inglaterra',  hostCode:'gb-eng', result:'Cuartos de final',type:''},
+  {year:1974, host:'Alemania',    hostCode:'de', result:'Segunda ronda',       type:''},
+  {year:1978, host:'Argentina',   hostCode:'ar', result:'¡CAMPEÓN DEL MUNDO!', type:'champ'},
+  {year:1982, host:'España',      hostCode:'es', result:'Segunda ronda',       type:''},
+  {year:1986, host:'México',      hostCode:'mx', result:'¡CAMPEÓN DEL MUNDO!', type:'champ'},
+  {year:1990, host:'Italia',      hostCode:'it', result:'SUBCAMPEÓN',          type:'sub'},
+  {year:1994, host:'Estados Unidos',hostCode:'us', result:'Octavos de final',  type:''},
+  {year:1998, host:'Francia',     hostCode:'fr', result:'Cuartos de final',    type:''},
+  {year:2002, host:'Corea-Japón', hostCode:'kr', result:'Fase de grupos',      type:''},
+  {year:2006, host:'Alemania',    hostCode:'de', result:'Cuartos de final',    type:''},
+  {year:2010, host:'Sudáfrica',   hostCode:'za', result:'Cuartos de final',    type:''},
+  {year:2014, host:'Brasil',      hostCode:'br', result:'SUBCAMPEÓN',          type:'sub'},
+  {year:2018, host:'Rusia',       hostCode:'ru', result:'Octavos de final',    type:''},
+  {year:2022, host:'Qatar',       hostCode:'qa', result:'¡CAMPEÓN DEL MUNDO!', type:'champ'},
+  {year:2026, host:'USA-México-Canadá',hostCode:'us', result:'¡A DEFENDER LA COPA!',type:'next'},
+];
+
+const QATAR_2022 = {
+  camino:[
+    {rd:'FG',rival:'Arabia Saudita',rivalCode:'sa',score:'1-2',win:false},
+    {rd:'FG',rival:'México',         rivalCode:'mx',score:'2-0',win:true},
+    {rd:'FG',rival:'Polonia',        rivalCode:'pl',score:'2-0',win:true},
+    {rd:'8°',rival:'Australia',      rivalCode:'au',score:'2-1',win:true},
+    {rd:'4°',rival:'Países Bajos',   rivalCode:'nl',score:'2-2 (4-3p)',win:true},
+    {rd:'SF',rival:'Croacia',        rivalCode:'hr',score:'3-0',win:true},
+    {rd:'F', rival:'Francia',        rivalCode:'fr',score:'3-3 (4-2p)',win:true},
+  ],
+  stats:[
+    {em:'⚽',val:'15',  lbl:'GOLES EN EL TORNEO'},
+    {em:'🐐',val:'7',   lbl:'GOLES DE MESSI'},
+    {em:'🧤',val:'DIBU',lbl:'MEJOR ARQUERO'},
+    {em:'🌟',val:'ENZO',lbl:'MEJOR JOVEN'},
+    {em:'🏆',val:'MVP', lbl:'MESSI BALÓN DE ORO'},
+    {em:'📅',val:'36',  lbl:'AÑOS SIN COPA'},
+  ],
+};
+
+const PLANTEL_2026 = [
+  {pos:'ARQUEROS', em:'🧤', short:'ARQ', players:[
+    {name:'Emiliano "Dibu" Martínez', num:23, club:'Aston Villa'},
+    {name:'Gerónimo Rulli',           num:12, club:'Marsella'},
+    {name:'Walter Benítez',           num:1,  club:'PSV'},
+  ]},
+  {pos:'DEFENSORES', em:'🛡️', short:'DEF', players:[
+    {name:'Cristian "Cuti" Romero', num:13, club:'Tottenham'},
+    {name:'Nicolás Otamendi',       num:19, club:'Benfica'},
+    {name:'Lisandro Martínez',      num:25, club:'Manchester Utd'},
+    {name:'Nahuel Molina',          num:26, club:'Atlético Madrid'},
+    {name:'Nicolás Tagliafico',     num:3,  club:'Lyon'},
+    {name:'Marcos Acuña',           num:8,  club:'River Plate'},
+    {name:'Gonzalo Montiel',        num:4,  club:'River Plate'},
+    {name:'Leonardo Balerdi',       num:6,  club:'Marsella'},
+  ]},
+  {pos:'MEDIOCAMPISTAS', em:'⚙️', short:'MED', players:[
+    {name:'Rodrigo De Paul',     num:7,  club:'Atlético Madrid'},
+    {name:'Leandro Paredes',     num:5,  club:'Boca Juniors'},
+    {name:'Enzo Fernández',      num:24, club:'Chelsea'},
+    {name:'Alexis Mac Allister', num:20, club:'Liverpool'},
+    {name:'Giovani Lo Celso',    num:18, club:'Real Betis'},
+    {name:'Exequiel Palacios',   num:14, club:'B. Leverkusen'},
+    {name:'Thiago Almada',       num:16, club:'Atlético Madrid'},
+  ]},
+  {pos:'DELANTEROS', em:'⚡', short:'DEL', players:[
+    {name:'Lionel Messi (C)',     num:10, club:'Inter Miami', captain:true},
+    {name:'Lautaro Martínez',     num:22, club:'Inter de Milán'},
+    {name:'Julián Álvarez',       num:9,  club:'Atlético Madrid'},
+    {name:'Nicolás González',     num:15, club:'Juventus'},
+    {name:'Alejandro Garnacho',   num:17, club:'Manchester Utd'},
+    {name:'Paulo Dybala',         num:21, club:'Roma'},
+  ]},
+];
+
+const MESSI_DATA = {
+  stats:[
+    {val:'5',   lbl:'MUNDIALES JUGADOS'},
+    {val:'13',  lbl:'GOLES EN MUNDIALES'},
+    {val:'191+',lbl:'PARTIDOS CON LA SELECCIÓN'},
+    {val:'112+',lbl:'GOLES (RÉCORD HISTÓRICO)'},
+    {val:'26',  lbl:'PARTIDOS EN MUNDIALES (RÉCORD)'},
+    {val:'8',   lbl:'BALONES DE ORO'},
+  ],
+  trofeos:[
+    {em:'🏆',name:'MUNDIAL FIFA',          yr:'QATAR 2022'},
+    {em:'🏆',name:'COPA AMÉRICA',          yr:'BRASIL 2021'},
+    {em:'🏆',name:'COPA AMÉRICA',          yr:'EE.UU. 2024'},
+    {em:'🏆',name:'FINALISSIMA vs ITALIA', yr:'WEMBLEY 2022'},
+    {em:'🥇',name:'MEDALLA DE ORO OLÍMPICA',yr:'BEIJING 2008'},
+    {em:'🥇',name:'MUNDIAL SUB-20',         yr:'PAÍSES BAJOS 2005'},
+  ],
+  datos:[
+    {em:'😱',txt:'En su <strong>debut con la Selección</strong> contra Hungría (17/08/2005), ¡fue expulsado a los 2 minutos de entrar! Su sueño arrancó con una roja.'},
+    {em:'⚽',txt:'Su <strong>primer gol</strong> con la mayor fue el 1 de marzo de 2006 contra Croacia. Tenía solo 18 años.'},
+    {em:'🔟',txt:'Usa el <strong>número 10</strong> desde 2008. Lo heredó nada menos que de Juan Román <strong>Riquelme</strong>.'},
+    {em:'❤️',txt:'Antes de 2021 lo llamaban <strong>"pecho frío"</strong> por perder finales. Después ganó Copa América, Finalissima, MUNDIAL y otra Copa América. Cerró todas las bocas.'},
+    {em:'🗣️',txt:'En cuartos contra Países Bajos en Qatar gritó la frase más recordada del Mundial: <strong>"¿QUÉ MIRÁS, BOBO?"</strong> al delantero Weghorst.'},
+    {em:'🎯',txt:'En Qatar 2022 hizo <strong>gol o asistencia en TODOS los partidos</strong> del torneo. Una jornada perfecta.'},
+    {em:'👑',txt:'Cuando levantó la Copa del Mundo, el emir de Qatar le puso encima un <strong>bisht</strong>, un manto árabe de honor. Una imagen para la historia.'},
+    {em:'🌎',txt:'Es el único jugador que <strong>marcó goles en 5 Mundiales distintos</strong> (2006, 2010, 2014, 2018 y 2022).'},
+    {em:'💪',txt:'Antes de ser figura ya tenía un mito: a los 13 años se fue de Rosario a Barcelona porque le pagaban un <strong>tratamiento hormonal</strong> para crecer.'},
+  ],
+};
+
+function initArgentina(){
+  switchArgTab(0);
+}
+
+function switchArgTab(idx){
+  for(let i=0;i<4;i++){
+    const p = document.getElementById('arg-panel-'+i);
+    const b = document.getElementById('arg-tab-btn-'+i);
+    if(p) p.style.display = i===idx?'':'none';
+    if(b) b.classList.toggle('active', i===idx);
+  }
+  // Render lazy
+  if(idx===0) renderArgHistoria();
+  else if(idx===1) renderArgQatar();
+  else if(idx===2) renderArgPlantel();
+  else if(idx===3) renderArgMessi();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderArgHistoria(){
+  const p = document.getElementById('arg-panel-0');
+  const champCount = MUNDIALES_ARG.filter(m=>m.type==='champ').length;
+  const subCount   = MUNDIALES_ARG.filter(m=>m.type==='sub').length;
+  const totalPart  = MUNDIALES_ARG.filter(m=>m.type!=='next').length;
+  p.innerHTML = `
+    <div class="info-box">🏆 Argentina jugó <strong>${totalPart} Mundiales</strong>, ganó <strong>${champCount}</strong> y fue <strong>${subCount} veces subcampeón</strong>. ¡Una de las selecciones más grandes de la historia!</div>
+    <div class="qatar-stats" style="margin-bottom:14px">
+      <div class="qstat"><div class="qstat-em">🏆</div><div class="qstat-val">${champCount}</div><div class="qstat-lbl">TÍTULOS MUNDIALES</div></div>
+      <div class="qstat"><div class="qstat-em">🥈</div><div class="qstat-val">${subCount}</div><div class="qstat-lbl">SUBCAMPEONATOS</div></div>
+    </div>
+    ${MUNDIALES_ARG.map(m=>{
+      const cls = m.type==='champ'?'champ':m.type==='sub'?'sub':m.type==='next'?'':'';
+      const trophy = m.type==='champ'?'🏆':m.type==='sub'?'🥈':m.type==='next'?'🔥':'⚽';
+      const flagSrc = m.hostCode==='gb-eng' ? 'gb-eng' : m.hostCode;
+      return `
+        <div class="mundial-card ${cls}">
+          <div class="mc-year">${m.year}</div>
+          <div class="mc-info">
+            <div class="mc-host"><img src="https://flagcdn.com/w40/${flagSrc}.png" alt="${m.host}"> ${m.host}</div>
+            <div class="mc-pos">${m.result}</div>
+          </div>
+          <div class="mc-trophy">${trophy}</div>
+        </div>`;
+    }).join('')}
+  `;
+}
+
+function renderArgQatar(){
+  const p = document.getElementById('arg-panel-1');
+  p.innerHTML = `
+    <div class="info-box">⭐ El <strong>18 de diciembre de 2022</strong>, después de 36 años, Argentina volvió a ser CAMPEÓN DEL MUNDO ganando una de las finales más emocionantes de la historia.</div>
+    <div class="qatar-final-card">
+      <div class="qfc-ttl">🏆 LA FINAL 🏆</div>
+      <div class="qfc-date">18 DIC 2022 · ESTADIO LUSAIL</div>
+      <div class="qfc-score">
+        <div class="qfc-team">
+          <img src="https://flagcdn.com/w80/ar.png" alt="Argentina">
+          <span class="qfc-team-name">ARGENTINA</span>
+          <div class="qfc-goals">3</div>
+        </div>
+        <div class="qfc-vs">VS</div>
+        <div class="qfc-team">
+          <img src="https://flagcdn.com/w80/fr.png" alt="Francia">
+          <span class="qfc-team-name">FRANCIA</span>
+          <div class="qfc-goals">3</div>
+        </div>
+      </div>
+      <div class="qfc-pen">⚽ PENALES 4 - 2 · ¡CAMPEONES!</div>
+    </div>
+    <div class="qatar-camino">
+      <h4>📍 EL CAMINO A LA GLORIA</h4>
+      ${QATAR_2022.camino.map(c=>`
+        <div class="camino-row">
+          <div class="camino-rd">${c.rd}</div>
+          <div class="camino-rival"><img src="https://flagcdn.com/w40/${c.rivalCode}.png" alt="${c.rival}">${c.rival}</div>
+          <div class="camino-res ${c.win?'win':'loss'}">${c.score}</div>
+        </div>`).join('')}
+    </div>
+    <div class="qatar-stats">
+      ${QATAR_2022.stats.map(s=>`
+        <div class="qstat">
+          <div class="qstat-em">${s.em}</div>
+          <div class="qstat-val">${s.val}</div>
+          <div class="qstat-lbl">${s.lbl}</div>
+        </div>`).join('')}
+    </div>
+    <div class="messi-fact" style="border-left-color:var(--arg-gold);background:linear-gradient(90deg,#FFF8DC,#fff)">
+      <div class="messi-fact-em">🎯</div>
+      <div class="messi-fact-txt">Los <strong>goles de Argentina en la final</strong> los hicieron Messi (2) y Di María. Mbappé hizo un hat-trick para Francia, pero <strong>el Dibu Martínez</strong> atajó penales clave.</div>
+    </div>
+  `;
+}
+
+function renderArgPlantel(){
+  const p = document.getElementById('arg-panel-2');
+  p.innerHTML = `
+    <div class="info-box">👕 Esta es la <strong>lista probable</strong> de los jugadores que defenderían a Argentina en el Mundial 2026. ¡Algunos pueden cambiar antes del torneo!</div>
+    ${PLANTEL_2026.map(g=>`
+      <div class="plantel-pos">
+        <div class="plantel-pos-hdr">
+          <span style="font-size:1.2rem">${g.em}</span> ${g.pos}
+          <span class="ppc">${g.players.length}</span>
+        </div>
+        ${g.players.map(pl=>`
+          <div class="player-card ${pl.captain?'captain':''}">
+            <div class="player-circle">${pl.num}</div>
+            <div>
+              <div class="player-name">${pl.name}</div>
+              <div class="player-club">${pl.club}</div>
+            </div>
+            ${pl.captain?'<div class="player-cap">©️</div>':''}
+          </div>`).join('')}
+      </div>`).join('')}
+    <div class="dt-card">
+      <div class="dt-lbl">🎩 DIRECTOR TÉCNICO</div>
+      <div class="dt-name">LIONEL SCALONI</div>
+      <div style="font-size:.75rem;opacity:.85;margin-top:4px;letter-spacing:.5px">CAMPEÓN DEL MUNDO 2022 · CAMPEÓN AMÉRICA 2021 Y 2024</div>
+    </div>
+  `;
+}
+
+function renderArgMessi(){
+  const p = document.getElementById('arg-panel-3');
+  p.innerHTML = `
+    <div class="messi-hero">
+      <img src="img/messi levantando copa.jfif" alt="Messi levantando la Copa del Mundo" onerror="this.style.display='none'">
+      <h3>👑 LIONEL ANDRÉS MESSI 👑</h3>
+      <div class="mh-sub">EL CAPITÁN · CAMPEÓN DEL MUNDO · EL MEJOR DE LA HISTORIA</div>
+    </div>
+    <div class="info-box">🐐 Nació el <strong>24 de junio de 1987</strong> en Rosario. Es el jugador con más títulos, más Balones de Oro y el corazón de la Selección Argentina.</div>
+
+    <div class="messi-section-ttl">📊 NÚMEROS DE LEYENDA</div>
+    <div class="messi-stats">
+      ${MESSI_DATA.stats.map(s=>`
+        <div class="mstat">
+          <div class="mstat-val">${s.val}</div>
+          <div class="mstat-lbl">${s.lbl}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="messi-section-ttl">🏆 TROFEOS CON LA SELECCIÓN</div>
+    ${MESSI_DATA.trofeos.map(t=>`
+      <div class="trofeo-card">
+        <div class="trofeo-em">${t.em}</div>
+        <div class="trofeo-name">${t.name}</div>
+        <div class="trofeo-yr">${t.yr}</div>
+      </div>`).join('')}
+
+    <div class="messi-section-ttl">🎲 DATOS DE COLOR</div>
+    ${MESSI_DATA.datos.map(d=>`
+      <div class="messi-fact">
+        <div class="messi-fact-em">${d.em}</div>
+        <div class="messi-fact-txt">${d.txt}</div>
+      </div>`).join('')}
+
+    <div class="messi-section-ttl">🔥 MESSI Y EL MUNDIAL 2026</div>
+    <div class="messi-2026">
+      <h4>🌎 ¿SU 6° MUNDIAL?</h4>
+      <p>El Mundial 2026 arranca el <strong>11 de junio</strong>. Messi cumple <strong>39 años el 24 de junio</strong>... ¡justo durante el torneo!</p>
+      <p>Si juega, va a ser el <strong>único futbolista de la historia en disputar 6 Mundiales</strong>. Hoy juega en <strong>Inter Miami</strong> (Estados Unidos), donde puede prepararse cerca de las sedes del Mundial.</p>
+      <p>El propio Messi dijo: <em>"Voy a ir partido a partido y a disfrutar mientras me sienta bien"</em>. Scaloni ya le abrió la puerta: <strong>si está, va a estar.</strong></p>
+      <p style="font-family:var(--fh);font-size:1.05rem;letter-spacing:2px;text-align:center;margin-top:10px;color:var(--arg-gold)">🇦🇷 ¡VAMOS A DEFENDER LA COPA! 🏆</p>
+    </div>
+  `;
 }
 
 // ============================================================
