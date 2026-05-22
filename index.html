@@ -203,7 +203,9 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 .team-selected-display{background:linear-gradient(135deg,var(--red-dark),var(--red));
   color:#fff;border-radius:14px;padding:18px 16px;text-align:center;margin:12px 0 4px;
   animation:popIn .4s cubic-bezier(.175,.885,.32,1.275);display:none}
-.team-selected-display .tsd-flag{font-size:3.2rem;display:block;margin-bottom:6px}
+.team-selected-display .tsd-flag{font-size:3.2rem;display:block;margin-bottom:6px;line-height:1}
+.team-selected-display .tsd-flag img{height:56px;width:auto;border-radius:6px;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);vertical-align:middle}
 .team-selected-display .tsd-name{font-family:var(--fh);font-size:1.6rem;
   letter-spacing:2px;text-transform:uppercase}
 .team-selected-display .tsd-group{font-size:.85rem;font-weight:700;
@@ -705,8 +707,8 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
     <div class="team-grid" id="team-grid"></div>
 
     <label class="big-lbl">¿CUÁNTOS AÑOS TENÉS?</label>
-    <input class="big-inp" id="inp-age" type="number" placeholder="Escribí tu edad..."
-      min="1" max="18" oninput="onAgeChange()">
+    <input class="big-inp" id="inp-age" type="number" inputmode="numeric" placeholder="Escribí tu edad..."
+      min="1" max="99" oninput="onAgeChange()">
 
     <div id="portada-hint" class="fb-msg" style="display:none"></div>
     <div style="margin-top:20px">
@@ -1798,7 +1800,7 @@ function selectTeam(name){
 function showSelectedTeam(team){
   if(!team) return;
   const wrap = document.getElementById('team-selected-display');
-  document.getElementById('tsd-flag').textContent = team.flag;
+  document.getElementById('tsd-flag').innerHTML = flagImgFromEmoji(team.flag, 56, 80) || team.flag;
   document.getElementById('tsd-name').textContent = team.n;
   document.getElementById('tsd-group').textContent = 'GRUPO ' + team.g;
   wrap.style.display = 'block';
@@ -1806,16 +1808,21 @@ function showSelectedTeam(team){
 
 function onNameChange(){
   S.playerName = document.getElementById('inp-name').value;
+  const hint = document.getElementById('portada-hint');
+  if(hint) hint.style.display='none';
   save();
 }
 function onAgeChange(){
   S.playerAge = document.getElementById('inp-age').value;
+  const hint = document.getElementById('portada-hint');
+  if(hint) hint.style.display='none';
   save();
 }
 function checkPortada(){
   const name = document.getElementById('inp-name').value.trim();
   const team = S.favoriteTeam;
-  const age  = document.getElementById('inp-age').value.trim();
+  const ageRaw = (document.getElementById('inp-age').value || S.playerAge || '').toString().trim();
+  const ageNum = parseInt(ageRaw, 10);
   const hint = document.getElementById('portada-hint');
   if(!name){
     hint.className='fb-msg fb-no'; hint.style.display='block';
@@ -1825,10 +1832,15 @@ function checkPortada(){
     hint.className='fb-msg fb-no'; hint.style.display='block';
     hint.textContent='¡Elegí tu selección favorita! 🏳️'; return;
   }
-  if(!age||isNaN(age)||+age<1||+age>18){
+  if(!ageRaw){
     hint.className='fb-msg fb-no'; hint.style.display='block';
     hint.textContent='¡Escribí cuántos años tenés! 🎂'; return;
   }
+  if(isNaN(ageNum)||ageNum<1||ageNum>99){
+    hint.className='fb-msg fb-no'; hint.style.display='block';
+    hint.textContent='¡Poné una edad entre 1 y 99! 🎂'; return;
+  }
+  const age = ageNum;
   S.playerName=name; S.playerAge=age; save();
   markDone('portada');
   renderHomeGrid();
