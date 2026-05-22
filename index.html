@@ -882,7 +882,10 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 .welcome-section.adult-warning .we-em{font-size:1.9rem}
 .welcome-section.adult-warning .we-content h3{color:#8a6300}
 .welcome-foot{padding:0 18px 22px;text-align:center}
-.welcome-foot .we-flag{font-size:1.3rem;margin-bottom:8px;letter-spacing:6px}
+.welcome-foot .we-flag{font-size:1.3rem;margin-bottom:10px;
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.welcome-foot .we-flag img{height:22px;width:auto;border-radius:3px;
+  box-shadow:0 1px 4px rgba(0,0,0,.2);vertical-align:middle}
 .welcome-foot .btn{font-size:1.05rem;padding:14px}
 .welcome-foot .we-sign{font-size:.7rem;color:#999;margin-top:10px;
   font-weight:700;letter-spacing:.5px}
@@ -955,7 +958,7 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
       </div>
 
       <div class="welcome-section">
-        <div class="we-em">🇦🇷</div>
+        <div class="we-em"><img src="https://flagcdn.com/w80/ar.png" alt="Argentina" style="width:46px;height:auto;border-radius:5px;box-shadow:0 2px 6px rgba(0,0,0,.25)"></div>
         <div class="we-content">
           <h3>SELECCIÓN ARGENTINA Y MESSI</h3>
           <p>Vas a encontrar una sección especial sobre la <strong>Scaloneta</strong>: su historia mundial, Qatar 2022, el plantel para el 2026 y datos exclusivos sobre Lionel <strong>Messi</strong>.</p>
@@ -987,7 +990,12 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
       </div>
     </div>
     <div class="welcome-foot">
-      <div class="we-flag">🇦🇷 ⚽ 🇲🇽 ⚽ 🇺🇸 ⚽ 🇨🇦</div>
+      <div class="we-flag">
+        <img src="https://flagcdn.com/w40/ar.png" alt="Argentina"> ⚽
+        <img src="https://flagcdn.com/w40/mx.png" alt="México"> ⚽
+        <img src="https://flagcdn.com/w40/us.png" alt="EE.UU."> ⚽
+        <img src="https://flagcdn.com/w40/ca.png" alt="Canadá">
+      </div>
       <button class="btn btn-r btn-full" onclick="closeWelcome()">¡EMPECEMOS! ➡️</button>
       <div class="we-sign">Hecho con ❤️ para vivir el Mundial 2026</div>
     </div>
@@ -1198,10 +1206,10 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 <div id="argentina-screen" class="screen">
   <div class="act-hdr">
     <button class="back-btn" onclick="goHome()">← Volver</button>
-    <span class="act-ttl">🇦🇷 Selección Argentina</span>
+    <span class="act-ttl"><img src="https://flagcdn.com/w40/ar.png" alt="AR" style="height:18px;vertical-align:middle;margin-right:4px;border-radius:2px"> Selección Argentina</span>
   </div>
   <div class="arg-hero">
-    <h2>🇦🇷 LA SCALONETA 🇦🇷</h2>
+    <h2><img src="https://flagcdn.com/w80/ar.png" alt="AR" style="height:28px;vertical-align:middle;margin:0 6px;border-radius:3px;box-shadow:0 2px 4px rgba(0,0,0,.2)"> LA SCALONETA <img src="https://flagcdn.com/w80/ar.png" alt="AR" style="height:28px;vertical-align:middle;margin:0 6px;border-radius:3px;box-shadow:0 2px 4px rgba(0,0,0,.2)"></h2>
     <div class="ah-sub">CAMPEONES DEL MUNDO · QATAR 2022</div>
     <div class="ah-stars"><span>⭐</span><span>⭐</span><span>⭐</span></div>
   </div>
@@ -2153,11 +2161,17 @@ function renderHomeGrid(){
     if(done) classes.push('done');
     if(opts.mustDo) classes.push('must-do');
     if(a.featured) classes.push(a.id==='messitrivia' ? 'featured-messi' : 'featured-arg');
+    // Si el emoji es una bandera (regional indicators), usar imagen real
+    const flagImgHtml = flagImgFromEmoji(a.emoji, 42, 60);
+    const isFlag = !!flagImgHtml;
+    const icoHtml = isFlag
+      ? `<div class="ci"><img src="${flagImgHtml.match(/src="([^"]+)"/)[1]}" alt="${a.title}" style="height:42px;width:auto;border-radius:5px;box-shadow:0 2px 6px rgba(0,0,0,.2)"></div>`
+      : `<div class="ci">${a.emoji}</div>`;
     return `<div class="${classes.join(' ')}" onclick="openActivity('${a.id}')">
       ${done?'<div class="done-badge">✓</div>':''}
       ${opts.mustDo?'<div class="must-do-badge">¡EMPEZÁ ACÁ!</div>':''}
       ${a.featured && !done?'<div class="nuevo-badge">¡NUEVO!</div>':''}
-      <div class="ci">${a.emoji}</div>
+      ${icoHtml}
       <div class="ct">${a.title}</div>
       ${starsLabel?`<div class="cs">${starsLabel}</div>`:''}
     </div>`;
@@ -3255,7 +3269,7 @@ function renderArgMessi(){
       <p>El Mundial 2026 arranca el <strong>11 de junio</strong>. Messi cumple <strong>39 años el 24 de junio</strong>... ¡justo durante el torneo!</p>
       <p>Si juega, va a ser el <strong>único futbolista de la historia en disputar 6 Mundiales</strong>. Hoy juega en <strong>Inter Miami</strong> (Estados Unidos), donde puede prepararse cerca de las sedes del Mundial.</p>
       <p>El propio Messi dijo: <em>"Voy a ir partido a partido y a disfrutar mientras me sienta bien"</em>. Scaloni ya le abrió la puerta: <strong>si está, va a estar.</strong></p>
-      <p style="font-family:var(--fh);font-size:1.05rem;letter-spacing:2px;text-align:center;margin-top:10px;color:var(--arg-gold)">🇦🇷 ¡VAMOS A DEFENDER LA COPA! 🏆</p>
+      <p style="font-family:var(--fh);font-size:1.05rem;letter-spacing:2px;text-align:center;margin-top:10px;color:var(--arg-gold)"><img src="https://flagcdn.com/w40/ar.png" alt="AR" style="height:18px;vertical-align:middle;margin-right:4px;border-radius:2px"> ¡VAMOS A DEFENDER LA COPA! 🏆</p>
     </div>
   `;
 }
