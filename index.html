@@ -129,7 +129,8 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 .act-card:active{transform:scale(.95)}
 .act-card.done{border-color:var(--green);
   background:linear-gradient(135deg,#F0FFF4,#fff)}
-.act-card .ci{font-size:2.4rem;line-height:1;transition:transform .2s}
+.act-card .ci{font-size:2.4rem;line-height:1;transition:transform .2s;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Twemoji Mozilla","EmojiOne Color",sans-serif}
 .act-card:hover .ci{transform:scale(1.15) rotate(-5deg)}
 .act-card .ct{font-family:var(--fh);font-size:1rem;color:#222;line-height:1.2;
   text-transform:uppercase;letter-spacing:.5px}
@@ -1400,7 +1401,7 @@ const ACTIVITIES = [
   {id:'portada',     emoji:'📝', title:'Mi Portada',       stars:0, game:false},
   {id:'anfitriones', emoji:'🌎', title:'Países Anfitriones', stars:0, game:false},
   {id:'equipos',    emoji:'🔢', title:'¿Cuántos Equipos?', stars:0, game:false},
-  {id:'fixture',    emoji:'📋', title:'El Fixture',        stars:0, game:false},
+  {id:'fixture',    emoji:'🆚', title:'El Fixture',        stars:0, game:false},
   {id:'argentina',  emoji:'🇦🇷', title:'Selección Argentina', stars:0, game:false, featured:true},
   {id:'intruso',    emoji:'🔍', title:'El Intruso',        stars:3, game:true},
   {id:'selecciones',emoji:'👕', title:'Grandes Selecciones',stars:3, game:true},
@@ -2162,8 +2163,8 @@ function renderHomeGrid(){
     if(opts.mustDo) classes.push('must-do');
     if(a.featured) classes.push(a.id==='messitrivia' ? 'featured-messi' : 'featured-arg');
     // Si el emoji es una bandera (regional indicators), usar imagen real
-    const flagImgHtml = flagImgFromEmoji(a.emoji, 42, 60);
-    const isFlag = !!flagImgHtml;
+    const flagImgHtml = flagImgFromEmoji(a.emoji, 42, 80);
+    const isFlag = flagImgHtml && flagImgHtml.startsWith('<img');
     const icoHtml = isFlag
       ? `<div class="ci"><img src="${flagImgHtml.match(/src="([^"]+)"/)[1]}" alt="${a.title}" style="height:42px;width:auto;border-radius:5px;box-shadow:0 2px 6px rgba(0,0,0,.2)"></div>`
       : `<div class="ci">${a.emoji}</div>`;
