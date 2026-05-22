@@ -666,6 +666,82 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
 .messi-2026 p{font-size:.85rem;font-weight:700;line-height:1.45;margin-bottom:6px;
   position:relative;z-index:1}
 .messi-2026 p strong{color:var(--arg-gold)}
+
+/* MESSI TRIVIA GAME */
+.mt-hero{background:linear-gradient(135deg,#1a4f7a,#3B83C9 50%,#75AADB);
+  color:#fff;border-radius:16px;padding:14px;margin-bottom:14px;
+  display:grid;grid-template-columns:90px 1fr;gap:14px;align-items:center;
+  border:3px solid var(--arg-gold);box-shadow:0 6px 18px rgba(26,79,122,.4);
+  position:relative;overflow:hidden}
+.mt-hero::before{content:'10';position:absolute;top:-25px;right:-15px;
+  font-family:var(--fh);font-size:8rem;color:rgba(255,255,255,.08);line-height:1}
+.mt-hero img{width:90px;height:90px;border-radius:12px;object-fit:cover;
+  box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.mt-hero .mth-ttl{font-family:var(--fh);font-size:1.3rem;letter-spacing:2px;
+  color:var(--arg-gold);text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.mt-hero .mth-sub{font-size:.78rem;font-weight:900;margin-top:3px;opacity:.95;
+  letter-spacing:.5px;line-height:1.3}
+.mt-hero .mth-score{display:inline-block;background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.3);border-radius:50px;padding:3px 10px;
+  margin-top:6px;font-family:var(--fh);font-size:.85rem;letter-spacing:1.5px}
+
+.mt-q-card{background:#fff;border-radius:14px;padding:16px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);border-left:5px solid var(--arg-sky-dark);
+  margin-bottom:10px}
+.mt-round{font-family:var(--fh);font-size:.85rem;color:var(--arg-sky-dark);
+  letter-spacing:2px;text-align:center;margin-bottom:6px}
+.mt-question{font-family:var(--fh);font-size:1.15rem;color:#222;line-height:1.25;
+  letter-spacing:1px;text-align:center;margin-bottom:14px;
+  text-transform:uppercase}
+.mt-opts{display:grid;grid-template-columns:1fr;gap:8px}
+.mt-opt{background:linear-gradient(135deg,#fff,#F8FBFF);
+  border:3px solid var(--arg-sky);border-radius:12px;
+  padding:14px 12px;font-size:.9rem;font-weight:900;color:#222;
+  font-family:var(--fb);cursor:pointer;transition:all .15s;
+  text-align:left;text-transform:uppercase;letter-spacing:.3px;
+  display:flex;align-items:center;gap:10px;line-height:1.25;width:100%}
+.mt-opt:hover{transform:translateY(-2px);
+  box-shadow:0 4px 10px rgba(59,131,201,.25);border-color:var(--arg-sky-dark)}
+.mt-opt:active{transform:scale(.97)}
+.mt-opt .mt-letter{width:30px;height:30px;border-radius:50%;
+  background:var(--arg-sky);color:#fff;display:flex;align-items:center;
+  justify-content:center;font-family:var(--fh);font-size:1rem;flex-shrink:0}
+.mt-opt.ok{background:linear-gradient(135deg,#D4EDDA,#E8F8E8);
+  border-color:var(--green);color:#155724}
+.mt-opt.ok .mt-letter{background:var(--green)}
+.mt-opt.no{background:linear-gradient(135deg,#F8D7DA,#FCE8EA);
+  border-color:#E74C3C;color:#721C24}
+.mt-opt.no .mt-letter{background:#E74C3C}
+.mt-opt.disabled{pointer-events:none;opacity:.7}
+.mt-opt.disabled.ok,.mt-opt.disabled.no{opacity:1}
+
+.mt-fact{background:linear-gradient(135deg,#FFF8DC,#fff);
+  border:2px solid var(--arg-gold);border-radius:12px;padding:10px 12px;
+  margin-top:10px;font-size:.82rem;font-weight:700;color:#5a3700;line-height:1.4;
+  box-shadow:0 2px 6px rgba(241,180,58,.25)}
+.mt-fact strong{color:#7B4E00}
+
+.mt-final{background:linear-gradient(135deg,#1a4f7a,#3B83C9);color:#fff;
+  border-radius:16px;padding:22px 16px;text-align:center;
+  border:3px solid var(--arg-gold);box-shadow:0 6px 22px rgba(26,79,122,.4)}
+.mt-final .mtf-em{font-size:4rem;line-height:1}
+.mt-final .mtf-ttl{font-family:var(--fh);font-size:1.5rem;color:var(--arg-gold);
+  letter-spacing:2px;margin:8px 0 4px;text-shadow:0 2px 4px rgba(0,0,0,.3)}
+.mt-final .mtf-score{font-family:var(--fh);font-size:2.6rem;letter-spacing:2px;
+  margin:10px 0;line-height:1}
+.mt-final .mtf-score small{font-size:.5em;opacity:.7}
+.mt-final .mtf-msg{font-size:.85rem;font-weight:900;opacity:.95;margin-bottom:14px;
+  letter-spacing:.5px;line-height:1.3}
+
+/* Card destacada Messi en home */
+.act-card.featured-messi{
+  border:3px solid var(--arg-gold);
+  background:linear-gradient(135deg,#FFF8DC,#fff 50%,#FFF8DC);
+  box-shadow:0 4px 18px rgba(241,180,58,.45);
+  animation:messiPulse 1.8s ease-in-out infinite;position:relative;overflow:visible}
+@keyframes messiPulse{0%,100%{box-shadow:0 4px 18px rgba(241,180,58,.4)}
+  50%{box-shadow:0 4px 28px rgba(241,180,58,.75)}}
+.act-card.featured-messi .ci{font-size:2.8rem}
 .fix-date-hdr{background:linear-gradient(90deg,var(--red-dark),var(--blue));
   color:#fff;padding:7px 14px;border-radius:10px;margin:14px 0 6px;
   font-family:var(--fh);font-size:.9rem;letter-spacing:2px}
@@ -1156,6 +1232,25 @@ body{font-family:var(--fb);background:var(--bg);min-height:100vh;overflow-x:hidd
   </div>
 </div>
 
+<!-- ===== MESSI TRIVIA ===== -->
+<div id="messitrivia-screen" class="screen">
+  <div class="act-hdr">
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+    <span class="act-ttl">🐐 Trivia Messi</span>
+  </div>
+  <div class="mt-hero">
+    <img src="img/messi levantando copa.jfif" alt="Messi" onerror="this.style.display='none'">
+    <div>
+      <div class="mth-ttl">🐐 TRIVIA MESSI</div>
+      <div class="mth-sub">10 PREGUNTAS · 1 ⭐ POR CADA RESPUESTA CORRECTA</div>
+      <span class="mth-score" id="mt-hero-score">0/10 ⭐</span>
+    </div>
+  </div>
+  <div class="prog-dots" id="mt-dots"></div>
+  <div class="q-progress" id="mt-progress"></div>
+  <div id="mt-content"></div>
+</div>
+
 <!-- ===== GOLEADORES (BOTAS DE ORO) — JUEGO FINAL ===== -->
 <div id="goleadores-screen" class="screen">
   <div class="act-hdr">
@@ -1201,6 +1296,7 @@ const ACTIVITIES = [
   {id:'campeones',  emoji:'🏆', title:'Los Campeones',     stars:2, game:true},
   {id:'anio',       emoji:'📅', title:'¿En qué año ganó?', stars:3, game:true},
   {id:'unir',       emoji:'🤝', title:'Unir Jugadores',    stars:3, game:true},
+  {id:'messitrivia',emoji:'🐐', title:'Trivia Messi',      stars:10, game:true, featured:true},
   {id:'goleadores', emoji:'🥇', title:'Botas de Oro',      stars:7, game:true},
   {id:'equipoideal',emoji:'⚽', title:'Mi Equipo Ideal',   stars:0, game:false},
   {id:'eliminatorias',emoji:'🗓️',title:'Eliminatorias',   stars:0, game:false},
@@ -1543,6 +1639,7 @@ function defaultState(){
     sel:{current:0,score:0},
     jug:{current:0,score:0,cluesShown:1},
     sil:{current:0,placed:[]},
+    messitrivia:{current:0,score:0},
     champ:{selected:{}},
     anio:{leftSel:null,matched:{}},
     unir:{leftSel:null,matched:{}},
@@ -1897,6 +1994,7 @@ function openActivity(id){
     silabas: initSil,
     sedes: initSedes,
     argentina: initArgentina,
+    messitrivia: initMessiTrivia,
     campeones: initCampeones,
     anio: initAnio,
     unir: initUnir,
@@ -1926,7 +2024,7 @@ function renderHomeGrid(){
     const classes = ['act-card'];
     if(done) classes.push('done');
     if(opts.mustDo) classes.push('must-do');
-    if(a.featured) classes.push('featured-arg');
+    if(a.featured) classes.push(a.id==='messitrivia' ? 'featured-messi' : 'featured-arg');
     return `<div class="${classes.join(' ')}" onclick="openActivity('${a.id}')">
       ${done?'<div class="done-badge">✓</div>':''}
       ${opts.mustDo?'<div class="must-do-badge">¡EMPEZÁ ACÁ!</div>':''}
@@ -2474,14 +2572,18 @@ function renderSel(){
 
   const cont = document.getElementById('sel-content');
   if(cur >= SELECCIONES_GAME.length){
+    const perfect = S.sel.score === SELECCIONES_GAME.length;
     cont.innerHTML = `
       <div class="card text-c">
-        <div style="font-size:4rem">👕🌟</div>
-        <div style="font-family:var(--fh);font-size:1.5rem;color:var(--red-dark);margin:10px 0">¡Reconociste todas las camisetas!</div>
-        <div style="margin-bottom:14px;font-weight:700;color:#555">Puntaje: ${S.sel.score}/${SELECCIONES_GAME.length}</div>
+        <div style="font-size:4rem">${perfect?'👕🏆':'👕'}</div>
+        <div style="font-family:var(--fh);font-size:1.5rem;color:var(--red-dark);margin:10px 0">
+          ${perfect ? '¡PERFECTO! ¡Reconociste TODAS las camisetas!' : '¡Terminaste el juego!'}
+        </div>
+        <div style="margin-bottom:14px;font-weight:700;color:#555">Puntaje: ${S.sel.score}/${SELECCIONES_GAME.length}${perfect?' ⭐':''}</div>
+        ${perfect ? '' : '<div style="background:linear-gradient(135deg,#FFF9E6,#fff);border:2px dashed var(--gold-dark);border-radius:12px;padding:12px;margin-bottom:14px;font-weight:900;color:var(--red-dark);font-size:.9rem;line-height:1.4">⚠️ Solo se ganan las ⭐ si respondés <strong>TODAS bien</strong>. ¡Volvé a intentar!</div>'}
         <button class="btn btn-g btn-full" onclick="S.sel={current:0,score:0};save();renderSel()">🔄 Jugar de nuevo</button>
       </div>`;
-    if(!S.completed['selecciones']){ markDone('selecciones',3); renderHomeGrid(); }
+    if(perfect && !S.completed['selecciones']){ markDone('selecciones',3); renderHomeGrid(); }
     return;
   }
 
@@ -2532,14 +2634,18 @@ function renderJug(){
 
   const cont = document.getElementById('jug-content');
   if(cur >= PLAYERS.length){
+    const perfect = S.jug.score === PLAYERS.length;
     cont.innerHTML = `
       <div class="card text-c">
-        <div style="font-size:4rem">🌟⭐🌟</div>
-        <div style="font-family:var(--fh);font-size:1.5rem;color:var(--red-dark);margin:10px 0">¡Adivinaste los 12 jugadores!</div>
-        <div style="margin-bottom:14px;font-weight:700;color:#555">Puntaje: ${S.jug.score}/${PLAYERS.length}</div>
+        <div style="font-size:4rem">${perfect?'🌟⭐🌟':'⚽'}</div>
+        <div style="font-family:var(--fh);font-size:1.5rem;color:var(--red-dark);margin:10px 0">
+          ${perfect ? '¡PERFECTO! ¡Adivinaste los 12 jugadores!' : '¡Terminaste el juego!'}
+        </div>
+        <div style="margin-bottom:14px;font-weight:700;color:#555">Puntaje: ${S.jug.score}/${PLAYERS.length}${perfect?' ⭐':''}</div>
+        ${perfect ? '' : '<div style="background:linear-gradient(135deg,#FFF9E6,#fff);border:2px dashed var(--gold-dark);border-radius:12px;padding:12px;margin-bottom:14px;font-weight:900;color:var(--red-dark);font-size:.9rem;line-height:1.4">⚠️ Solo se ganan las ⭐ si respondés <strong>TODAS bien</strong>. ¡Volvé a intentar!</div>'}
         <button class="btn btn-g btn-full" onclick="S.jug={current:0,score:0,cluesShown:1};save();renderJug()">🔄 Jugar de nuevo</button>
       </div>`;
-    if(!S.completed['jugadores']){ markDone('jugadores',5); renderHomeGrid(); }
+    if(perfect && !S.completed['jugadores']){ markDone('jugadores',5); renderHomeGrid(); }
     return;
   }
 
@@ -3024,6 +3130,181 @@ function renderArgMessi(){
       <p style="font-family:var(--fh);font-size:1.05rem;letter-spacing:2px;text-align:center;margin-top:10px;color:var(--arg-gold)">🇦🇷 ¡VAMOS A DEFENDER LA COPA! 🏆</p>
     </div>
   `;
+}
+
+// ============================================================
+// MESSI TRIVIA
+// ============================================================
+const MESSI_TRIVIA = [
+  {
+    q:'¿En qué año debutó Messi con la Selección Argentina mayor?',
+    opts:['2003','2004','2005','2006'],
+    correct:2,
+    fact:'Debutó el 17 de agosto de 2005 contra Hungría... ¡y a los 2 minutos lo expulsaron!'
+  },
+  {
+    q:'¿Cuántos Mundiales jugó Messi antes del 2026?',
+    opts:['3','4','5','6'],
+    correct:2,
+    fact:'Jugó 5: Alemania 2006, Sudáfrica 2010, Brasil 2014, Rusia 2018 y Qatar 2022.'
+  },
+  {
+    q:'¿De quién heredó Messi la camiseta número 10 en la Selección?',
+    opts:['Diego Maradona','Carlos Tévez','Juan Román Riquelme','Ángel Di María'],
+    correct:2,
+    fact:'En 2008 Riquelme dejó la Selección y la 10 pasó a Messi. La tiene desde entonces.'
+  },
+  {
+    q:'¿Cuántos goles hizo Messi en el Mundial de Qatar 2022?',
+    opts:['5','6','7','8'],
+    correct:2,
+    fact:'Hizo 7 goles, incluyendo 2 en la final. Quedó a 1 de la Bota de Oro que ganó Mbappé.'
+  },
+  {
+    q:'¿Cuál fue la famosa frase de Messi en cuartos vs Países Bajos en Qatar?',
+    opts:['"Vamos, carajo"','"¿Qué mirás, bobo?"','"Andá pa allá"','"Hay equipo"'],
+    correct:1,
+    fact:'Se lo dijo al delantero holandés Wout Weghorst y quedó como una de las frases del Mundial.'
+  },
+  {
+    q:'¿Cuál fue el PRIMER trofeo grande que ganó Messi con la Selección mayor?',
+    opts:['Mundial Qatar 2022','Copa América Brasil 2021','Finalissima 2022','Copa América 2024'],
+    correct:1,
+    fact:'En 2021 ganó la Copa América en el Maracaná contra Brasil. Fue su primer título mayor.'
+  },
+  {
+    q:'¿Cuántos Balones de Oro ganó Messi en su carrera?',
+    opts:['6','7','8','9'],
+    correct:2,
+    fact:'Tiene 8 Balones de Oro, más que ningún otro jugador en la historia.'
+  },
+  {
+    q:'¿En qué club juega Messi actualmente?',
+    opts:['Barcelona','PSG','Inter Miami','Newell\'s Old Boys'],
+    correct:2,
+    fact:'Desde 2023 juega en Inter Miami (MLS, Estados Unidos), cerca de las sedes del Mundial 2026.'
+  },
+  {
+    q:'¿Cuántos partidos jugó Messi en Mundiales? (¡es récord histórico!)',
+    opts:['22','24','26','28'],
+    correct:2,
+    fact:'26 partidos en Mundiales. Nadie en la historia jugó tantos.'
+  },
+  {
+    q:'¿Cómo se llama el manto árabe que el emir de Qatar le puso a Messi al levantar la Copa?',
+    opts:['Bisht','Keffiyeh','Thawb','Abaya'],
+    correct:0,
+    fact:'El BISHT es un manto de honor árabe. La imagen de Messi con bisht levantando la copa dio la vuelta al mundo.'
+  },
+];
+
+function initMessiTrivia(){ renderMessiTrivia(); }
+
+function renderMessiTrivia(){
+  const cur   = S.messitrivia.current;
+  const score = S.messitrivia.score;
+  const total = MESSI_TRIVIA.length;
+
+  // Hero score actualizado
+  const hs = document.getElementById('mt-hero-score');
+  if(hs) hs.textContent = `${score}/${total} ⭐`;
+
+  // Dots
+  const dotsEl = document.getElementById('mt-dots');
+  dotsEl.innerHTML = MESSI_TRIVIA.map((_,i)=>
+    `<div class="pd ${i<cur?'done':i===cur?'cur':''}"></div>`).join('');
+
+  // Progress
+  document.getElementById('mt-progress').textContent = cur < total
+    ? `Pregunta ${cur+1} de ${total}` : '¡Completado!';
+
+  const cont = document.getElementById('mt-content');
+
+  // Pantalla final
+  if(cur >= total){
+    let em, ttl, msg;
+    if(score===total){      em='🐐'; ttl='¡PERFECTO! ¡SOS UN EXPERTO EN MESSI!'; msg='Lo conocés como nadie 🏆'; }
+    else if(score>=8){      em='🌟'; ttl='¡MUY BIEN!';                msg='Sabés un montón sobre Messi.'; }
+    else if(score>=5){      em='👍'; ttl='¡BIEN!';                   msg='Repasá la sección Argentina y volvé a jugar.'; }
+    else {                  em='💪'; ttl='¡SEGUÍ APRENDIENDO!';      msg='Andá a la sección Argentina y aprendé más sobre Messi.'; }
+
+    cont.innerHTML = `
+      <div class="mt-final">
+        <div class="mtf-em">${em}</div>
+        <div class="mtf-ttl">${ttl}</div>
+        <div class="mtf-score">${score}<small>/${total}</small> ⭐</div>
+        <div class="mtf-msg">${msg}</div>
+        <button class="btn btn-g btn-full" onclick="resetMessiTrivia()">🔄 Jugar de nuevo</button>
+      </div>`;
+
+    if(!S.completed['messitrivia']){
+      S.completed['messitrivia'] = true;
+      save();
+      renderHomeGrid();
+      if(score===total){
+        setTimeout(()=>celebrate('🐐','¡10/10!','¡Perfecto! Conocés todo sobre Messi 🏆',null), 600);
+      }
+    }
+    return;
+  }
+
+  // Pregunta actual
+  const q = MESSI_TRIVIA[cur];
+  const letters = ['A','B','C','D'];
+  cont.innerHTML = `
+    <div class="mt-q-card">
+      <div class="mt-round">PREGUNTA ${cur+1} DE ${total}</div>
+      <div class="mt-question">${q.q}</div>
+      <div class="mt-opts">
+        ${q.opts.map((o,i)=>`
+          <button class="mt-opt" onclick="checkMessiTrivia(${i})">
+            <span class="mt-letter">${letters[i]}</span>
+            <span>${o}</span>
+          </button>`).join('')}
+      </div>
+      <div id="mt-fb" class="fb-msg" style="display:none"></div>
+    </div>`;
+}
+
+function checkMessiTrivia(idx){
+  const cur = S.messitrivia.current;
+  const q = MESSI_TRIVIA[cur];
+  const btns = document.querySelectorAll('.mt-opt');
+  btns.forEach(b=>b.classList.add('disabled'));
+  const fb = document.getElementById('mt-fb');
+  const firstPlay = !S.completed['messitrivia'];
+
+  if(idx === q.correct){
+    sndOk();
+    btns[idx].classList.add('ok');
+    if(firstPlay) addStars(1);  // Solo suma estrella en el primer playthrough
+    S.messitrivia.score++;
+    confetti(35);
+    fb.style.display='block';
+    fb.className='fb-msg fb-ok';
+    fb.innerHTML = `✅ ¡CORRECTO! +1 ⭐<div class="mt-fact" style="text-transform:none;margin-top:8px"><strong>💡 Sabías que:</strong> ${q.fact}</div>`;
+  } else {
+    sndNo();
+    btns[idx].classList.add('no');
+    btns[q.correct].classList.add('ok');
+    fb.style.display='block';
+    fb.className='fb-msg fb-no';
+    fb.innerHTML = `❌ La respuesta correcta era: <strong>${q.opts[q.correct]}</strong><div class="mt-fact" style="text-transform:none;margin-top:8px"><strong>💡 Sabías que:</strong> ${q.fact}</div>`;
+  }
+
+  // Hero score actualizado al toque
+  const hs = document.getElementById('mt-hero-score');
+  if(hs) hs.textContent = `${S.messitrivia.score}/${MESSI_TRIVIA.length} ⭐`;
+
+  S.messitrivia.current++;
+  save();
+  setTimeout(()=>renderMessiTrivia(), 3000);
+}
+
+function resetMessiTrivia(){
+  S.messitrivia = {current:0, score:0};
+  save();
+  renderMessiTrivia();
 }
 
 // ============================================================
