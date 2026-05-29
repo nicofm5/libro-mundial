@@ -3046,36 +3046,38 @@ const QATAR_2022 = {
 
 const PLANTEL_2026 = [
   {pos:'ARQUEROS', em:'🧤', short:'ARQ', players:[
-    {name:'Emiliano "Dibu" Martínez', num:23, club:'Aston Villa'},
-    {name:'Gerónimo Rulli',           num:12, club:'Marsella'},
-    {name:'Walter Benítez',           num:1,  club:'PSV'},
+    {name:'Juan Musso',                num:1,  club:'Atlético Madrid'},
+    {name:'Gerónimo Rulli',            num:12, club:'Marsella'},
+    {name:'Emiliano "Dibu" Martínez',  num:23, club:'Aston Villa'},
   ]},
   {pos:'DEFENSORES', em:'🛡️', short:'DEF', players:[
-    {name:'Cristian "Cuti" Romero', num:13, club:'Tottenham'},
-    {name:'Nicolás Otamendi',       num:19, club:'Benfica'},
-    {name:'Lisandro Martínez',      num:25, club:'Manchester Utd'},
-    {name:'Nahuel Molina',          num:26, club:'Atlético Madrid'},
+    {name:'Lisandro Martínez',      num:2,  club:'Manchester Utd'},
     {name:'Nicolás Tagliafico',     num:3,  club:'Lyon'},
-    {name:'Marcos Acuña',           num:8,  club:'River Plate'},
     {name:'Gonzalo Montiel',        num:4,  club:'River Plate'},
     {name:'Leonardo Balerdi',       num:6,  club:'Marsella'},
+    {name:'Cristian "Cuti" Romero', num:13, club:'Tottenham'},
+    {name:'Nicolás Otamendi',       num:19, club:'Benfica'},
+    {name:'Facundo Medina',         num:25, club:'Marsella'},
+    {name:'Nahuel Molina',          num:26, club:'Atlético Madrid'},
   ]},
   {pos:'MEDIOCAMPISTAS', em:'⚙️', short:'MED', players:[
-    {name:'Rodrigo De Paul',     num:7,  club:'Atlético Madrid'},
+    {name:'Rodrigo De Paul',     num:7,  club:'Inter Miami'},
+    {name:'Giovani Lo Celso',    num:8,  club:'Real Betis'},
     {name:'Leandro Paredes',     num:5,  club:'Boca Juniors'},
     {name:'Enzo Fernández',      num:24, club:'Chelsea'},
     {name:'Alexis Mac Allister', num:20, club:'Liverpool'},
-    {name:'Giovani Lo Celso',    num:18, club:'Real Betis'},
     {name:'Exequiel Palacios',   num:14, club:'B. Leverkusen'},
-    {name:'Thiago Almada',       num:16, club:'Atlético Madrid'},
+    {name:'Valentín Barco',      num:16, club:'Estrasburgo'},
   ]},
   {pos:'DELANTEROS', em:'⚡', short:'DEL', players:[
-    {name:'Lionel Messi (C)',     num:10, club:'Inter Miami', captain:true},
-    {name:'Lautaro Martínez',     num:22, club:'Inter de Milán'},
-    {name:'Julián Álvarez',       num:9,  club:'Atlético Madrid'},
-    {name:'Nicolás González',     num:15, club:'Juventus'},
-    {name:'Alejandro Garnacho',   num:17, club:'Manchester Utd'},
-    {name:'Paulo Dybala',         num:21, club:'Roma'},
+    {name:'Lionel Messi (C)',      num:10, club:'Inter Miami', captain:true},
+    {name:'José Manuel López',     num:11, club:'Palmeiras'},
+    {name:'Julián Álvarez',        num:9,  club:'Atlético Madrid'},
+    {name:'Nicolás González',      num:15, club:'Atlético Madrid'},
+    {name:'Giuliano Simeone',      num:17, club:'Atlético Madrid'},
+    {name:'Nicolás Paz',           num:18, club:'Como'},
+    {name:'Thiago Almada',         num:21, club:'Atlético Madrid'},
+    {name:'Lautaro Martínez',      num:22, club:'Inter de Milán'},
   ]},
 ];
 
@@ -3205,7 +3207,7 @@ function renderArgQatar(){
 function renderArgPlantel(){
   const p = document.getElementById('arg-panel-2');
   p.innerHTML = `
-    <div class="info-box">👕 Esta es la <strong>lista probable</strong> de los jugadores que defenderían a Argentina en el Mundial 2026. ¡Algunos pueden cambiar antes del torneo!</div>
+    <div class="info-box">👕 Esta es la <strong>lista oficial</strong> de los 26 jugadores convocados por Scaloni para defender la corona en el Mundial 2026. ¡Vamos Argentina! 🇦🇷</div>
     ${PLANTEL_2026.map(g=>`
       <div class="plantel-pos">
         <div class="plantel-pos-hdr">
